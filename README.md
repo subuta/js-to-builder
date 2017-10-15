@@ -1,4 +1,4 @@
-### js-to-builder
+## js-to-builder
 
 Will generate [ast-types](https://github.com/benjamn/ast-types) builder from your javascript code.
 
