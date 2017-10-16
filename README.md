@@ -20,12 +20,24 @@ import { toBuilder, print } from 'js-to-builder'
 
 const code = `const hoge = 'fuga';`
 
-// will return ast-types builder
-const variableDeclaration = toBuilder(code).builder
+// parse and generate ast-types builder
+const variableDeclaration = toBuilder(code)
+
+// will print builder code (main feature of this library!)
+console.log(variableDeclaration.code)
+
+// -> `
+// b.variableDeclaration('const', [
+//   b.variableDeclarator(
+//     b.identifier('hoge'),
+//     b.literal('fuga')
+//   )
+// ]);
+// `
 
 // will print original code
 console.log(print([
-  variableDeclaration
+  variableDeclaration.builder
 ]))
 
 // -> `const hoge = "fuga";`
