@@ -1,8 +1,16 @@
 /* global describe, it */
+/** @jsx h */
 
-import toBuilder from 'lib/transform/toBuilder'
+import toBuilder from 'lib/transform'
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
+import h from 'lib/h'
+
+import {
+  ExpressionStatement,
+  CallExpression,
+  Identifier
+} from 'lib/components'
 
 import * as types from 'ast-types'
 const {namedTypes: n, builders: b} = types
@@ -13,18 +21,25 @@ describe('toBuilder', () => {
   it('should convert CallExpression', () => {
     const code = 'hoge()'
 
-    console.log(toBuilder(code, {to: 'jsx'}).code)
-
-    assert(toBuilder(code, {to: 'jsx'}).code === `
-      b.expressionStatement(
-        b.callExpression(
-          b.identifier('hoge'),
-          []
-        )
+    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+      const render = () => (
+        <ExpressionStatement>
+          <CallExpression>
+            <Identifier>hoge</Identifier>
+          </CallExpression>
+        </ExpressionStatement>
       )
-    `)
+    `))
 
-    // assert(format(print([toBuilder(code).builder])) === format(code))
+    const render = () => (
+      <ExpressionStatement>
+        <CallExpression>
+          <Identifier>hoge</Identifier>
+        </CallExpression>
+      </ExpressionStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
   })
 
   // it('should convert CallExpression with arguments', () => {

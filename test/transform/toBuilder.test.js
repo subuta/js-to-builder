@@ -1,6 +1,6 @@
 /* global describe, it */
 
-import toBuilder from 'lib/transform/toBuilder'
+import toBuilder from 'lib/transform'
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
 
