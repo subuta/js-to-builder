@@ -13,7 +13,7 @@ import {
   Let,
   Var,
   Value,
-  ObjectDeclaration
+  ArrowFunc
 } from 'lib/components/shorthand'
 
 import {
@@ -189,6 +189,44 @@ describe('Components', () => {
       const hoge = {
         hoge: 'fuga',
         fuga: 'piyo'
+      }
+    `))
+  })
+
+  it.only('Value with function should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <ArrowFunc>
+          <Identifier>str</Identifier>
+          <Identifier>hoge</Identifier>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Identifier>str</Identifier>
+              </CallExpression>
+            </ExpressionStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Identifier>hoge</Identifier>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </ArrowFunc>
+      </Const>
+    )
+
+    assert(format(print([render()])) === format(`
+      const hoge = (str, hoge) => {
+        console.log(str)
+        console.log(hoge)
       }
     `))
   })
