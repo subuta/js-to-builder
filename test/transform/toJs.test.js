@@ -27,6 +27,24 @@ describe('toBuilder', () => {
     assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
   })
 
+  it('should convert chained CallExpression', () => {
+    const code = 'hoge("arg1").fuga("arg2")'
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.expressionStatement(
+        b.callExpression(
+          b.memberExpression(
+            b.callExpression(b.identifier('hoge'), [b.literal('arg1')]),
+            b.identifier('fuga')
+          ),
+          [b.literal('arg2')]
+        )
+      )
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
   it('should convert CallExpression with arguments', () => {
     const code = 'hoge(\'fuga\')'
 
@@ -361,6 +379,144 @@ describe('toBuilder', () => {
           b.identifier('piyo')
         )
       ])
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
+  it('should convert if', () => {
+    const code = `if (true) console.log('hoge');`
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.ifStatement(
+        b.literal(true),
+        b.expressionStatement(
+          b.callExpression(
+            b.memberExpression(b.identifier('console'), b.identifier('log')),
+            [b.literal('hoge')]
+          )
+        ),
+        null
+      )
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
+  it('should convert if with BlockStatement', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    }`
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.ifStatement(
+        b.literal(true),
+        b.blockStatement([
+          b.expressionStatement(
+            b.callExpression(
+              b.memberExpression(b.identifier('console'), b.identifier('log')),
+              [b.literal('hoge')]
+            )
+          )
+        ]),
+        null
+      )
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
+  it('should convert if with alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else {
+      console.log('fuga');
+    }`
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.ifStatement(
+        b.literal(true),
+        b.blockStatement([
+          b.expressionStatement(
+            b.callExpression(
+              b.memberExpression(b.identifier('console'), b.identifier('log')),
+              [b.literal('hoge')]
+            )
+          )
+        ]),
+        b.blockStatement([
+          b.expressionStatement(
+            b.callExpression(
+              b.memberExpression(b.identifier('console'), b.identifier('log')),
+              [b.literal('fuga')]
+            )
+          )
+        ])
+      )
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
+  it('should convert if with complex alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else if (false) {
+      console.log('fuga');
+    } else {
+      console.log('piyo');
+    }`
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.ifStatement(
+        b.literal(true),
+        b.blockStatement([
+          b.expressionStatement(
+            b.callExpression(
+              b.memberExpression(b.identifier('console'), b.identifier('log')),
+              [b.literal('hoge')]
+            )
+          )
+        ]),
+        b.ifStatement(
+          b.literal(false),
+          b.blockStatement([
+            b.expressionStatement(
+              b.callExpression(
+                b.memberExpression(b.identifier('console'), b.identifier('log')),
+                [b.literal('fuga')]
+              )
+            )
+          ]),
+          b.blockStatement([
+            b.expressionStatement(
+              b.callExpression(
+                b.memberExpression(b.identifier('console'), b.identifier('log')),
+                [b.literal('piyo')]
+              )
+            )
+          ])
+        )
+      )
+    `))
+
+    assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))
+  })
+
+  it('should convert if with BinaryExpression', () => {
+    const code = `if (true === true) console.log('hoge');`
+
+    assert(toBuilder(code, {to: 'js'}).code === format(`
+      b.ifStatement(
+        b.binaryExpression('===', b.literal(true), b.literal(true)),
+        b.expressionStatement(
+          b.callExpression(
+            b.memberExpression(b.identifier('console'), b.identifier('log')),
+            [b.literal('hoge')]
+          )
+        ),
+        null
+      )
     `))
 
     assert(format(print([toBuilder(code, {to: 'js'}).builder])) === format(code))

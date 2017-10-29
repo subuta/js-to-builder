@@ -20,8 +20,10 @@ import {
   ObjectExpression,
   ArrowFunctionExpression,
   MemberExpression,
+  BinaryExpression,
 
   BlockStatement,
+  IfStatement,
 
   Property,
 
@@ -66,6 +68,44 @@ describe('toBuilder', () => {
       <ExpressionStatement>
         <CallExpression>
           <Identifier>hoge</Identifier>
+        </CallExpression>
+      </ExpressionStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert chained CallExpression', () => {
+    const code = 'hoge("arg1").fuga("arg2")'
+
+    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+      const render = () => (
+        <ExpressionStatement>
+          <CallExpression>
+            <MemberExpression>
+              <CallExpression>
+                <Identifier>hoge</Identifier>
+                <Literal>arg1</Literal>
+              </CallExpression>
+              <Identifier>fuga</Identifier>
+            </MemberExpression>
+            <Literal>arg2</Literal>
+          </CallExpression>
+        </ExpressionStatement>
+      )
+    `))
+
+    const render = () => (
+      <ExpressionStatement>
+        <CallExpression>
+          <MemberExpression>
+            <CallExpression>
+              <Identifier>hoge</Identifier>
+              <Literal>arg1</Literal>
+            </CallExpression>
+            <Identifier>fuga</Identifier>
+          </MemberExpression>
+          <Literal>arg2</Literal>
         </CallExpression>
       </ExpressionStatement>
     )
@@ -663,6 +703,304 @@ describe('toBuilder', () => {
           <Identifier>piyo</Identifier>
         </VariableDeclarator>
       </VariableDeclaration>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert if', () => {
+    const code = `if (true) console.log('hoge');`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <IfStatement>
+          <Literal>{true}</Literal>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </IfStatement>
+      )
+    `))
+
+    const render = () => (
+      <IfStatement>
+        <Literal>{true}</Literal>
+        <ExpressionStatement>
+          <CallExpression>
+            <MemberExpression>
+              <Identifier>console</Identifier>
+              <Identifier>log</Identifier>
+            </MemberExpression>
+            <Literal>hoge</Literal>
+          </CallExpression>
+        </ExpressionStatement>
+      </IfStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert if with BlockStatement', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <IfStatement>
+          <Literal>{true}</Literal>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </IfStatement>
+      )
+    `))
+
+    const render = () => (
+      <IfStatement>
+        <Literal>{true}</Literal>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+      </IfStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert if with alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else {
+      console.log('fuga');
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <IfStatement>
+          <Literal>{true}</Literal>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+          
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>fuga</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </IfStatement>
+      )
+    `))
+
+    const render = () => (
+      <IfStatement>
+        <Literal>{true}</Literal>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>fuga</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+      </IfStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert if with complex alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else if (false) {
+      console.log('fuga');
+    } else {
+      console.log('piyo');
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <IfStatement>
+          <Literal>{true}</Literal>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+      
+          <IfStatement>
+            <Literal>{false}</Literal>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>fuga</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+      
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>piyo</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+          </IfStatement>
+        </IfStatement>
+      )
+    `))
+
+    const render = () => (
+      <IfStatement>
+        <Literal>{true}</Literal>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+
+        <IfStatement>
+          <Literal>{false}</Literal>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>fuga</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>piyo</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </IfStatement>
+      </IfStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert if with BinaryExpression', () => {
+    const code = `if (true === true) console.log('hoge');`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <IfStatement>
+          <BinaryExpression operator="===">
+            <Literal>{true}</Literal>
+            <Literal>{true}</Literal>
+          </BinaryExpression>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </IfStatement>
+      )
+    `))
+
+    const render = () => (
+      <IfStatement>
+        <BinaryExpression operator="===">
+          <Literal>{true}</Literal>
+          <Literal>{true}</Literal>
+        </BinaryExpression>
+        <ExpressionStatement>
+          <CallExpression>
+            <MemberExpression>
+              <Identifier>console</Identifier>
+              <Identifier>log</Identifier>
+            </MemberExpression>
+            <Literal>hoge</Literal>
+          </CallExpression>
+        </ExpressionStatement>
+      </IfStatement>
     )
 
     assert(format(print([render()])) === format(code))
