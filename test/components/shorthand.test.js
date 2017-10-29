@@ -13,7 +13,9 @@ import {
   Let,
   Var,
   Value,
-  ArrowFunc
+  ArrowFn,
+  FnStatement,
+  FnCall
 } from 'lib/components/shorthand'
 
 import {
@@ -193,40 +195,69 @@ describe('Components', () => {
     `))
   })
 
-  it.only('Value with function should render', () => {
+  it('Value with array should render', () => {
     const render = () => (
       <Const name="hoge">
-        <ArrowFunc>
+        <Value>{[1, 2, 3]}</Value>
+      </Const>
+    )
+
+    assert(format(print([render()])) === format(`
+      const hoge = [1, 2, 3]
+    `))
+
+    const renderWithValue = () => (
+      <Const name="hoge" value={[1, 2, 3]} />
+    )
+
+    assert(format(print([renderWithValue()])) === format(`
+      const hoge = [1, 2, 3]
+    `))
+  })
+
+  it('Value with simple function should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <ArrowFn>
           <Identifier>str</Identifier>
           <Identifier>hoge</Identifier>
-          <BlockStatement>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Identifier>str</Identifier>
-              </CallExpression>
-            </ExpressionStatement>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Identifier>hoge</Identifier>
-              </CallExpression>
-            </ExpressionStatement>
-          </BlockStatement>
-        </ArrowFunc>
+          <FnStatement>
+            <FnCall callee="console.log">
+              <Identifier>str</Identifier>
+            </FnCall>
+          </FnStatement>
+        </ArrowFn>
+      </Const>
+    )
+
+    assert(format(print([render()])) === format(`
+      const hoge = (str, hoge) => console.log(str)
+    `))
+  })
+
+  it('Value with complex function should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <ArrowFn>
+          <Identifier>str</Identifier>
+          <Identifier>hoge</Identifier>
+          <FnStatement>
+            <FnCall callee="console.log">
+              <Identifier>str</Identifier>
+            </FnCall>
+
+            <FnCall callee="console.log">
+              <Literal>hoge</Literal>
+            </FnCall>
+          </FnStatement>
+        </ArrowFn>
       </Const>
     )
 
     assert(format(print([render()])) === format(`
       const hoge = (str, hoge) => {
         console.log(str)
-        console.log(hoge)
+        console.log('hoge')
       }
     `))
   })
