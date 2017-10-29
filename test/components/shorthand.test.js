@@ -245,10 +245,7 @@ describe('Components', () => {
             <FnCall callee="console.log">
               <Identifier>str</Identifier>
             </FnCall>
-
-            <FnCall callee="console.log">
-              <Literal>hoge</Literal>
-            </FnCall>
+            <Const name="hoge" value="true" />
           </FnStatement>
         </ArrowFn>
       </Const>
@@ -257,7 +254,7 @@ describe('Components', () => {
     assert(format(print([render()])) === format(`
       const hoge = (str, hoge) => {
         console.log(str)
-        console.log('hoge')
+        const hoge = 'true'
       }
     `))
   })
