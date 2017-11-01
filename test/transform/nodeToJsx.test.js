@@ -12,6 +12,10 @@ import h from 'lib/h'
 import {
   Program,
 
+  ForStatement,
+  ForInStatement,
+  ForOfStatement,
+  DebuggerStatement,
   ReturnStatement,
   ExpressionStatement,
 
@@ -21,9 +25,17 @@ import {
   ArrowFunctionExpression,
   MemberExpression,
   BinaryExpression,
+  AssignmentExpression,
+  UpdateExpression,
+  FunctionExpression,
 
   BlockStatement,
   IfStatement,
+  LabeledStatement,
+  BreakStatement,
+  DoWhileStatement,
+  WhileStatement,
+  ContinueStatement,
 
   Property,
 
@@ -790,6 +802,61 @@ describe('toBuilder', () => {
     assert(format(print([render()])) === format(code))
   })
 
+  it('should convert iife', () => {
+    const code = `(function() {
+      debugger
+      return console.log('hoge')
+    })()`
+
+    assert(toBuilder(code).code /*?*/ === format(`
+      const render = () => (
+        <ExpressionStatement>
+          <CallExpression>
+            <FunctionExpression id={null}>
+              <BlockStatement>
+                <DebuggerStatement />
+      
+                <ReturnStatement>
+                  <CallExpression>
+                    <MemberExpression>
+                      <Identifier>console</Identifier>
+                      <Identifier>log</Identifier>
+                    </MemberExpression>
+                    <Literal>hoge</Literal>
+                  </CallExpression>
+                </ReturnStatement>
+              </BlockStatement>
+            </FunctionExpression>
+          </CallExpression>
+        </ExpressionStatement>
+      )
+    `))
+
+    const render = () => (
+      <ExpressionStatement>
+        <CallExpression>
+          <FunctionExpression id={null}>
+            <BlockStatement>
+              <DebuggerStatement />
+
+              <ReturnStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ReturnStatement>
+            </BlockStatement>
+          </FunctionExpression>
+        </CallExpression>
+      </ExpressionStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
   it('should convert if with alternate', () => {
     const code = `if (true) {
       console.log('hoge');
@@ -1001,6 +1068,314 @@ describe('toBuilder', () => {
           </CallExpression>
         </ExpressionStatement>
       </IfStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert for loop', () => {
+    const code = `for (step = 0; step < 5; step++) {
+      if (true) {
+        break
+      } else {
+        continue
+      }
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <ForStatement>
+          <AssignmentExpression operator="=">
+            <Identifier>step</Identifier>
+            <Literal>{0}</Literal>
+          </AssignmentExpression>
+      
+          <BinaryExpression operator="<">
+            <Identifier>step</Identifier>
+            <Literal>{5}</Literal>
+          </BinaryExpression>
+      
+          <UpdateExpression operator="++" prefix={false}>
+            <Identifier>step</Identifier>
+          </UpdateExpression>
+      
+          <BlockStatement>
+            <IfStatement>
+              <Literal>{true}</Literal>
+              <BlockStatement>
+                <BreakStatement />
+              </BlockStatement>
+      
+              <BlockStatement>
+                <ContinueStatement />
+              </BlockStatement>
+            </IfStatement>
+          </BlockStatement>
+        </ForStatement>
+      )
+    `))
+
+    const render = () => (
+      <ForStatement>
+        <AssignmentExpression operator="=">
+          <Identifier>step</Identifier>
+          <Literal>{0}</Literal>
+        </AssignmentExpression>
+
+        <BinaryExpression operator="<">
+          <Identifier>step</Identifier>
+          <Literal>{5}</Literal>
+        </BinaryExpression>
+
+        <UpdateExpression operator="++" prefix={false}>
+          <Identifier>step</Identifier>
+        </UpdateExpression>
+
+        <BlockStatement>
+          <IfStatement>
+            <Literal>{true}</Literal>
+            <BlockStatement>
+              <BreakStatement />
+            </BlockStatement>
+
+            <BlockStatement>
+              <ContinueStatement />
+            </BlockStatement>
+          </IfStatement>
+        </BlockStatement>
+      </ForStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert do while', () => {
+    const code = `
+    do { 
+      console.log('hoge')
+    } while (true)
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <DoWhileStatement>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+          <Literal>{true}</Literal>
+        </DoWhileStatement>
+      )
+    `))
+
+    const render = () => (
+      <DoWhileStatement>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+        <Literal>{true}</Literal>
+      </DoWhileStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert while', () => {
+    const code = `
+    while (true) console.log('hoge');
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <WhileStatement>
+          <Literal>{true}</Literal>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </WhileStatement>
+      )
+    `))
+
+    const render = () => (
+      <WhileStatement>
+        <Literal>{true}</Literal>
+        <ExpressionStatement>
+          <CallExpression>
+            <MemberExpression>
+              <Identifier>console</Identifier>
+              <Identifier>log</Identifier>
+            </MemberExpression>
+            <Literal>hoge</Literal>
+          </CallExpression>
+        </ExpressionStatement>
+      </WhileStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert while with label', () => {
+    const code = `
+    markLoop: while (true) { break markLoop; }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <LabeledStatement>
+          <Identifier>markLoop</Identifier>
+          <WhileStatement>
+            <Literal>{true}</Literal>
+            <BlockStatement>
+              <BreakStatement>
+                <Identifier>markLoop</Identifier>
+              </BreakStatement>
+            </BlockStatement>
+          </WhileStatement>
+        </LabeledStatement>
+      )
+    `))
+
+    const render = () => (
+      <LabeledStatement>
+        <Identifier>markLoop</Identifier>
+        <WhileStatement>
+          <Literal>{true}</Literal>
+          <BlockStatement>
+            <BreakStatement>
+              <Identifier>markLoop</Identifier>
+            </BreakStatement>
+          </BlockStatement>
+        </WhileStatement>
+      </LabeledStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert for in', () => {
+    const code = `
+    for (var i in obj) { console.log('hoge'); }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <ForInStatement>
+          <VariableDeclaration kind="var">
+            <VariableDeclarator>
+              <Identifier>i</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+          <Identifier>obj</Identifier>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </ForInStatement>
+      )
+    `))
+
+    const render = () => (
+      <ForInStatement>
+        <VariableDeclaration kind="var">
+          <VariableDeclarator>
+            <Identifier>i</Identifier>
+          </VariableDeclarator>
+        </VariableDeclaration>
+        <Identifier>obj</Identifier>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Literal>hoge</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+      </ForInStatement>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
+  it('should convert for of', () => {
+    const code = `
+    for (let i of arr) { console.log(i); }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <ForOfStatement>
+          <VariableDeclaration kind="let">
+            <VariableDeclarator>
+              <Identifier>i</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+          <Identifier>arr</Identifier>
+          <BlockStatement>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Identifier>i</Identifier>
+              </CallExpression>
+            </ExpressionStatement>
+          </BlockStatement>
+        </ForOfStatement>
+      )
+    `))
+
+    const render = () => (
+      <ForOfStatement>
+        <VariableDeclaration kind="let">
+          <VariableDeclarator>
+            <Identifier>i</Identifier>
+          </VariableDeclarator>
+        </VariableDeclaration>
+        <Identifier>arr</Identifier>
+        <BlockStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <Identifier>console</Identifier>
+                <Identifier>log</Identifier>
+              </MemberExpression>
+              <Identifier>i</Identifier>
+            </CallExpression>
+          </ExpressionStatement>
+        </BlockStatement>
+      </ForOfStatement>
     )
 
     assert(format(print([render()])) === format(code))
