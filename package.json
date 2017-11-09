@@ -48,6 +48,7 @@
     "power-assert": "^1.4.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "recompose": "^0.26.0",
     "standard": "^10.0.2",
     "wallabify": "0.0.15"
   },

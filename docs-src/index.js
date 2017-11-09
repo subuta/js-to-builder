@@ -4,10 +4,12 @@ import ReactDOM from 'react-dom'
 import _ from 'lodash'
 window._ = _
 
+import Content from './Content'
+
 let App = () => {
   return (
     <div>
-      <h1>fuga</h1>
+      <Content />
     </div>
   )
 }
