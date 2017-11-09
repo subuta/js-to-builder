@@ -293,6 +293,36 @@ describe('toBuilder', () => {
     assert(format(print([render()])) === format(code))
   })
 
+  it('should convert Empty function expression', () => {
+    const code = 'const render = function() {}'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>render</Identifier>
+            <FunctionExpression id={null}>
+              <BlockStatement />
+            </FunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      )
+    `))
+
+    const render = () => (
+      <VariableDeclaration kind="const">
+        <VariableDeclarator>
+          <Identifier>render</Identifier>
+          <FunctionExpression id={null}>
+            <BlockStatement />
+          </FunctionExpression>
+        </VariableDeclarator>
+      </VariableDeclaration>
+    )
+
+    assert(format(print([render()])) === format(code))
+  })
+
   it('should convert single line arrow function expression', () => {
     const code = 'const render = (str) => console.log(str)'
 
