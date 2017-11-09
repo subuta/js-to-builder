@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/subuta/js-to-builder/issues"
   },
-  "homepage": "/js-to-builder/",
+  "homepage": "https://github.com/subuta/js-to-builder#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-module-resolver": "^2.7.1",

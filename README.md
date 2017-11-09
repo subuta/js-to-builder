@@ -1,6 +1,8 @@
 ## js-to-builder
 
-Will generate [ast-types](https://github.com/benjamn/ast-types) builder from your javascript code.
+SEE for testing this library: https://subuta.github.io/js-to-builder/
+
+Will generate [ast-types](https://github.com/benjamn/ast-types) builder JSX from your javascript code.
 
 ### Why?
 

@@ -7,7 +7,7 @@ window._ = _
 let App = () => {
   return (
     <div>
-      <h1>hoge</h1>
+      <h1>fuga</h1>
     </div>
   )
 }
