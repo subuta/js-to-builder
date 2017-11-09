@@ -10,6 +10,12 @@ module.exports = (options, req) => ({
     require('poi-preset-react')(options)
   ],
 
+  transformModules: [
+    'babylon',
+    'chalk',
+    'prettier'
+  ],
+
   devServer: {
     headers: {
       'Access-Control-Allow-Origin': '*'

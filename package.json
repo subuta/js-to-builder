@@ -57,7 +57,7 @@
     "ast-types": "^0.9.12",
     "falafel": "^2.1.0",
     "lodash": "^4.17.4",
-    "prettier": "1.6.1",
+    "prettier": "git://github.com/prettier/prettier.git#1.7.4",
     "recast": "^0.12.6"
   }
 }

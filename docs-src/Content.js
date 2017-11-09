@@ -10,11 +10,11 @@ import {
 import { toBuilder, format } from 'js-to-builder'
 
 const enhance = compose(
-  withState('code', 'setCode', ''),
+  withState('code', 'setCode', 'const hoge = "fuga";'),
   withState('error', 'setError', null),
   withPropsOnChange(
     ['code', 'setCode'],
-    ({code, setCode, setError}) => {
+    ({code, setCode}) => {
       let jsx = ''
       let error = null
 
@@ -36,26 +36,35 @@ const enhance = compose(
   )
 )
 
-export default enhance(({setCode, jsx, error}) => {
+export default enhance(({code, setCode, jsx, error}) => {
   return (
     <div style={{
       display: 'flex',
       alignItems: 'flex-start',
-      height: '100vh'
+      height: '100vh',
+      fontFamily: '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace',
+      fontSize: 13,
+      color: '#24292e',
+      wordWrap: 'normal',
+      whiteSpace: 'pre'
     }}>
       <textarea
         onInput={(e) => setCode(e.target.value)}
         style={{
+          padding: 8,
           flex: 1,
-          height: '90%'
+          height: '90%',
+          fontSize: 13
         }}
+        defaultValue={code}
         cols="30"
         rows="10"
       />
       <pre
         style={{
           margin: '0 0 0 16px',
-          color: error ? 'red' : 'black',
+          padding: 8,
+          color: error ? 'red' : 'inherit',
           flex: 1,
           height: '90%'
         }}
