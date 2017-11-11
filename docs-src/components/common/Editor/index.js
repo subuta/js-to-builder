@@ -21,24 +21,22 @@ const enhance = compose(
   withPropsOnChange(
     ['onChange'],
     ({onChange}) => ({
-      onChange: _.debounce(onChange, 1000 / 60)
+      onChange: _.debounce(onChange, 10)
     })
   ),
   withPropsOnChange(
     ['template'],
-    ({template, onChange, setValue}) => {
+    ({template, setValue}) => {
       // update Value and parent htmlPart.
       setValue(createInitialState(template.split('\n')))
-      onChange(template)
     }
   ),
   withHandlers({
     handleChange: ({onChange, setValue}) => ({value}) => {
       // const {startBlock, document} = change.state
-      const html = Plain.serialize(value)
       // update Value and parent htmlPart.
       setValue(value)
-      onChange(html)
+      onChange(Plain.serialize(value))
     }
   })
 )
