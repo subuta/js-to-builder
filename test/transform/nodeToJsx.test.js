@@ -68,23 +68,64 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code, {to: 'jsx'}).code === format(`
       const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <CallExpression>
+              <Identifier>hoge</Identifier>
+            </CallExpression>
+          </ExpressionStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExpressionStatement>
           <CallExpression>
             <Identifier>hoge</Identifier>
           </CallExpression>
         </ExpressionStatement>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
+  })
+
+  it('should multiline code', () => {
+    const code = 'hoge(); fuga();'
+    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+      const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <CallExpression>
+              <Identifier>hoge</Identifier>
+            </CallExpression>
+          </ExpressionStatement>
+          <ExpressionStatement>
+            <CallExpression>
+              <Identifier>fuga</Identifier>
+            </CallExpression>
+          </ExpressionStatement>
+        </Program>
       )
     `))
 
     const render = () => (
-      <ExpressionStatement>
-        <CallExpression>
-          <Identifier>hoge</Identifier>
-        </CallExpression>
-      </ExpressionStatement>
+      <Program>
+        <ExpressionStatement>
+          <CallExpression>
+            <Identifier>hoge</Identifier>
+          </CallExpression>
+        </ExpressionStatement>
+        <ExpressionStatement>
+          <CallExpression>
+            <Identifier>fuga</Identifier>
+          </CallExpression>
+        </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(recast.print(render()).code) === format(code))
   })
 
   it('should convert chained CallExpression', () => {
@@ -92,6 +133,25 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code, {to: 'jsx'}).code === format(`
       const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <CallExpression>
+              <MemberExpression>
+                <CallExpression>
+                  <Identifier>hoge</Identifier>
+                  <Literal>arg1</Literal>
+                </CallExpression>
+                <Identifier>fuga</Identifier>
+              </MemberExpression>
+              <Literal>arg2</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExpressionStatement>
           <CallExpression>
             <MemberExpression>
@@ -104,25 +164,10 @@ describe('toBuilder', () => {
             <Literal>arg2</Literal>
           </CallExpression>
         </ExpressionStatement>
-      )
-    `))
-
-    const render = () => (
-      <ExpressionStatement>
-        <CallExpression>
-          <MemberExpression>
-            <CallExpression>
-              <Identifier>hoge</Identifier>
-              <Literal>arg1</Literal>
-            </CallExpression>
-            <Identifier>fuga</Identifier>
-          </MemberExpression>
-          <Literal>arg2</Literal>
-        </CallExpression>
-      </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert CallExpression with arguments', () => {
@@ -130,25 +175,29 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <CallExpression>
+              <Identifier>hoge</Identifier>
+              <Literal>fuga</Literal>
+            </CallExpression>
+          </ExpressionStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExpressionStatement>
           <CallExpression>
             <Identifier>hoge</Identifier>
             <Literal>fuga</Literal>
           </CallExpression>
         </ExpressionStatement>
-      )
-    `))
-
-    const render = () => (
-      <ExpressionStatement>
-        <CallExpression>
-          <Identifier>hoge</Identifier>
-          <Literal>fuga</Literal>
-        </CallExpression>
-      </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert ArrayExpression', () => {
@@ -156,19 +205,23 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <ExpressionStatement>
-          <ArrayExpression />
-        </ExpressionStatement>
+        <Program>
+          <ExpressionStatement>
+            <ArrayExpression />
+          </ExpressionStatement>
+        </Program>
       )
     `))
 
     const render = () => (
-      <ExpressionStatement>
-        <ArrayExpression />
-      </ExpressionStatement>
+      <Program>
+        <ExpressionStatement>
+          <ArrayExpression />
+        </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert ArrayExpression with arguments', () => {
@@ -176,6 +229,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <ArrayExpression>
+              <Literal>{1}</Literal>
+              <Literal>{2}</Literal>
+              <Literal>{3}</Literal>
+            </ArrayExpression>
+          </ExpressionStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExpressionStatement>
           <ArrayExpression>
             <Literal>{1}</Literal>
@@ -183,20 +250,10 @@ describe('toBuilder', () => {
             <Literal>{3}</Literal>
           </ArrayExpression>
         </ExpressionStatement>
-      )
-    `))
-
-    const render = () => (
-      <ExpressionStatement>
-        <ArrayExpression>
-          <Literal>{1}</Literal>
-          <Literal>{2}</Literal>
-          <Literal>{3}</Literal>
-        </ArrayExpression>
-      </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert VariableDeclaration', () => {
@@ -204,25 +261,29 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>hoge</Identifier>
+              <Literal>hoge</Literal>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>hoge</Identifier>
             <Literal>hoge</Literal>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>hoge</Identifier>
-          <Literal>hoge</Literal>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert VariableDeclaration with object', () => {
@@ -232,6 +293,24 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>hoge</Identifier>
+              <ObjectExpression>
+                <Property kind="init" method={false} shorthand={false} computed={false}>
+                  <Identifier>HOGE</Identifier>
+                  <Literal>hoge</Literal>
+                </Property>
+              </ObjectExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>hoge</Identifier>
@@ -243,24 +322,10 @@ describe('toBuilder', () => {
             </ObjectExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>hoge</Identifier>
-          <ObjectExpression>
-            <Property kind="init" method={false} shorthand={false} computed={false}>
-              <Identifier>HOGE</Identifier>
-              <Literal>hoge</Literal>
-            </Property>
-          </ObjectExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert Empty arrow function expression', () => {
@@ -268,6 +333,21 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>render</Identifier>
+              <ArrowFunctionExpression>
+                <BlockStatement />
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>render</Identifier>
@@ -276,21 +356,10 @@ describe('toBuilder', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>render</Identifier>
-          <ArrowFunctionExpression>
-            <BlockStatement />
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert Empty function expression', () => {
@@ -298,6 +367,21 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>render</Identifier>
+              <FunctionExpression id={null}>
+                <BlockStatement />
+              </FunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>render</Identifier>
@@ -306,21 +390,10 @@ describe('toBuilder', () => {
             </FunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>render</Identifier>
-          <FunctionExpression id={null}>
-            <BlockStatement />
-          </FunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert single line arrow function expression', () => {
@@ -328,6 +401,28 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>render</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>str</Identifier>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Identifier>str</Identifier>
+                </CallExpression>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>render</Identifier>
@@ -343,28 +438,10 @@ describe('toBuilder', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>render</Identifier>
-          <ArrowFunctionExpression>
-            <Identifier>str</Identifier>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Identifier>str</Identifier>
-            </CallExpression>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert block arrow function expression', () => {
@@ -372,6 +449,32 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>render</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>str</Identifier>
+                <BlockStatement>
+                  <ExpressionStatement>
+                    <CallExpression>
+                      <MemberExpression>
+                        <Identifier>console</Identifier>
+                        <Identifier>log</Identifier>
+                      </MemberExpression>
+                      <Identifier>str</Identifier>
+                    </CallExpression>
+                  </ExpressionStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>render</Identifier>
@@ -391,32 +494,10 @@ describe('toBuilder', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>render</Identifier>
-          <ArrowFunctionExpression>
-            <Identifier>str</Identifier>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Identifier>str</Identifier>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert Identifier', () => {
@@ -424,19 +505,23 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <ExpressionStatement>
-          <Identifier>hoge</Identifier>
-        </ExpressionStatement>
+        <Program>
+          <ExpressionStatement>
+            <Identifier>hoge</Identifier>
+          </ExpressionStatement>
+        </Program>
       )
     `))
 
     const render = () => (
-      <ExpressionStatement>
-        <Identifier>hoge</Identifier>
-      </ExpressionStatement>
+      <Program>
+        <ExpressionStatement>
+          <Identifier>hoge</Identifier>
+        </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module import', () => {
@@ -444,25 +529,29 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ImportDeclaration>
+            <ImportDefaultSpecifier>
+              <Identifier>hoge</Identifier>
+            </ImportDefaultSpecifier>
+            <Literal>hoge</Literal>
+          </ImportDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ImportDeclaration>
           <ImportDefaultSpecifier>
             <Identifier>hoge</Identifier>
           </ImportDefaultSpecifier>
           <Literal>hoge</Literal>
         </ImportDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <ImportDeclaration>
-        <ImportDefaultSpecifier>
-          <Identifier>hoge</Identifier>
-        </ImportDefaultSpecifier>
-        <Literal>hoge</Literal>
-      </ImportDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module default export', () => {
@@ -470,19 +559,23 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <ExportDefaultDeclaration>
-          <Literal>hoge</Literal>
-        </ExportDefaultDeclaration>
+        <Program>
+          <ExportDefaultDeclaration>
+            <Literal>hoge</Literal>
+          </ExportDefaultDeclaration>
+        </Program>
       )
     `))
 
     const render = () => (
-      <ExportDefaultDeclaration>
-        <Literal>hoge</Literal>
-      </ExportDefaultDeclaration>
+      <Program>
+        <ExportDefaultDeclaration>
+          <Literal>hoge</Literal>
+        </ExportDefaultDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module named export', () => {
@@ -490,6 +583,21 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ExportNamedDeclaration>
+            <VariableDeclaration kind="const">
+              <VariableDeclarator>
+                <Identifier>hoge</Identifier>
+                <Literal>hoge</Literal>
+              </VariableDeclarator>
+            </VariableDeclaration>
+          </ExportNamedDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExportNamedDeclaration>
           <VariableDeclaration kind="const">
             <VariableDeclarator>
@@ -498,21 +606,10 @@ describe('toBuilder', () => {
             </VariableDeclarator>
           </VariableDeclaration>
         </ExportNamedDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <ExportNamedDeclaration>
-        <VariableDeclaration kind="const">
-          <VariableDeclarator>
-            <Identifier>hoge</Identifier>
-            <Literal>hoge</Literal>
-          </VariableDeclarator>
-        </VariableDeclaration>
-      </ExportNamedDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module import * as ...', () => {
@@ -520,25 +617,29 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ImportDeclaration>
+            <ImportNamespaceSpecifier>
+              <Identifier>hoge</Identifier>
+            </ImportNamespaceSpecifier>
+            <Literal>hoge</Literal>
+          </ImportDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ImportDeclaration>
           <ImportNamespaceSpecifier>
             <Identifier>hoge</Identifier>
           </ImportNamespaceSpecifier>
           <Literal>hoge</Literal>
         </ImportDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <ImportDeclaration>
-        <ImportNamespaceSpecifier>
-          <Identifier>hoge</Identifier>
-        </ImportNamespaceSpecifier>
-        <Literal>hoge</Literal>
-      </ImportDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module named import', () => {
@@ -546,6 +647,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ImportDeclaration>
+            <ImportSpecifier>
+              <Identifier>hoge</Identifier>
+              <Identifier>hoge</Identifier>
+            </ImportSpecifier>
+            <Literal>hoge</Literal>
+          </ImportDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ImportDeclaration>
           <ImportSpecifier>
             <Identifier>hoge</Identifier>
@@ -553,20 +668,10 @@ describe('toBuilder', () => {
           </ImportSpecifier>
           <Literal>hoge</Literal>
         </ImportDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <ImportDeclaration>
-        <ImportSpecifier>
-          <Identifier>hoge</Identifier>
-          <Identifier>hoge</Identifier>
-        </ImportSpecifier>
-        <Literal>hoge</Literal>
-      </ImportDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert module named import as ...', () => {
@@ -574,6 +679,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ImportDeclaration>
+            <ImportSpecifier>
+              <Identifier>hoge</Identifier>
+              <Identifier>fuga</Identifier>
+            </ImportSpecifier>
+            <Literal>hoge</Literal>
+          </ImportDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ImportDeclaration>
           <ImportSpecifier>
             <Identifier>hoge</Identifier>
@@ -581,20 +700,10 @@ describe('toBuilder', () => {
           </ImportSpecifier>
           <Literal>hoge</Literal>
         </ImportDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <ImportDeclaration>
-        <ImportSpecifier>
-          <Identifier>hoge</Identifier>
-          <Identifier>fuga</Identifier>
-        </ImportSpecifier>
-        <Literal>hoge</Literal>
-      </ImportDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert object spread', () => {
@@ -602,6 +711,24 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <ObjectPattern>
+                <Property kind="init" method={false} shorthand={true} computed={false}>
+                  <Identifier>hoge</Identifier>
+                  <Identifier>hoge</Identifier>
+                </Property>
+              </ObjectPattern>
+              <Identifier>piyo</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <ObjectPattern>
@@ -613,24 +740,10 @@ describe('toBuilder', () => {
             <Identifier>piyo</Identifier>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <ObjectPattern>
-            <Property kind="init" method={false} shorthand={true} computed={false}>
-              <Identifier>hoge</Identifier>
-              <Identifier>hoge</Identifier>
-            </Property>
-          </ObjectPattern>
-          <Identifier>piyo</Identifier>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert object spread with assignment', () => {
@@ -640,6 +753,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <ObjectPattern>
+                <Property kind="init" method={false} shorthand={true} computed={false}>
+                  <Identifier>hoge</Identifier>
+                  <AssignmentPattern>
+                    <Identifier>hoge</Identifier>
+                    <Literal>{false}</Literal>
+                  </AssignmentPattern>
+                </Property>
+              </ObjectPattern>
+              <Identifier>piyo</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <ObjectPattern>
@@ -654,28 +788,11 @@ describe('toBuilder', () => {
             <Identifier>piyo</Identifier>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <ObjectPattern>
-            <Property kind="init" method={false} shorthand={true} computed={false}>
-              <Identifier>hoge</Identifier>
-              <AssignmentPattern>
-                <Identifier>hoge</Identifier>
-                <Literal>{false}</Literal>
-              </AssignmentPattern>
-            </Property>
-          </ObjectPattern>
-          <Identifier>piyo</Identifier>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
     // FIXME: { hoge = false } が再現できてない。
-    assert(format(print([render()])) !== format(code))
+    assert(format(print(render())) !== format(code))
   })
 
   it('should convert object spread with literal', () => {
@@ -683,6 +800,24 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <ObjectPattern>
+                <Property kind="init" method={false} shorthand={false} computed={false}>
+                  <Literal>hoge</Literal>
+                  <Identifier>hoge</Identifier>
+                </Property>
+              </ObjectPattern>
+              <Identifier>piyo</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <ObjectPattern>
@@ -694,24 +829,10 @@ describe('toBuilder', () => {
             <Identifier>piyo</Identifier>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <ObjectPattern>
-            <Property kind="init" method={false} shorthand={false} computed={false}>
-              <Literal>hoge</Literal>
-              <Identifier>hoge</Identifier>
-            </Property>
-          </ObjectPattern>
-          <Identifier>piyo</Identifier>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert object spread with computed', () => {
@@ -719,6 +840,24 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <ObjectPattern>
+                <Property kind="init" method={false} shorthand={false} computed={true}>
+                  <Literal>hoge</Literal>
+                  <Identifier>hoge</Identifier>
+                </Property>
+              </ObjectPattern>
+              <Identifier>piyo</Identifier>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <ObjectPattern>
@@ -730,24 +869,10 @@ describe('toBuilder', () => {
             <Identifier>piyo</Identifier>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <ObjectPattern>
-            <Property kind="init" method={false} shorthand={false} computed={true}>
-              <Literal>hoge</Literal>
-              <Identifier>hoge</Identifier>
-            </Property>
-          </ObjectPattern>
-          <Identifier>piyo</Identifier>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert if', () => {
@@ -755,6 +880,25 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <IfStatement>
+            <Literal>{true}</Literal>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </IfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <IfStatement>
           <Literal>{true}</Literal>
           <ExpressionStatement>
@@ -767,25 +911,10 @@ describe('toBuilder', () => {
             </CallExpression>
           </ExpressionStatement>
         </IfStatement>
-      )
-    `))
-
-    const render = () => (
-      <IfStatement>
-        <Literal>{true}</Literal>
-        <ExpressionStatement>
-          <CallExpression>
-            <MemberExpression>
-              <Identifier>console</Identifier>
-              <Identifier>log</Identifier>
-            </MemberExpression>
-            <Literal>hoge</Literal>
-          </CallExpression>
-        </ExpressionStatement>
-      </IfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert if with BlockStatement', () => {
@@ -795,6 +924,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <IfStatement>
+            <Literal>{true}</Literal>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+          </IfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <IfStatement>
           <Literal>{true}</Literal>
           <BlockStatement>
@@ -809,27 +959,10 @@ describe('toBuilder', () => {
             </ExpressionStatement>
           </BlockStatement>
         </IfStatement>
-      )
-    `))
-
-    const render = () => (
-      <IfStatement>
-        <Literal>{true}</Literal>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>hoge</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-      </IfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert iife', () => {
@@ -838,14 +971,40 @@ describe('toBuilder', () => {
       return console.log('hoge')
     })()`
 
-    assert(toBuilder(code).code /*?*/ === format(`
+    assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ExpressionStatement>
+            <CallExpression>
+              <FunctionExpression id={null}>
+                <BlockStatement>
+                  <DebuggerStatement />
+        
+                  <ReturnStatement>
+                    <CallExpression>
+                      <MemberExpression>
+                        <Identifier>console</Identifier>
+                        <Identifier>log</Identifier>
+                      </MemberExpression>
+                      <Literal>hoge</Literal>
+                    </CallExpression>
+                  </ReturnStatement>
+                </BlockStatement>
+              </FunctionExpression>
+            </CallExpression>
+          </ExpressionStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ExpressionStatement>
           <CallExpression>
             <FunctionExpression id={null}>
               <BlockStatement>
                 <DebuggerStatement />
-      
+
                 <ReturnStatement>
                   <CallExpression>
                     <MemberExpression>
@@ -859,32 +1018,10 @@ describe('toBuilder', () => {
             </FunctionExpression>
           </CallExpression>
         </ExpressionStatement>
-      )
-    `))
-
-    const render = () => (
-      <ExpressionStatement>
-        <CallExpression>
-          <FunctionExpression id={null}>
-            <BlockStatement>
-              <DebuggerStatement />
-
-              <ReturnStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ReturnStatement>
-            </BlockStatement>
-          </FunctionExpression>
-        </CallExpression>
-      </ExpressionStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert if with alternate', () => {
@@ -896,6 +1033,39 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <IfStatement>
+            <Literal>{true}</Literal>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+            
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>fuga</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+          </IfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <IfStatement>
           <Literal>{true}</Literal>
           <BlockStatement>
@@ -909,7 +1079,7 @@ describe('toBuilder', () => {
               </CallExpression>
             </ExpressionStatement>
           </BlockStatement>
-          
+
           <BlockStatement>
             <ExpressionStatement>
               <CallExpression>
@@ -922,39 +1092,10 @@ describe('toBuilder', () => {
             </ExpressionStatement>
           </BlockStatement>
         </IfStatement>
-      )
-    `))
-
-    const render = () => (
-      <IfStatement>
-        <Literal>{true}</Literal>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>hoge</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>fuga</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-      </IfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert if with complex alternate', () => {
@@ -968,6 +1109,54 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <IfStatement>
+            <Literal>{true}</Literal>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+        
+            <IfStatement>
+              <Literal>{false}</Literal>
+              <BlockStatement>
+                <ExpressionStatement>
+                  <CallExpression>
+                    <MemberExpression>
+                      <Identifier>console</Identifier>
+                      <Identifier>log</Identifier>
+                    </MemberExpression>
+                    <Literal>fuga</Literal>
+                  </CallExpression>
+                </ExpressionStatement>
+              </BlockStatement>
+        
+              <BlockStatement>
+                <ExpressionStatement>
+                  <CallExpression>
+                    <MemberExpression>
+                      <Identifier>console</Identifier>
+                      <Identifier>log</Identifier>
+                    </MemberExpression>
+                    <Literal>piyo</Literal>
+                  </CallExpression>
+                </ExpressionStatement>
+              </BlockStatement>
+            </IfStatement>
+          </IfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <IfStatement>
           <Literal>{true}</Literal>
           <BlockStatement>
@@ -981,7 +1170,7 @@ describe('toBuilder', () => {
               </CallExpression>
             </ExpressionStatement>
           </BlockStatement>
-      
+
           <IfStatement>
             <Literal>{false}</Literal>
             <BlockStatement>
@@ -995,7 +1184,7 @@ describe('toBuilder', () => {
                 </CallExpression>
               </ExpressionStatement>
             </BlockStatement>
-      
+
             <BlockStatement>
               <ExpressionStatement>
                 <CallExpression>
@@ -1009,54 +1198,10 @@ describe('toBuilder', () => {
             </BlockStatement>
           </IfStatement>
         </IfStatement>
-      )
-    `))
-
-    const render = () => (
-      <IfStatement>
-        <Literal>{true}</Literal>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>hoge</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-
-        <IfStatement>
-          <Literal>{false}</Literal>
-          <BlockStatement>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Literal>fuga</Literal>
-              </CallExpression>
-            </ExpressionStatement>
-          </BlockStatement>
-
-          <BlockStatement>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Literal>piyo</Literal>
-              </CallExpression>
-            </ExpressionStatement>
-          </BlockStatement>
-        </IfStatement>
-      </IfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert if with BinaryExpression', () => {
@@ -1064,6 +1209,28 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <IfStatement>
+            <BinaryExpression operator="===">
+              <Literal>{true}</Literal>
+              <Literal>{true}</Literal>
+            </BinaryExpression>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </IfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <IfStatement>
           <BinaryExpression operator="===">
             <Literal>{true}</Literal>
@@ -1079,28 +1246,10 @@ describe('toBuilder', () => {
             </CallExpression>
           </ExpressionStatement>
         </IfStatement>
-      )
-    `))
-
-    const render = () => (
-      <IfStatement>
-        <BinaryExpression operator="===">
-          <Literal>{true}</Literal>
-          <Literal>{true}</Literal>
-        </BinaryExpression>
-        <ExpressionStatement>
-          <CallExpression>
-            <MemberExpression>
-              <Identifier>console</Identifier>
-              <Identifier>log</Identifier>
-            </MemberExpression>
-            <Literal>hoge</Literal>
-          </CallExpression>
-        </ExpressionStatement>
-      </IfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert for loop', () => {
@@ -1114,69 +1263,73 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ForStatement>
+            <AssignmentExpression operator="=">
+              <Identifier>step</Identifier>
+              <Literal>{0}</Literal>
+            </AssignmentExpression>
+        
+            <BinaryExpression operator="<">
+              <Identifier>step</Identifier>
+              <Literal>{5}</Literal>
+            </BinaryExpression>
+        
+            <UpdateExpression operator="++" prefix={false}>
+              <Identifier>step</Identifier>
+            </UpdateExpression>
+        
+            <BlockStatement>
+              <IfStatement>
+                <Literal>{true}</Literal>
+                <BlockStatement>
+                  <BreakStatement />
+                </BlockStatement>
+        
+                <BlockStatement>
+                  <ContinueStatement />
+                </BlockStatement>
+              </IfStatement>
+            </BlockStatement>
+          </ForStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ForStatement>
           <AssignmentExpression operator="=">
             <Identifier>step</Identifier>
             <Literal>{0}</Literal>
           </AssignmentExpression>
-      
+
           <BinaryExpression operator="<">
             <Identifier>step</Identifier>
             <Literal>{5}</Literal>
           </BinaryExpression>
-      
+
           <UpdateExpression operator="++" prefix={false}>
             <Identifier>step</Identifier>
           </UpdateExpression>
-      
+
           <BlockStatement>
             <IfStatement>
               <Literal>{true}</Literal>
               <BlockStatement>
                 <BreakStatement />
               </BlockStatement>
-      
+
               <BlockStatement>
                 <ContinueStatement />
               </BlockStatement>
             </IfStatement>
           </BlockStatement>
         </ForStatement>
-      )
-    `))
-
-    const render = () => (
-      <ForStatement>
-        <AssignmentExpression operator="=">
-          <Identifier>step</Identifier>
-          <Literal>{0}</Literal>
-        </AssignmentExpression>
-
-        <BinaryExpression operator="<">
-          <Identifier>step</Identifier>
-          <Literal>{5}</Literal>
-        </BinaryExpression>
-
-        <UpdateExpression operator="++" prefix={false}>
-          <Identifier>step</Identifier>
-        </UpdateExpression>
-
-        <BlockStatement>
-          <IfStatement>
-            <Literal>{true}</Literal>
-            <BlockStatement>
-              <BreakStatement />
-            </BlockStatement>
-
-            <BlockStatement>
-              <ContinueStatement />
-            </BlockStatement>
-          </IfStatement>
-        </BlockStatement>
-      </ForStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert do while', () => {
@@ -1188,6 +1341,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <DoWhileStatement>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+            <Literal>{true}</Literal>
+          </DoWhileStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <DoWhileStatement>
           <BlockStatement>
             <ExpressionStatement>
@@ -1202,27 +1376,10 @@ describe('toBuilder', () => {
           </BlockStatement>
           <Literal>{true}</Literal>
         </DoWhileStatement>
-      )
-    `))
-
-    const render = () => (
-      <DoWhileStatement>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>hoge</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-        <Literal>{true}</Literal>
-      </DoWhileStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert while', () => {
@@ -1232,6 +1389,25 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <WhileStatement>
+            <Literal>{true}</Literal>
+            <ExpressionStatement>
+              <CallExpression>
+                <MemberExpression>
+                  <Identifier>console</Identifier>
+                  <Identifier>log</Identifier>
+                </MemberExpression>
+                <Literal>hoge</Literal>
+              </CallExpression>
+            </ExpressionStatement>
+          </WhileStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <WhileStatement>
           <Literal>{true}</Literal>
           <ExpressionStatement>
@@ -1244,25 +1420,10 @@ describe('toBuilder', () => {
             </CallExpression>
           </ExpressionStatement>
         </WhileStatement>
-      )
-    `))
-
-    const render = () => (
-      <WhileStatement>
-        <Literal>{true}</Literal>
-        <ExpressionStatement>
-          <CallExpression>
-            <MemberExpression>
-              <Identifier>console</Identifier>
-              <Identifier>log</Identifier>
-            </MemberExpression>
-            <Literal>hoge</Literal>
-          </CallExpression>
-        </ExpressionStatement>
-      </WhileStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert while with label', () => {
@@ -1272,6 +1433,24 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <LabeledStatement>
+            <Identifier>markLoop</Identifier>
+            <WhileStatement>
+              <Literal>{true}</Literal>
+              <BlockStatement>
+                <BreakStatement>
+                  <Identifier>markLoop</Identifier>
+                </BreakStatement>
+              </BlockStatement>
+            </WhileStatement>
+          </LabeledStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <LabeledStatement>
           <Identifier>markLoop</Identifier>
           <WhileStatement>
@@ -1283,24 +1462,10 @@ describe('toBuilder', () => {
             </BlockStatement>
           </WhileStatement>
         </LabeledStatement>
-      )
-    `))
-
-    const render = () => (
-      <LabeledStatement>
-        <Identifier>markLoop</Identifier>
-        <WhileStatement>
-          <Literal>{true}</Literal>
-          <BlockStatement>
-            <BreakStatement>
-              <Identifier>markLoop</Identifier>
-            </BreakStatement>
-          </BlockStatement>
-        </WhileStatement>
-      </LabeledStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert for in', () => {
@@ -1310,6 +1475,32 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ForInStatement>
+            <VariableDeclaration kind="var">
+              <VariableDeclarator>
+                <Identifier>i</Identifier>
+              </VariableDeclarator>
+            </VariableDeclaration>
+            <Identifier>obj</Identifier>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Literal>hoge</Literal>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+          </ForInStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ForInStatement>
           <VariableDeclaration kind="var">
             <VariableDeclarator>
@@ -1329,32 +1520,10 @@ describe('toBuilder', () => {
             </ExpressionStatement>
           </BlockStatement>
         </ForInStatement>
-      )
-    `))
-
-    const render = () => (
-      <ForInStatement>
-        <VariableDeclaration kind="var">
-          <VariableDeclarator>
-            <Identifier>i</Identifier>
-          </VariableDeclarator>
-        </VariableDeclaration>
-        <Identifier>obj</Identifier>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Literal>hoge</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-      </ForInStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should convert for of', () => {
@@ -1364,6 +1533,32 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <ForOfStatement>
+            <VariableDeclaration kind="let">
+              <VariableDeclarator>
+                <Identifier>i</Identifier>
+              </VariableDeclarator>
+            </VariableDeclaration>
+            <Identifier>arr</Identifier>
+            <BlockStatement>
+              <ExpressionStatement>
+                <CallExpression>
+                  <MemberExpression>
+                    <Identifier>console</Identifier>
+                    <Identifier>log</Identifier>
+                  </MemberExpression>
+                  <Identifier>i</Identifier>
+                </CallExpression>
+              </ExpressionStatement>
+            </BlockStatement>
+          </ForOfStatement>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <ForOfStatement>
           <VariableDeclaration kind="let">
             <VariableDeclarator>
@@ -1383,59 +1578,33 @@ describe('toBuilder', () => {
             </ExpressionStatement>
           </BlockStatement>
         </ForOfStatement>
-      )
-    `))
-
-    const render = () => (
-      <ForOfStatement>
-        <VariableDeclaration kind="let">
-          <VariableDeclarator>
-            <Identifier>i</Identifier>
-          </VariableDeclarator>
-        </VariableDeclaration>
-        <Identifier>arr</Identifier>
-        <BlockStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <Identifier>console</Identifier>
-                <Identifier>log</Identifier>
-              </MemberExpression>
-              <Identifier>i</Identifier>
-            </CallExpression>
-          </ExpressionStatement>
-        </BlockStatement>
-      </ForOfStatement>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 })
 
 describe('option', () => {
-  it('should not omit Program if shouldOmitProgram = false', () => {
+  it('should omit Program if shouldOmitProgram = true', () => {
     const code = 'hoge()'
 
-    assert(toBuilder(code, {shouldOmitProgram: false}).code === format(`
+    assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <Identifier>hoge</Identifier>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
-      )
-    `))
-
-    const render = () => (
-      <Program>
         <ExpressionStatement>
           <CallExpression>
             <Identifier>hoge</Identifier>
           </CallExpression>
         </ExpressionStatement>
-      </Program>
+      )
+    `))
+
+    const render = () => (
+      <ExpressionStatement>
+        <CallExpression>
+          <Identifier>hoge</Identifier>
+        </CallExpression>
+      </ExpressionStatement>
     )
 
     assert(format(recast.print(render()).code) === format(code))

@@ -55,6 +55,46 @@ describe('redux', () => {
     `
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>actionCreator</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>arg</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <ObjectExpression>
+                      <Property
+                        kind="init"
+                        method={false}
+                        shorthand={false}
+                        computed={false}
+                      >
+                        <Identifier>type</Identifier>
+                        <Literal>HOGE</Literal>
+                      </Property>
+        
+                      <Property
+                        kind="init"
+                        method={false}
+                        shorthand={false}
+                        computed={false}
+                      >
+                        <Identifier>payload</Identifier>
+                        <Identifier>arg</Identifier>
+                      </Property>
+                    </ObjectExpression>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>actionCreator</Identifier>
@@ -72,7 +112,7 @@ describe('redux', () => {
                       <Identifier>type</Identifier>
                       <Literal>HOGE</Literal>
                     </Property>
-      
+
                     <Property
                       kind="init"
                       method={false}
@@ -88,46 +128,10 @@ describe('redux', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>actionCreator</Identifier>
-          <ArrowFunctionExpression>
-            <Identifier>arg</Identifier>
-            <BlockStatement>
-              <ReturnStatement>
-                <ObjectExpression>
-                  <Property
-                    kind="init"
-                    method={false}
-                    shorthand={false}
-                    computed={false}
-                  >
-                    <Identifier>type</Identifier>
-                    <Literal>HOGE</Literal>
-                  </Property>
-
-                  <Property
-                    kind="init"
-                    method={false}
-                    shorthand={false}
-                    computed={false}
-                  >
-                    <Identifier>payload</Identifier>
-                    <Identifier>arg</Identifier>
-                  </Property>
-                </ObjectExpression>
-              </ReturnStatement>
-            </BlockStatement>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate redux-thunk actionCreator code', () => {
@@ -143,6 +147,56 @@ describe('redux', () => {
     `
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>actionCreator</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>arg</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <ArrowFunctionExpression>
+                      <Identifier>dispatch</Identifier>
+                      <BlockStatement>
+                        <ExpressionStatement>
+                          <CallExpression>
+                            <Identifier>dispatch</Identifier>
+                            <ObjectExpression>
+                              <Property
+                                kind="init"
+                                method={false}
+                                shorthand={false}
+                                computed={false}
+                              >
+                                <Identifier>type</Identifier>
+                                <Literal>HOGE</Literal>
+                              </Property>
+        
+                              <Property
+                                kind="init"
+                                method={false}
+                                shorthand={false}
+                                computed={false}
+                              >
+                                <Identifier>payload</Identifier>
+                                <Identifier>arg</Identifier>
+                              </Property>
+                            </ObjectExpression>
+                          </CallExpression>
+                        </ExpressionStatement>
+                      </BlockStatement>
+                    </ArrowFunctionExpression>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>actionCreator</Identifier>
@@ -166,7 +220,7 @@ describe('redux', () => {
                               <Identifier>type</Identifier>
                               <Literal>HOGE</Literal>
                             </Property>
-      
+
                             <Property
                               kind="init"
                               method={false}
@@ -186,56 +240,10 @@ describe('redux', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>actionCreator</Identifier>
-          <ArrowFunctionExpression>
-            <Identifier>arg</Identifier>
-            <BlockStatement>
-              <ReturnStatement>
-                <ArrowFunctionExpression>
-                  <Identifier>dispatch</Identifier>
-                  <BlockStatement>
-                    <ExpressionStatement>
-                      <CallExpression>
-                        <Identifier>dispatch</Identifier>
-                        <ObjectExpression>
-                          <Property
-                            kind="init"
-                            method={false}
-                            shorthand={false}
-                            computed={false}
-                          >
-                            <Identifier>type</Identifier>
-                            <Literal>HOGE</Literal>
-                          </Property>
-
-                          <Property
-                            kind="init"
-                            method={false}
-                            shorthand={false}
-                            computed={false}
-                          >
-                            <Identifier>payload</Identifier>
-                            <Identifier>arg</Identifier>
-                          </Property>
-                        </ObjectExpression>
-                      </CallExpression>
-                    </ExpressionStatement>
-                  </BlockStatement>
-                </ArrowFunctionExpression>
-              </ReturnStatement>
-            </BlockStatement>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate reducer code', () => {
@@ -246,6 +254,31 @@ describe('redux', () => {
     `
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>reducer</Identifier>
+              <ArrowFunctionExpression>
+                <AssignmentPattern>
+                  <Identifier>state</Identifier>
+                  <ObjectExpression />
+                </AssignmentPattern>
+        
+                <Identifier>action</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <Identifier>state</Identifier>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>reducer</Identifier>
@@ -254,7 +287,7 @@ describe('redux', () => {
                 <Identifier>state</Identifier>
                 <ObjectExpression />
               </AssignmentPattern>
-      
+
               <Identifier>action</Identifier>
               <BlockStatement>
                 <ReturnStatement>
@@ -264,31 +297,10 @@ describe('redux', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>reducer</Identifier>
-          <ArrowFunctionExpression>
-            <AssignmentPattern>
-              <Identifier>state</Identifier>
-              <ObjectExpression />
-            </AssignmentPattern>
-
-            <Identifier>action</Identifier>
-            <BlockStatement>
-              <ReturnStatement>
-                <Identifier>state</Identifier>
-              </ReturnStatement>
-            </BlockStatement>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate selector code', () => {
@@ -297,6 +309,25 @@ describe('redux', () => {
     `
     assert(toBuilder(code).code === format(`
       const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>getState</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>state</Identifier>
+                <MemberExpression>
+                  <Identifier>state</Identifier>
+                  <Identifier>reducer</Identifier>
+                </MemberExpression>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
         <VariableDeclaration kind="const">
           <VariableDeclarator>
             <Identifier>getState</Identifier>
@@ -309,24 +340,9 @@ describe('redux', () => {
             </ArrowFunctionExpression>
           </VariableDeclarator>
         </VariableDeclaration>
-      )
-    `))
-
-    const render = () => (
-      <VariableDeclaration kind="const">
-        <VariableDeclarator>
-          <Identifier>getState</Identifier>
-          <ArrowFunctionExpression>
-            <Identifier>state</Identifier>
-            <MemberExpression>
-              <Identifier>state</Identifier>
-              <Identifier>reducer</Identifier>
-            </MemberExpression>
-          </ArrowFunctionExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
+      </Program>
     )
 
-    assert(format(print([render()])) === format(code))
+    assert(format(print(render())) === format(code))
   })
 })

@@ -60,7 +60,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = 'hoge'
     `))
 
@@ -68,7 +68,7 @@ describe('Components', () => {
       <Const name="hoge" value="hoge" />
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       const hoge = 'hoge'
     `))
   })
@@ -80,7 +80,7 @@ describe('Components', () => {
       </Let>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       let hoge = 'hoge'
     `))
 
@@ -88,7 +88,7 @@ describe('Components', () => {
       <Let name="hoge" value="hoge" />
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       let hoge = 'hoge'
     `))
   })
@@ -100,7 +100,7 @@ describe('Components', () => {
       </Var>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       var hoge = 'hoge'
     `))
 
@@ -108,7 +108,7 @@ describe('Components', () => {
       <Var name="hoge" value="hoge" />
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       var hoge = 'hoge'
     `))
   })
@@ -120,7 +120,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = 'hoge'
     `))
 
@@ -130,7 +130,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       const hoge = 'hoge'
     `))
 
@@ -140,7 +140,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([renderWithNumber()])) === format(`
+    assert(format(print(renderWithNumber())) === format(`
       const hoge = 1
     `))
   })
@@ -152,7 +152,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = 'hoge'
     `))
   })
@@ -164,7 +164,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = true
     `))
   })
@@ -176,7 +176,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = {
         hoge: 'fuga',
         fuga: 'piyo'
@@ -187,7 +187,7 @@ describe('Components', () => {
       <Const name="hoge" value={{hoge: 'fuga', fuga: 'piyo'}} />
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       const hoge = {
         hoge: 'fuga',
         fuga: 'piyo'
@@ -202,7 +202,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = [1, 2, 3]
     `))
 
@@ -210,7 +210,7 @@ describe('Components', () => {
       <Const name="hoge" value={[1, 2, 3]} />
     )
 
-    assert(format(print([renderWithValue()])) === format(`
+    assert(format(print(renderWithValue())) === format(`
       const hoge = [1, 2, 3]
     `))
   })
@@ -230,7 +230,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = (str, hoge) => console.log(str)
     `))
   })
@@ -251,7 +251,7 @@ describe('Components', () => {
       </Const>
     )
 
-    assert(format(print([render()])) === format(`
+    assert(format(print(render())) === format(`
       const hoge = (str, hoge) => {
         console.log(str)
         const hoge = 'true'
