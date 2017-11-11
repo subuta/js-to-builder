@@ -4,7 +4,10 @@ import ReactDOM from 'react-dom'
 import _ from 'lodash'
 window._ = _
 
-import Content from './Content'
+import './style'
+import { wrap } from './utils/style'
+
+import Content from './components'
 
 let App = () => {
   return (
@@ -13,6 +16,9 @@ let App = () => {
     </div>
   )
 }
+
+// styleを注入する。
+App = wrap(App)
 
 let render = () => {
   const appNode = document.getElementById('app')
