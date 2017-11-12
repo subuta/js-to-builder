@@ -1,8 +1,45 @@
 /* global describe, it */
+/** @jsx h */
 
-import toBuilder from 'lib/transform/toBuilder'
+import toBuilder from 'lib/transform'
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
+
+import {
+  Program,
+
+  ReturnStatement,
+  ExpressionStatement,
+
+  CallExpression,
+  ArrayExpression,
+  ObjectExpression,
+  ArrowFunctionExpression,
+  MemberExpression,
+
+  BlockStatement,
+
+  Property,
+
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
+
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+
+  AssignmentPattern,
+  ObjectPattern,
+
+  VariableDeclaration,
+  VariableDeclarator,
+
+  Identifier,
+  Literal,
+} from 'lib/components'
+
+import h from 'lib/h'
 
 const assert = require('assert')
 
@@ -17,47 +54,84 @@ describe('redux', () => {
       }
     `
     assert(toBuilder(code).code === format(`
-      b.variableDeclaration('const', [
-        b.variableDeclarator(
-          b.identifier('actionCreator'),
-          b.arrowFunctionExpression(
-            [b.identifier('arg')],
-            b.blockStatement([
-              b.returnStatement(
-                b.objectExpression([
-                  Object.assign(
-                    b.property(
-                      'init',
-                      b.identifier('type'),
-                      b.literal('HOGE')
-                    ),
-                    {
-                      method: false,
-                      shorthand: false,
-                      computed: false
-                    }
-                  ),
-                  Object.assign(
-                    b.property(
-                      'init',
-                      b.identifier('payload'),
-                      b.identifier('arg')
-                    ),
-                    {
-                      method: false,
-                      shorthand: false,
-                      computed: false
-                    }
-                  )
-                ])
-              )
-            ])
-          )
-        )
-      ])
+      const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>actionCreator</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>arg</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <ObjectExpression>
+                      <Property
+                        kind="init"
+                        method={false}
+                        shorthand={false}
+                        computed={false}
+                      >
+                        <Identifier>type</Identifier>
+                        <Literal>HOGE</Literal>
+                      </Property>
+        
+                      <Property
+                        kind="init"
+                        method={false}
+                        shorthand={false}
+                        computed={false}
+                      >
+                        <Identifier>payload</Identifier>
+                        <Identifier>arg</Identifier>
+                      </Property>
+                    </ObjectExpression>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
     `))
 
-    assert(format(print([toBuilder(code).builder])) === format(code))
+    const render = () => (
+      <Program>
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>actionCreator</Identifier>
+            <ArrowFunctionExpression>
+              <Identifier>arg</Identifier>
+              <BlockStatement>
+                <ReturnStatement>
+                  <ObjectExpression>
+                    <Property
+                      kind="init"
+                      method={false}
+                      shorthand={false}
+                      computed={false}
+                    >
+                      <Identifier>type</Identifier>
+                      <Literal>HOGE</Literal>
+                    </Property>
+
+                    <Property
+                      kind="init"
+                      method={false}
+                      shorthand={false}
+                      computed={false}
+                    >
+                      <Identifier>payload</Identifier>
+                      <Identifier>arg</Identifier>
+                    </Property>
+                  </ObjectExpression>
+                </ReturnStatement>
+              </BlockStatement>
+            </ArrowFunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate redux-thunk actionCreator code', () => {
@@ -72,69 +146,104 @@ describe('redux', () => {
       }
     `
     assert(toBuilder(code).code === format(`
-      b.variableDeclaration('const', [
-        b.variableDeclarator(
-          b.identifier('actionCreator'),
-          b.arrowFunctionExpression(
-            [b.identifier('arg')],
-            b.blockStatement([
-              b.returnStatement(
-                b.arrowFunctionExpression(
-                  [b.identifier('dispatch')],
-                  b.blockStatement([
-                    b.expressionStatement(
-                      b.callExpression(
-                        b.identifier(
-                          'dispatch'
-                        ),
-                        [
-                          b.objectExpression([
-                            Object.assign(
-                              b.property(
-                                'init',
-                                b.identifier(
-                                  'type'
-                                ),
-                                b.literal(
-                                  'HOGE'
-                                )
-                              ),
-                              {
-                                method: false,
-                                shorthand: false,
-                                computed: false
-                              }
-                            ),
-                            Object.assign(
-                              b.property(
-                                'init',
-                                b.identifier(
-                                  'payload'
-                                ),
-                                b.identifier(
-                                  'arg'
-                                )
-                              ),
-                              {
-                                method: false,
-                                shorthand: false,
-                                computed: false
-                              }
-                            )
-                          ])
-                        ]
-                      )
-                    )
-                  ])
-                )
-              )
-            ])
-          )
-        )
-      ])
+      const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>actionCreator</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>arg</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <ArrowFunctionExpression>
+                      <Identifier>dispatch</Identifier>
+                      <BlockStatement>
+                        <ExpressionStatement>
+                          <CallExpression>
+                            <Identifier>dispatch</Identifier>
+                            <ObjectExpression>
+                              <Property
+                                kind="init"
+                                method={false}
+                                shorthand={false}
+                                computed={false}
+                              >
+                                <Identifier>type</Identifier>
+                                <Literal>HOGE</Literal>
+                              </Property>
+        
+                              <Property
+                                kind="init"
+                                method={false}
+                                shorthand={false}
+                                computed={false}
+                              >
+                                <Identifier>payload</Identifier>
+                                <Identifier>arg</Identifier>
+                              </Property>
+                            </ObjectExpression>
+                          </CallExpression>
+                        </ExpressionStatement>
+                      </BlockStatement>
+                    </ArrowFunctionExpression>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
     `))
 
-    assert(format(print([toBuilder(code).builder])) === format(code))
+    const render = () => (
+      <Program>
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>actionCreator</Identifier>
+            <ArrowFunctionExpression>
+              <Identifier>arg</Identifier>
+              <BlockStatement>
+                <ReturnStatement>
+                  <ArrowFunctionExpression>
+                    <Identifier>dispatch</Identifier>
+                    <BlockStatement>
+                      <ExpressionStatement>
+                        <CallExpression>
+                          <Identifier>dispatch</Identifier>
+                          <ObjectExpression>
+                            <Property
+                              kind="init"
+                              method={false}
+                              shorthand={false}
+                              computed={false}
+                            >
+                              <Identifier>type</Identifier>
+                              <Literal>HOGE</Literal>
+                            </Property>
+
+                            <Property
+                              kind="init"
+                              method={false}
+                              shorthand={false}
+                              computed={false}
+                            >
+                              <Identifier>payload</Identifier>
+                              <Identifier>arg</Identifier>
+                            </Property>
+                          </ObjectExpression>
+                        </CallExpression>
+                      </ExpressionStatement>
+                    </BlockStatement>
+                  </ArrowFunctionExpression>
+                </ReturnStatement>
+              </BlockStatement>
+            </ArrowFunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate reducer code', () => {
@@ -144,28 +253,54 @@ describe('redux', () => {
       }
     `
     assert(toBuilder(code).code === format(`
-      b.variableDeclaration('const', [
-        b.variableDeclarator(
-          b.identifier('reducer'),
-          b.arrowFunctionExpression(
-            [
-              b.assignmentPattern(
-                b.identifier('state'),
-                b.objectExpression([])
-              ),
-              b.identifier('action')
-            ],
-            b.blockStatement([
-              b.returnStatement(
-                b.identifier('state')
-              )
-            ])
-          )
-        )
-      ])
+      const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>reducer</Identifier>
+              <ArrowFunctionExpression>
+                <AssignmentPattern>
+                  <Identifier>state</Identifier>
+                  <ObjectExpression />
+                </AssignmentPattern>
+        
+                <Identifier>action</Identifier>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <Identifier>state</Identifier>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
     `))
 
-    assert(format(print([toBuilder(code).builder])) === format(code))
+    const render = () => (
+      <Program>
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>reducer</Identifier>
+            <ArrowFunctionExpression>
+              <AssignmentPattern>
+                <Identifier>state</Identifier>
+                <ObjectExpression />
+              </AssignmentPattern>
+
+              <Identifier>action</Identifier>
+              <BlockStatement>
+                <ReturnStatement>
+                  <Identifier>state</Identifier>
+                </ReturnStatement>
+              </BlockStatement>
+            </ArrowFunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
   })
 
   it('should parse and generate selector code', () => {
@@ -173,20 +308,41 @@ describe('redux', () => {
       const getState = (state) => state.reducer
     `
     assert(toBuilder(code).code === format(`
-      b.variableDeclaration('const', [
-        b.variableDeclarator(
-          b.identifier('getState'),
-          b.arrowFunctionExpression(
-            [b.identifier('state')],
-            b.memberExpression(
-              b.identifier('state'),
-              b.identifier('reducer')
-            )
-          )
-        )
-      ])
+      const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>getState</Identifier>
+              <ArrowFunctionExpression>
+                <Identifier>state</Identifier>
+                <MemberExpression>
+                  <Identifier>state</Identifier>
+                  <Identifier>reducer</Identifier>
+                </MemberExpression>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
     `))
 
-    assert(format(print([toBuilder(code).builder])) === format(code))
+    const render = () => (
+      <Program>
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>getState</Identifier>
+            <ArrowFunctionExpression>
+              <Identifier>state</Identifier>
+              <MemberExpression>
+                <Identifier>state</Identifier>
+                <Identifier>reducer</Identifier>
+              </MemberExpression>
+            </ArrowFunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
   })
 })

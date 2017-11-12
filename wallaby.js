@@ -1,6 +1,7 @@
 const wallabify = require('wallabify')
 const path = require('path')
 
+// import browserify for wallaby.
 const wallabyPostprocessor = wallabify(
   {
     // browserify options, such as

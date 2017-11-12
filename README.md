@@ -1,10 +1,17 @@
 ## js-to-builder
 
-Will generate [ast-types](https://github.com/benjamn/ast-types) builder from your javascript code.
+SEE https://subuta.github.io/js-to-builder/ and try js-to-builder feature
+
+Will generate [ast-types](https://github.com/benjamn/ast-types) builder JSX from your JavaScript code.
+
+### Feature
+
+- `toBuilder` feature to parse JavaScript code and generate equivalent `builder-jsx`.
+- Built-in `builder-jsx` shorthand that may use for your own JavaScript code generator. (or write your own code block) 
 
 ### Why?
 
-Because it's harder to write builder-code(AST) manually ;)
+`builder-jsx` let you easily compose/reuse your code block compared to original AST compatible builder api.
 
 ### Getting Started
 #### Installation
@@ -13,42 +20,124 @@ Because it's harder to write builder-code(AST) manually ;)
 npm i js-to-builder --save
 ```
 
-#### Example
+### Example
+#### 1. To generate builder-jsx code from your code(JavaScript).
+You may use [Online editor](https://subuta.github.io/js-to-builder/)
 
-```js
-import { toBuilder, print } from 'js-to-builder'
+```jsx harmony
+// 1. import toBuilder from `js-to-builder`
+import { toBuilder } from 'js-to-builder'
 
-const code = `const hoge = 'fuga';`
+// 2. parse code(string) and generate ast-types builder jsx
+const variableDeclaration = toBuilder(`const hoge = 'fuga'`)
 
-// parse and generate ast-types builder
-const variableDeclaration = toBuilder(code)
-
-// will print builder code (main feature of this library!)
+// 3. print builder-jsx code and copy it(to clipboard) for next step.
 console.log(variableDeclaration.code)
 
-// -> `
-// b.variableDeclaration('const', [
-//   b.variableDeclarator(
-//     b.identifier('hoge'),
-//     b.literal('fuga')
-//   )
-// ]);
-// `
+// ->
+// const render = () => (
+//   <Program>
+//     <VariableDeclaration kind="const">
+//       <VariableDeclarator>
+//         <Identifier>hoge</Identifier>
+//         <Literal>fuga</Literal>
+//       </VariableDeclarator>
+//     </VariableDeclaration>
+//   </Program>
+// )
+```
 
-// will print original code
-console.log(print([
-  variableDeclaration.builder
-]))
+#### 2. To generate code from builder-jsx
+Copy and paste printed `builder-jsx` and use `js-to-builder` for construct your own JavaScript code generator.
 
-// -> `const hoge = "fuga";`
+```jsx harmony
+// 1. specify jsx pragma as h (the one imported from `js-to-builder`)
+/** @jsx h */
+import { h, components, format } from 'js-to-builder'
+import { print } from 'recast'
 
+// 2. import necessary　builder-jsx components from js-to-builder components.
+const {
+  Program,
+
+  ForStatement,
+  ForInStatement,
+  ForOfStatement,
+  DebuggerStatement,
+  ReturnStatement,
+  ExpressionStatement,
+
+  CallExpression,
+  ArrayExpression,
+  ObjectExpression,
+  ArrowFunctionExpression,
+  MemberExpression,
+  BinaryExpression,
+  AssignmentExpression,
+  UpdateExpression,
+  FunctionExpression,
+
+  BlockStatement,
+  IfStatement,
+  LabeledStatement,
+  BreakStatement,
+  DoWhileStatement,
+  WhileStatement,
+  ContinueStatement,
+
+  Property,
+
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
+
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+
+  AssignmentPattern,
+  ObjectPattern,
+
+  VariableDeclaration,
+  VariableDeclarator,
+
+  Identifier,
+  Literal,
+} = components
+
+// 3. paste(or write your own) builder-jsx code
+const render = () => (
+  <Program>
+    <VariableDeclaration kind="const">
+      <VariableDeclarator>
+        <Identifier>hoge</Identifier>
+        <Literal>fuga</Literal>
+      </VariableDeclarator>
+    </VariableDeclaration>
+  </Program>
+)
+
+// 4. use react's `print` to convert builder code to JavaScript code.
+const code = format(print(render()))
+
+// will print JavaScript Code
+console.log(code)
+
+// ->
+// const hoge = 'fuga'
+
+// You can save generated JavaScript Code as a file using `fs.writeFile` of-course :)
 ```
 
 ### Development
 
 ```bash
-// clone this repository and then ...
+# clone this repository and then ...
 npm i
+
+# will run docs (Github pages)
+npm run watch
+open http://localhost:4000
 ```
 
 #### To run tests locally
@@ -60,7 +149,7 @@ npm i
 #### References
 
 - Use [AST Explorer](https://astexplorer.net/) to see how AST Tree created from your code(set parser to [recast](https://github.com/benjamn/recast) of-course).
-- [MDN Parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) and [ESTree Spec](https://github.com/estree/estree) will describes about definition of JavaScript AST.
+- [MDN Parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) and [ESTree Spec](https://github.com/estree/estree) describes about definition of JavaScript AST.
 
 #### License
 
