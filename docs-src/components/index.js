@@ -81,7 +81,7 @@ import JsxEditor from './JsxEditor'
 
 const enhance = compose(
   withState('code', 'setCode', ''),
-  withState('codeTemplate', 'setCodeTemplate', 'const hoge = "fuga";'),
+  withState('codeTemplate', 'setCodeTemplate', `const hoge = 'fuga'`),
   withState('error', 'setError', null),
   withPropsOnChange(
     ['code', 'setCode', 'setCodeTemplate'],
@@ -101,8 +101,8 @@ const enhance = compose(
       return {
         jsx,
         error,
-        setCode: _.debounce(setCode, 10), // debounce setCode call
-        setCodeTemplate: _.debounce(setCodeTemplate, 10) // debounce setCodeTemplate call
+        setCode: _.debounce(setCode, 1000 / 60), // debounce setCode call
+        setCodeTemplate: _.debounce(setCodeTemplate, 1000 / 60) // debounce setCodeTemplate call
       }
     }
   )
@@ -129,7 +129,9 @@ export default enhance((props) => {
   return (
     <div className={classes.Content}>
       <CodeEditor
-        onChange={(value) => setCode(value)}
+        onChange={(value) => {
+          setCode(value)
+        }}
         template={codeTemplate}
       />
 

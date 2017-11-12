@@ -32,11 +32,13 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    handleChange: ({onChange, setValue}) => ({value}) => {
-      // const {startBlock, document} = change.state
-      // update Value and parent htmlPart.
+    handleChange: (props) => ({value}) => {
+      const {onChange, setValue} = props
+      if (value.document !== props.value.document) {
+        // trigger onChange only if document changed.
+        onChange(Plain.serialize(value))
+      }
       setValue(value)
-      onChange(Plain.serialize(value))
     }
   })
 )
