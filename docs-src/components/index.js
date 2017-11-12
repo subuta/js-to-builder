@@ -17,18 +17,6 @@ import { components, h, toBuilder, print, format } from 'js-to-builder'
 // expose h to window for eval
 window.h = h
 
-const renderBuilder = (builderCode) => {
-  const code = _.get(Babel.transform(builderCode, babelOptions), 'code', '')
-  // FIXME: remove eval.
-  const builder = eval(`
-            (() => {
-              ${format(code)}
-              return render()
-            })()
-          `)
-  return print(builder)
-}
-
 const {
   Program,
 
@@ -107,27 +95,41 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    handleBuilderChange: ({setCodeTemplate, setBuilderError}) => (value) => {
+    renderBuilder: () => (builderCode) => {
+      const code = _.get(Babel.transform(builderCode, {
+        'presets': [
+          'es2015',
+          'stage-2',
+          'react'
+        ]
+      }), 'code', '')
+
+      const builder = eval(`
+            (() => {
+              ${format(code)}
+              return render()
+            })()
+          `)
+
+      return print(builder)
+    }
+  }),
+  withHandlers({
+    handleBuilderChange: ({setCodeTemplate, setBuilderError, renderBuilder}) => (value) => {
       if (_.isEmpty(value)) return
       const jsxCode = `/** @jsx h */ ${value}`
       try {
         const code = format(renderBuilder(jsxCode))
         setBuilderError(null)
-        setCodeTemplate(code)
+        setCodeTemplate(format(`
+          ${code}
+        `))
       } catch (e) {
         setBuilderError(e)
       }
     }
   })
 )
-
-const babelOptions = {
-  'presets': [
-    'es2015',
-    'stage-2',
-    'react'
-  ]
-}
 
 export default enhance((props) => {
   const {
@@ -140,22 +142,32 @@ export default enhance((props) => {
   } = props
 
   return (
-    <div className={classes.Content}>
-      <Editor
-        className={classes.Editor}
-        onChange={(value) => {
-          setCode(value)
-        }}
-        template={codeTemplate}
-        error={codeError}
-      />
+    <div>
+      <div className={classes.Content}>
+        <h3>js-to-builder</h3>
 
-      <Editor
-        className={classes.Editor}
-        onChange={handleBuilderChange}
-        template={jsx || ''}
-        error={builderError}
-      />
+        <a href="https://github.com/subuta/js-to-builder" target="_blank">https://github.com/subuta/js-to-builder</a>
+
+        <div className={classes.Editors}>
+          <Editor
+            onChange={(value) => {
+              setCode(value)
+            }}
+            template={codeTemplate}
+            error={codeError}
+          />
+
+          <Editor
+            onChange={handleBuilderChange}
+            template={jsx || ''}
+            error={builderError}
+          />
+        </div>
+      </div>
+
+      <div className={classes.Footer}>
+        <a href="https://github.com/subuta" target="_blank">by @subuta</a>
+      </div>
     </div>
   )
 })

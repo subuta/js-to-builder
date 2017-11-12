@@ -66,7 +66,7 @@ describe('toBuilder', () => {
   it('should convert CallExpression', () => {
     const code = 'hoge()'
 
-    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+    assert(toBuilder(code).code === format(`
       const render = () => (
         <Program>
           <ExpressionStatement>
@@ -93,7 +93,7 @@ describe('toBuilder', () => {
 
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
-    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+    assert(toBuilder(code).code === format(`
       const render = () => (
         <Program>
           <ExpressionStatement>
@@ -131,7 +131,7 @@ describe('toBuilder', () => {
   it('should convert chained CallExpression', () => {
     const code = 'hoge("arg1").fuga("arg2")'
 
-    assert(toBuilder(code, {to: 'jsx'}).code === format(`
+    assert(toBuilder(code).code === format(`
       const render = () => (
         <Program>
           <ExpressionStatement>

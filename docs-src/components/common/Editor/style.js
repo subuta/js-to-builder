@@ -23,6 +23,7 @@ const Editor = {
   border: `1px solid #cccccc`,
   fontFamily: '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;',
   height: '100%',
+  overflow: 'scroll',
 
   '& > pre': {
     margin: '8px 0',
