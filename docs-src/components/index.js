@@ -12,7 +12,7 @@ import {
 
 import classes from './style.js'
 
-import { components, h, toBuilder, print, format } from 'js-to-builder'
+import { components, shorthand, h, toBuilder, print, format } from 'js-to-builder'
 
 // expose h to window for eval
 window.h = h
@@ -64,6 +64,16 @@ const {
   Identifier,
   Literal,
 } = components
+
+const {
+  Const,
+  Let,
+  Var,
+  Value,
+  ArrowFn,
+  FnStatement,
+  FnCall
+} = shorthand
 
 import Editor from 'docs-src/components/common/Editor'
 
