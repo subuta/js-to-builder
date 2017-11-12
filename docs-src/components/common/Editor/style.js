@@ -10,6 +10,13 @@ const LineNumber = {
   textAlign: 'right'
 }
 
+const EditorWrapper = {
+  position: 'relative',
+  flex: '1 1 auto',
+  height: '100%',
+  width: '50%'
+}
+
 const Editor = {
   padding: '0 8px',
   '-webkit-font-smoothing': 'auto',
@@ -66,6 +73,22 @@ const Editor = {
   }
 }
 
+const Error = {
+  margin: 0,
+  padding: 8,
+  position: 'absolute',
+  whiteSpace: 'pre-wrap',
+  left: 0,
+  bottom: 0,
+  right: 0,
+  background: '#EEEEEE',
+  color: 'red',
+  opacity: 0.8,
+  fontWeight: 'bold'
+}
+
 export default registerStyles({
-  Editor
+  EditorWrapper,
+  Editor,
+  Error
 })

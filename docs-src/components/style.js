@@ -3,6 +3,7 @@ import {
 } from 'docs-src/utils/style'
 
 const Content = {
+  padding: 16,
   display: 'flex',
   alignItems: 'flex-start',
   height: '100vh',
@@ -13,28 +14,14 @@ const Content = {
   whiteSpace: 'pre'
 }
 
-const CodeEditor = {
-  padding: 8,
-  flex: '1 1 auto',
-  height: '90%',
-  width: '50%',
-  fontSize: 13
-}
-
-const JsxEditor = {
-  margin: '0 0 0 16px',
-  padding: 8,
-  flex: '1 1 auto',
-  height: '90%',
-  width: '50%',
-  color: 'black',
-  '& p.is-error': {
-    color: 'red'
+const Editor = {
+  margin: '0 16px 0 0',
+  '&:nth-of-type(2)': {
+    margin: 0
   }
 }
 
 export default registerStyles({
   Content,
-  CodeEditor,
-  JsxEditor
+  Editor
 })

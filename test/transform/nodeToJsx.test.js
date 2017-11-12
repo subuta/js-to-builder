@@ -1528,7 +1528,7 @@ describe('toBuilder', () => {
 
   it('should convert for of', () => {
     const code = `
-    for (let i of arr) { console.log(i); }
+      for (let i of arr) { console.log(i); }
     `
 
     assert(toBuilder(code).code === format(`

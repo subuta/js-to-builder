@@ -47,15 +47,30 @@ export default enhance((props) => {
   const {
     value,
     handleChange,
+    error,
+    className
   } = props
 
+  let editorWrapperClass = classes.EditorWrapper
+  if (className) {
+    editorWrapperClass += ` ${className}`
+  }
+
   return (
-    <Editor
-      className={classes.Editor}
-      placeholder='enter some code'
-      plugins={plugins}
-      value={value}
-      onChange={handleChange}
-    />
+    <div className={editorWrapperClass}>
+      <Editor
+        className={classes.Editor}
+        placeholder='enter some code'
+        plugins={plugins}
+        value={value}
+        onChange={handleChange}
+      />
+
+      {error && (
+        <pre className={classes.Error}>
+          {error.toString()}
+        </pre>
+      )}
+    </div>
   )
 })

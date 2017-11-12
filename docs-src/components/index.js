@@ -6,7 +6,8 @@ import * as Babel from '@babel/standalone'
 import {
   compose,
   withState,
-  withPropsOnChange
+  withPropsOnChange,
+  withHandlers
 } from 'recompose'
 
 import classes from './style.js'
@@ -76,17 +77,16 @@ const {
   Literal,
 } = components
 
-import CodeEditor from './CodeEditor'
-import JsxEditor from './JsxEditor'
+import Editor from 'docs-src/components/common/Editor'
 
 const enhance = compose(
   withState('code', 'setCode', ''),
   withState('codeTemplate', 'setCodeTemplate', `const hoge = 'fuga'`),
-  withState('error', 'setError', null),
+  withState('builderError', 'setBuilderError', null),
   withPropsOnChange(
     ['code', 'setCode', 'setCodeTemplate'],
     ({code, setCode, setCodeTemplate}) => {
-      let jsx = ''
+      let jsx = null
       let error = null
 
       if (_.isEmpty(code)) return
@@ -100,12 +100,25 @@ const enhance = compose(
 
       return {
         jsx,
-        error,
+        codeError: error,
         setCode: _.debounce(setCode, 1000 / 60), // debounce setCode call
         setCodeTemplate: _.debounce(setCodeTemplate, 1000 / 60) // debounce setCodeTemplate call
       }
     }
-  )
+  ),
+  withHandlers({
+    handleBuilderChange: ({setCodeTemplate, setBuilderError}) => (value) => {
+      if (_.isEmpty(value)) return
+      const jsxCode = `/** @jsx h */ ${value}`
+      try {
+        const code = format(renderBuilder(jsxCode))
+        setBuilderError(null)
+        setCodeTemplate(code)
+      } catch (e) {
+        setBuilderError(e)
+      }
+    }
+  })
 )
 
 const babelOptions = {
@@ -116,37 +129,32 @@ const babelOptions = {
   ]
 }
 
-// FIXME: 編集中のeditorのフォーカスが外れるのを直す。
 export default enhance((props) => {
   const {
     setCode,
     jsx,
-    error,
+    codeError,
+    builderError,
     codeTemplate,
-    setCodeTemplate
+    handleBuilderChange
   } = props
 
   return (
     <div className={classes.Content}>
-      <CodeEditor
+      <Editor
+        className={classes.Editor}
         onChange={(value) => {
           setCode(value)
         }}
         template={codeTemplate}
+        error={codeError}
       />
 
-      <JsxEditor
-        onChange={(value) => {
-          const jsxCode = `/** @jsx h */ ${value}`
-          try {
-            const code = format(renderBuilder(jsxCode))
-            window.requestAnimationFrame(() => setCodeTemplate(code))
-          } catch (e) {
-            console.log('error on eval', e)
-          }
-        }}
-        jsx={jsx}
-        error={error}
+      <Editor
+        className={classes.Editor}
+        onChange={handleBuilderChange}
+        template={jsx || ''}
+        error={builderError}
       />
     </div>
   )
