@@ -55,6 +55,12 @@ import {
 
   Identifier,
   Literal,
+
+  JSXElement,
+  JSXOpeningElement,
+  JSXIdentifier,
+  JSXText,
+  JSXClosingElement
 } from 'lib/components'
 
 import * as types from 'ast-types'
@@ -1578,6 +1584,75 @@ describe('toBuilder', () => {
             </ExpressionStatement>
           </BlockStatement>
         </ForOfStatement>
+      </Program>
+    )
+
+    assert(format(print(render())) === format(code))
+  })
+
+  // jsx
+  it('should convert simple jsx', () => {
+    const code = `
+      const render = () => {
+        return (
+          <span>hoge</span>
+        )
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <Program>
+          <VariableDeclaration kind="const">
+            <VariableDeclarator>
+              <Identifier>render</Identifier>
+              <ArrowFunctionExpression>
+                <BlockStatement>
+                  <ReturnStatement>
+                    <JSXElement name={null} attributes={null} selfClosing={undefined}>
+                      <JSXOpeningElement
+                        name={<JSXIdentifier name="span" />}
+                        attributes={null}
+                        selfClosing={false}
+                      />
+      
+                      <JSXText>hoge</JSXText>
+      
+                      <JSXClosingElement name={<JSXIdentifier name="span" />} />
+                    </JSXElement>
+                  </ReturnStatement>
+                </BlockStatement>
+              </ArrowFunctionExpression>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Program>
+      )
+    `))
+
+    const render = () => (
+      <Program>
+        <VariableDeclaration kind="const">
+          <VariableDeclarator>
+            <Identifier>render</Identifier>
+            <ArrowFunctionExpression>
+              <BlockStatement>
+                <ReturnStatement>
+                  <JSXElement selfClosing={undefined}>
+                    <JSXOpeningElement selfClosing={false}>
+                      <JSXIdentifier name="span" />
+                    </JSXOpeningElement>
+
+                    <JSXText>hoge</JSXText>
+
+                    <JSXClosingElement>
+                      <JSXIdentifier name="span" />
+                    </JSXClosingElement>
+                  </JSXElement>
+                </ReturnStatement>
+              </BlockStatement>
+            </ArrowFunctionExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
       </Program>
     )
 
