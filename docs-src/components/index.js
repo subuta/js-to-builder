@@ -63,6 +63,12 @@ const {
 
   Identifier,
   Literal,
+
+  JSXElement,
+  JSXOpeningElement,
+  JSXIdentifier,
+  JSXText,
+  JSXClosingElement
 } = components
 
 const {
