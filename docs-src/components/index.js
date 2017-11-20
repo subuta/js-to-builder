@@ -1,8 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
 
-import * as Babel from '@babel/standalone'
-
 import {
   compose,
   withState,
@@ -12,76 +10,10 @@ import {
 
 import classes from './style.js'
 
-import { components, shorthand, h, toBuilder, print, format } from 'js-to-builder'
-
-// expose h to window for eval
-window.h = h
-
-const {
-  Program,
-
-  ForStatement,
-  ForInStatement,
-  ForOfStatement,
-  DebuggerStatement,
-  ReturnStatement,
-  ExpressionStatement,
-
-  CallExpression,
-  ArrayExpression,
-  ObjectExpression,
-  ArrowFunctionExpression,
-  MemberExpression,
-  BinaryExpression,
-  AssignmentExpression,
-  UpdateExpression,
-  FunctionExpression,
-
-  BlockStatement,
-  IfStatement,
-  LabeledStatement,
-  BreakStatement,
-  DoWhileStatement,
-  WhileStatement,
-  ContinueStatement,
-
-  Property,
-
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportNamespaceSpecifier,
-  ImportSpecifier,
-
-  ExportDefaultDeclaration,
-  ExportNamedDeclaration,
-
-  AssignmentPattern,
-  ObjectPattern,
-
-  VariableDeclaration,
-  VariableDeclarator,
-
-  Identifier,
-  Literal,
-
-  JSXElement,
-  JSXOpeningElement,
-  JSXIdentifier,
-  JSXText,
-  JSXClosingElement
-} = components
-
-const {
-  Const,
-  Let,
-  Var,
-  Value,
-  ArrowFn,
-  FnStatement,
-  FnCall
-} = shorthand
+import { components, shorthand, toBuilder, print, format } from 'js-to-builder'
 
 import Editor from 'docs-src/components/common/Editor'
+import { babelAndEval } from 'docs-src/utils/babel'
 
 const enhance = compose(
   withState('code', 'setCode', ''),
@@ -111,31 +43,11 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    renderBuilder: () => (builderCode) => {
-      const code = _.get(Babel.transform(builderCode, {
-        'presets': [
-          'es2015',
-          'stage-2',
-          'react'
-        ]
-      }), 'code', '')
-
-      const builder = eval(`
-            (() => {
-              ${format(code)}
-              return render()
-            })()
-          `)
-
-      return print(builder)
-    }
-  }),
-  withHandlers({
-    handleBuilderChange: ({setCodeTemplate, setBuilderError, renderBuilder}) => (value) => {
+    handleBuilderChange: ({setCodeTemplate, setBuilderError}) => (value) => {
       if (_.isEmpty(value)) return
       const jsxCode = `/** @jsx h */ ${value}`
       try {
-        const code = format(renderBuilder(jsxCode))
+        const code = format(babelAndEval(jsxCode))
         setBuilderError(null)
         setCodeTemplate(format(`
           ${code}

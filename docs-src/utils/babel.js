@@ -59,9 +59,7 @@ export const babelAndEval = (builderCode) => {
     JSXOpeningElement,
     JSXIdentifier,
     JSXText,
-    JSXClosingElement,
-    JSXAttribute,
-    JSXExpressionContainer
+    JSXClosingElement
   } = components
 
   const {
@@ -71,7 +69,8 @@ export const babelAndEval = (builderCode) => {
     Value,
     ArrowFn,
     FnStatement,
-    FnCall
+    FnCall,
+    JSX
   } = shorthand
 
   const code = _.get(Babel.transform(builderCode, {
@@ -91,3 +90,5 @@ export const babelAndEval = (builderCode) => {
 
   return print(builder)
 }
+
+export default babelAndEval

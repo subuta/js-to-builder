@@ -1,7 +1,6 @@
 /* global describe, it */
 /** @jsx h */
 
-import toBuilder from 'lib/transform'
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
 import h from 'lib/h'
@@ -15,7 +14,8 @@ import {
   Value,
   ArrowFn,
   FnStatement,
-  FnCall
+  FnCall,
+  JSX
 } from 'lib/components/shorthand'
 
 import {
@@ -50,6 +50,14 @@ import {
 
   Identifier,
   Literal,
+
+  JSXElement,
+  JSXOpeningElement,
+  JSXIdentifier,
+  JSXText,
+  JSXClosingElement,
+  JSXAttribute,
+  JSXExpressionContainer
 } from 'lib/components'
 
 describe('Components', () => {
@@ -169,6 +177,18 @@ describe('Components', () => {
     `))
   })
 
+  it('Value with null should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value>{null}</Value>
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = null
+    `))
+  })
+
   it('Value with object should render', () => {
     const render = () => (
       <Const name="hoge">
@@ -256,6 +276,70 @@ describe('Components', () => {
         console.log(str)
         const hoge = 'true'
       }
+    `))
+  })
+
+  it('simple JSX should render', () => {
+    const render = () => (
+      <JSX tagName="span">hoge</JSX>
+    )
+
+    assert(format(print(render())) === format(`
+      <span>hoge</span>
+    `))
+  })
+
+  it('JSX with attributes should render', () => {
+    const render = () => (
+      <JSX
+        tagName="span"
+        style={{
+          color: 'red'
+        }}
+        fuga={false}
+        hidden
+      >
+        hoge
+      </JSX>
+    )
+
+    assert(format(print(render())) === format(`
+      <span 
+        style={{
+          color: 'red'
+        }}
+        fuga={false}
+        hidden
+      >
+        hoge
+      </span>
+    `))
+  })
+
+  it('nested JSX should render', () => {
+    const render = () => (
+      <JSX tagName="p">
+        <JSX
+          tagName="b"
+          style={{
+            color: 'red'
+          }}
+        >
+          piyo
+        </JSX>
+      </JSX>
+    )
+
+    assert(format(print(render())) === format(`
+      <p>
+        <b
+          style={{
+            color: 'red'
+          }}
+        >
+          piyo
+        </b>
+      </p>
     `))
   })
 })
