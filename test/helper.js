@@ -1,69 +1,13 @@
 import * as Babel from '@babel/standalone'
 import _ from 'lodash'
 
-import { h, print, format, components, shorthand } from 'js-to-builder'
+import { h, print, format, shorthand } from 'js-to-builder'
 
 // expose h to window for eval
 window.h = h
 
 // transpile source code by babel.
 export const babelAndEval = (builderCode) => {
-  const {
-    Program,
-
-    ForStatement,
-    ForInStatement,
-    ForOfStatement,
-    DebuggerStatement,
-    ReturnStatement,
-    ExpressionStatement,
-
-    CallExpression,
-    ArrayExpression,
-    ObjectExpression,
-    ArrowFunctionExpression,
-    MemberExpression,
-    BinaryExpression,
-    AssignmentExpression,
-    UpdateExpression,
-    FunctionExpression,
-
-    BlockStatement,
-    IfStatement,
-    LabeledStatement,
-    BreakStatement,
-    DoWhileStatement,
-    WhileStatement,
-    ContinueStatement,
-
-    Property,
-
-    ImportDeclaration,
-    ImportDefaultSpecifier,
-    ImportNamespaceSpecifier,
-    ImportSpecifier,
-
-    ExportDefaultDeclaration,
-    ExportNamedDeclaration,
-
-    AssignmentPattern,
-    ObjectPattern,
-
-    VariableDeclaration,
-    VariableDeclarator,
-
-    Identifier,
-    Literal,
-
-    JSXElement,
-    JSXOpeningElement,
-    JSXIdentifier,
-    JSXText,
-    JSXClosingElement,
-    JSXAttribute,
-    JSXExpressionContainer
-  } = components
-
   const {
     Const,
     Let,

@@ -12,13 +12,13 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <Identifier>hoge</Identifier>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier>hoge</identifier>
+            </callExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -31,18 +31,18 @@ describe('toBuilder', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <Identifier>hoge</Identifier>
-            </CallExpression>
-          </ExpressionStatement>
-          <ExpressionStatement>
-            <CallExpression>
-              <Identifier>fuga</Identifier>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier>hoge</identifier>
+            </callExpression>
+          </expressionStatement>
+          <expressionStatement>
+            <callExpression>
+              <identifier>fuga</identifier>
+            </callExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -56,20 +56,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <MemberExpression>
-                <CallExpression>
-                  <Identifier>hoge</Identifier>
-                  <Literal>arg1</Literal>
-                </CallExpression>
-                <Identifier>fuga</Identifier>
-              </MemberExpression>
-              <Literal>arg2</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <memberExpression>
+                <callExpression>
+                  <identifier>hoge</identifier>
+                  <literal>arg1</literal>
+                </callExpression>
+                <identifier>fuga</identifier>
+              </memberExpression>
+              <literal>arg2</literal>
+            </callExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -83,14 +83,14 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <Identifier>hoge</Identifier>
-              <Literal>fuga</Literal>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier>hoge</identifier>
+              <literal>fuga</literal>
+            </callExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -104,11 +104,11 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <ArrayExpression />
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <arrayExpression />
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -122,15 +122,15 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <ArrayExpression>
-              <Literal>{1}</Literal>
-              <Literal>{2}</Literal>
-              <Literal>{3}</Literal>
-            </ArrayExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <arrayExpression>
+              <literal>{1}</literal>
+              <literal>{2}</literal>
+              <literal>{3}</literal>
+            </arrayExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -144,14 +144,14 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>hoge</Identifier>
-              <Literal>hoge</Literal>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <literal>hoge</literal>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -167,19 +167,19 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>hoge</Identifier>
-              <ObjectExpression>
-                <Property kind="init" method={false} shorthand={false} computed={false}>
-                  <Identifier>HOGE</Identifier>
-                  <Literal>hoge</Literal>
-                </Property>
-              </ObjectExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <objectExpression>
+                <property kind="init" method={false} shorthand={false} computed={false}>
+                  <identifier>HOGE</identifier>
+                  <literal>hoge</literal>
+                </property>
+              </objectExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -193,16 +193,16 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <ArrowFunctionExpression>
-                <BlockStatement />
-              </ArrowFunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <arrowFunctionExpression>
+                <blockStatement />
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -216,16 +216,16 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <FunctionExpression id={null}>
-                <BlockStatement />
-              </FunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <functionExpression id={null}>
+                <blockStatement />
+              </functionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -239,23 +239,23 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <ArrowFunctionExpression>
-                <Identifier>str</Identifier>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Identifier>str</Identifier>
-                </CallExpression>
-              </ArrowFunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <arrowFunctionExpression>
+                <identifier>str</identifier>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <identifier>str</identifier>
+                </callExpression>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -269,27 +269,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <ArrowFunctionExpression>
-                <Identifier>str</Identifier>
-                <BlockStatement>
-                  <ExpressionStatement>
-                    <CallExpression>
-                      <MemberExpression>
-                        <Identifier>console</Identifier>
-                        <Identifier>log</Identifier>
-                      </MemberExpression>
-                      <Identifier>str</Identifier>
-                    </CallExpression>
-                  </ExpressionStatement>
-                </BlockStatement>
-              </ArrowFunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <arrowFunctionExpression>
+                <identifier>str</identifier>
+                <blockStatement>
+                  <expressionStatement>
+                    <callExpression>
+                      <memberExpression>
+                        <identifier>console</identifier>
+                        <identifier>log</identifier>
+                      </memberExpression>
+                      <identifier>str</identifier>
+                    </callExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -303,11 +303,11 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <Identifier>hoge</Identifier>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <identifier>hoge</identifier>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -321,14 +321,14 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ImportDeclaration>
-            <ImportDefaultSpecifier>
-              <Identifier>hoge</Identifier>
-            </ImportDefaultSpecifier>
-            <Literal>hoge</Literal>
-          </ImportDeclaration>
-        </Program>
+        <program>
+          <importDeclaration>
+            <importDefaultSpecifier>
+              <identifier>hoge</identifier>
+            </importDefaultSpecifier>
+            <literal>hoge</literal>
+          </importDeclaration>
+        </program>
       )
     `))
 
@@ -342,11 +342,11 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExportDefaultDeclaration>
-            <Literal>hoge</Literal>
-          </ExportDefaultDeclaration>
-        </Program>
+        <program>
+          <exportDefaultDeclaration>
+            <literal>hoge</literal>
+          </exportDefaultDeclaration>
+        </program>
       )
     `))
 
@@ -360,16 +360,16 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExportNamedDeclaration>
-            <VariableDeclaration kind="const">
-              <VariableDeclarator>
-                <Identifier>hoge</Identifier>
-                <Literal>hoge</Literal>
-              </VariableDeclarator>
-            </VariableDeclaration>
-          </ExportNamedDeclaration>
-        </Program>
+        <program>
+          <exportNamedDeclaration>
+            <variableDeclaration kind="const">
+              <variableDeclarator>
+                <identifier>hoge</identifier>
+                <literal>hoge</literal>
+              </variableDeclarator>
+            </variableDeclaration>
+          </exportNamedDeclaration>
+        </program>
       )
     `))
 
@@ -383,14 +383,14 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ImportDeclaration>
-            <ImportNamespaceSpecifier>
-              <Identifier>hoge</Identifier>
-            </ImportNamespaceSpecifier>
-            <Literal>hoge</Literal>
-          </ImportDeclaration>
-        </Program>
+        <program>
+          <importDeclaration>
+            <importNamespaceSpecifier>
+              <identifier>hoge</identifier>
+            </importNamespaceSpecifier>
+            <literal>hoge</literal>
+          </importDeclaration>
+        </program>
       )
     `))
 
@@ -404,15 +404,15 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ImportDeclaration>
-            <ImportSpecifier>
-              <Identifier>hoge</Identifier>
-              <Identifier>hoge</Identifier>
-            </ImportSpecifier>
-            <Literal>hoge</Literal>
-          </ImportDeclaration>
-        </Program>
+        <program>
+          <importDeclaration>
+            <importSpecifier>
+              <identifier>hoge</identifier>
+              <identifier>hoge</identifier>
+            </importSpecifier>
+            <literal>hoge</literal>
+          </importDeclaration>
+        </program>
       )
     `))
 
@@ -426,15 +426,15 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ImportDeclaration>
-            <ImportSpecifier>
-              <Identifier>hoge</Identifier>
-              <Identifier>fuga</Identifier>
-            </ImportSpecifier>
-            <Literal>hoge</Literal>
-          </ImportDeclaration>
-        </Program>
+        <program>
+          <importDeclaration>
+            <importSpecifier>
+              <identifier>hoge</identifier>
+              <identifier>fuga</identifier>
+            </importSpecifier>
+            <literal>hoge</literal>
+          </importDeclaration>
+        </program>
       )
     `))
 
@@ -448,19 +448,19 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <ObjectPattern>
-                <Property kind="init" method={false} shorthand={true} computed={false}>
-                  <Identifier>hoge</Identifier>
-                  <Identifier>hoge</Identifier>
-                </Property>
-              </ObjectPattern>
-              <Identifier>piyo</Identifier>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" method={false} shorthand={true} computed={false}>
+                  <identifier>hoge</identifier>
+                  <identifier>hoge</identifier>
+                </property>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -476,22 +476,22 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <ObjectPattern>
-                <Property kind="init" method={false} shorthand={true} computed={false}>
-                  <Identifier>hoge</Identifier>
-                  <AssignmentPattern>
-                    <Identifier>hoge</Identifier>
-                    <Literal>{false}</Literal>
-                  </AssignmentPattern>
-                </Property>
-              </ObjectPattern>
-              <Identifier>piyo</Identifier>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" method={false} shorthand={true} computed={false}>
+                  <identifier>hoge</identifier>
+                  <assignmentPattern>
+                    <identifier>hoge</identifier>
+                    <literal>{false}</literal>
+                  </assignmentPattern>
+                </property>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -506,19 +506,19 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <ObjectPattern>
-                <Property kind="init" method={false} shorthand={false} computed={false}>
-                  <Literal>hoge</Literal>
-                  <Identifier>hoge</Identifier>
-                </Property>
-              </ObjectPattern>
-              <Identifier>piyo</Identifier>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" method={false} shorthand={false} computed={false}>
+                  <literal>hoge</literal>
+                  <identifier>hoge</identifier>
+                </property>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -532,19 +532,19 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <ObjectPattern>
-                <Property kind="init" method={false} shorthand={false} computed={true}>
-                  <Literal>hoge</Literal>
-                  <Identifier>hoge</Identifier>
-                </Property>
-              </ObjectPattern>
-              <Identifier>piyo</Identifier>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" method={false} shorthand={false} computed={true}>
+                  <literal>hoge</literal>
+                  <identifier>hoge</identifier>
+                </property>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -558,20 +558,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <IfStatement>
-            <Literal>{true}</Literal>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Literal>hoge</Literal>
-              </CallExpression>
-            </ExpressionStatement>
-          </IfStatement>
-        </Program>
+        <program>
+          <ifStatement>
+            <literal>{true}</literal>
+            <expressionStatement>
+              <callExpression>
+                <memberExpression>
+                  <identifier>console</identifier>
+                  <identifier>log</identifier>
+                </memberExpression>
+                <literal>hoge</literal>
+              </callExpression>
+            </expressionStatement>
+          </ifStatement>
+        </program>
       )
     `))
 
@@ -587,22 +587,22 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <IfStatement>
-            <Literal>{true}</Literal>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-          </IfStatement>
-        </Program>
+        <program>
+          <ifStatement>
+            <literal>{true}</literal>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>hoge</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </ifStatement>
+        </program>
       )
     `))
 
@@ -619,27 +619,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ExpressionStatement>
-            <CallExpression>
-              <FunctionExpression id={null}>
-                <BlockStatement>
-                  <DebuggerStatement />
-        
-                  <ReturnStatement>
-                    <CallExpression>
-                      <MemberExpression>
-                        <Identifier>console</Identifier>
-                        <Identifier>log</Identifier>
-                      </MemberExpression>
-                      <Literal>hoge</Literal>
-                    </CallExpression>
-                  </ReturnStatement>
-                </BlockStatement>
-              </FunctionExpression>
-            </CallExpression>
-          </ExpressionStatement>
-        </Program>
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <functionExpression id={null}>
+                <blockStatement>
+                  <debuggerStatement />
+
+                  <returnStatement>
+                    <callExpression>
+                      <memberExpression>
+                        <identifier>console</identifier>
+                        <identifier>log</identifier>
+                      </memberExpression>
+                      <literal>hoge</literal>
+                    </callExpression>
+                  </returnStatement>
+                </blockStatement>
+              </functionExpression>
+            </callExpression>
+          </expressionStatement>
+        </program>
       )
     `))
 
@@ -657,34 +657,34 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <IfStatement>
-            <Literal>{true}</Literal>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-            
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>fuga</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-          </IfStatement>
-        </Program>
+        <program>
+          <ifStatement>
+            <literal>{true}</literal>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>hoge</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>fuga</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </ifStatement>
+        </program>
       )
     `))
 
@@ -704,49 +704,49 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <IfStatement>
-            <Literal>{true}</Literal>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-        
-            <IfStatement>
-              <Literal>{false}</Literal>
-              <BlockStatement>
-                <ExpressionStatement>
-                  <CallExpression>
-                    <MemberExpression>
-                      <Identifier>console</Identifier>
-                      <Identifier>log</Identifier>
-                    </MemberExpression>
-                    <Literal>fuga</Literal>
-                  </CallExpression>
-                </ExpressionStatement>
-              </BlockStatement>
-        
-              <BlockStatement>
-                <ExpressionStatement>
-                  <CallExpression>
-                    <MemberExpression>
-                      <Identifier>console</Identifier>
-                      <Identifier>log</Identifier>
-                    </MemberExpression>
-                    <Literal>piyo</Literal>
-                  </CallExpression>
-                </ExpressionStatement>
-              </BlockStatement>
-            </IfStatement>
-          </IfStatement>
-        </Program>
+        <program>
+          <ifStatement>
+            <literal>{true}</literal>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>hoge</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+
+            <ifStatement>
+              <literal>{false}</literal>
+              <blockStatement>
+                <expressionStatement>
+                  <callExpression>
+                    <memberExpression>
+                      <identifier>console</identifier>
+                      <identifier>log</identifier>
+                    </memberExpression>
+                    <literal>fuga</literal>
+                  </callExpression>
+                </expressionStatement>
+              </blockStatement>
+
+              <blockStatement>
+                <expressionStatement>
+                  <callExpression>
+                    <memberExpression>
+                      <identifier>console</identifier>
+                      <identifier>log</identifier>
+                    </memberExpression>
+                    <literal>piyo</literal>
+                  </callExpression>
+                </expressionStatement>
+              </blockStatement>
+            </ifStatement>
+          </ifStatement>
+        </program>
       )
     `))
 
@@ -760,23 +760,23 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <IfStatement>
-            <BinaryExpression operator="===">
-              <Literal>{true}</Literal>
-              <Literal>{true}</Literal>
-            </BinaryExpression>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Literal>hoge</Literal>
-              </CallExpression>
-            </ExpressionStatement>
-          </IfStatement>
-        </Program>
+        <program>
+          <ifStatement>
+            <binaryExpression operator="===">
+              <literal>{true}</literal>
+              <literal>{true}</literal>
+            </binaryExpression>
+            <expressionStatement>
+              <callExpression>
+                <memberExpression>
+                  <identifier>console</identifier>
+                  <identifier>log</identifier>
+                </memberExpression>
+                <literal>hoge</literal>
+              </callExpression>
+            </expressionStatement>
+          </ifStatement>
+        </program>
       )
     `))
 
@@ -796,36 +796,36 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ForStatement>
-            <AssignmentExpression operator="=">
-              <Identifier>step</Identifier>
-              <Literal>{0}</Literal>
-            </AssignmentExpression>
-        
-            <BinaryExpression operator="<">
-              <Identifier>step</Identifier>
-              <Literal>{5}</Literal>
-            </BinaryExpression>
-        
-            <UpdateExpression operator="++" prefix={false}>
-              <Identifier>step</Identifier>
-            </UpdateExpression>
-        
-            <BlockStatement>
-              <IfStatement>
-                <Literal>{true}</Literal>
-                <BlockStatement>
-                  <BreakStatement />
-                </BlockStatement>
-        
-                <BlockStatement>
-                  <ContinueStatement />
-                </BlockStatement>
-              </IfStatement>
-            </BlockStatement>
-          </ForStatement>
-        </Program>
+        <program>
+          <forStatement>
+            <assignmentExpression operator="=">
+              <identifier>step</identifier>
+              <literal>{0}</literal>
+            </assignmentExpression>
+
+            <binaryExpression operator="<">
+              <identifier>step</identifier>
+              <literal>{5}</literal>
+            </binaryExpression>
+
+            <updateExpression operator="++" prefix={false}>
+              <identifier>step</identifier>
+            </updateExpression>
+
+            <blockStatement>
+              <ifStatement>
+                <literal>{true}</literal>
+                <blockStatement>
+                  <breakStatement />
+                </blockStatement>
+
+                <blockStatement>
+                  <continueStatement />
+                </blockStatement>
+              </ifStatement>
+            </blockStatement>
+          </forStatement>
+        </program>
       )
     `))
 
@@ -836,29 +836,29 @@ describe('toBuilder', () => {
 
   it('should convert do while', () => {
     const code = `
-    do { 
+    do {
       console.log('hoge')
     } while (true)
     `
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <DoWhileStatement>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-            <Literal>{true}</Literal>
-          </DoWhileStatement>
-        </Program>
+        <program>
+          <doWhileStatement>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>hoge</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+            <literal>{true}</literal>
+          </doWhileStatement>
+        </program>
       )
     `))
 
@@ -874,20 +874,20 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <WhileStatement>
-            <Literal>{true}</Literal>
-            <ExpressionStatement>
-              <CallExpression>
-                <MemberExpression>
-                  <Identifier>console</Identifier>
-                  <Identifier>log</Identifier>
-                </MemberExpression>
-                <Literal>hoge</Literal>
-              </CallExpression>
-            </ExpressionStatement>
-          </WhileStatement>
-        </Program>
+        <program>
+          <whileStatement>
+            <literal>{true}</literal>
+            <expressionStatement>
+              <callExpression>
+                <memberExpression>
+                  <identifier>console</identifier>
+                  <identifier>log</identifier>
+                </memberExpression>
+                <literal>hoge</literal>
+              </callExpression>
+            </expressionStatement>
+          </whileStatement>
+        </program>
       )
     `))
 
@@ -903,19 +903,19 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <LabeledStatement>
-            <Identifier>markLoop</Identifier>
-            <WhileStatement>
-              <Literal>{true}</Literal>
-              <BlockStatement>
-                <BreakStatement>
-                  <Identifier>markLoop</Identifier>
-                </BreakStatement>
-              </BlockStatement>
-            </WhileStatement>
-          </LabeledStatement>
-        </Program>
+        <program>
+          <labeledStatement>
+            <identifier>markLoop</identifier>
+            <whileStatement>
+              <literal>{true}</literal>
+              <blockStatement>
+                <breakStatement>
+                  <identifier>markLoop</identifier>
+                </breakStatement>
+              </blockStatement>
+            </whileStatement>
+          </labeledStatement>
+        </program>
       )
     `))
 
@@ -931,27 +931,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ForInStatement>
-            <VariableDeclaration kind="var">
-              <VariableDeclarator>
-                <Identifier>i</Identifier>
-              </VariableDeclarator>
-            </VariableDeclaration>
-            <Identifier>obj</Identifier>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Literal>hoge</Literal>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-          </ForInStatement>
-        </Program>
+        <program>
+          <forInStatement>
+            <variableDeclaration kind="var">
+              <variableDeclarator>
+                <identifier>i</identifier>
+              </variableDeclarator>
+            </variableDeclaration>
+            <identifier>obj</identifier>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <literal>hoge</literal>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </forInStatement>
+        </program>
       )
     `))
 
@@ -967,27 +967,27 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <ForOfStatement>
-            <VariableDeclaration kind="let">
-              <VariableDeclarator>
-                <Identifier>i</Identifier>
-              </VariableDeclarator>
-            </VariableDeclaration>
-            <Identifier>arr</Identifier>
-            <BlockStatement>
-              <ExpressionStatement>
-                <CallExpression>
-                  <MemberExpression>
-                    <Identifier>console</Identifier>
-                    <Identifier>log</Identifier>
-                  </MemberExpression>
-                  <Identifier>i</Identifier>
-                </CallExpression>
-              </ExpressionStatement>
-            </BlockStatement>
-          </ForOfStatement>
-        </Program>
+        <program>
+          <forOfStatement>
+            <variableDeclaration kind="let">
+              <variableDeclarator>
+                <identifier>i</identifier>
+              </variableDeclarator>
+            </variableDeclaration>
+            <identifier>arr</identifier>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression>
+                    <identifier>console</identifier>
+                    <identifier>log</identifier>
+                  </memberExpression>
+                  <identifier>i</identifier>
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </forOfStatement>
+        </program>
       )
     `))
 
@@ -1008,28 +1008,28 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <ArrowFunctionExpression>
-                <BlockStatement>
-                  <ReturnStatement>
-                    <JSXElement>
-                      <JSXOpeningElement
-                        name={<JSXIdentifier name="span" />}
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <arrowFunctionExpression>
+                <blockStatement>
+                  <returnStatement>
+                    <jsxElement>
+                      <jsxOpeningElement
+                        name={<jsxIdentifier name="span" />}
                         attributes={[]}
                         selfClosing={false}
-                      />     
-                      <JSXText>hoge</JSXText>
-                      <JSXClosingElement name={<JSXIdentifier name="span" />} />
-                    </JSXElement>
-                  </ReturnStatement>
-                </BlockStatement>
-              </ArrowFunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+                      />
+                      <jsxText>hoge</jsxText>
+                      <jsxClosingElement name={<jsxIdentifier name="span" />} />
+                    </jsxElement>
+                  </returnStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -1042,8 +1042,8 @@ describe('toBuilder', () => {
     const code = `
       const render = () => {
         return (
-          <span 
-            id="example" 
+          <span
+            id="example"
             style={{
               color: 'red'
             }}
@@ -1057,55 +1057,55 @@ describe('toBuilder', () => {
 
     assert(toBuilder(code).code === format(`
       const render = () => (
-        <Program>
-          <VariableDeclaration kind="const">
-            <VariableDeclarator>
-              <Identifier>render</Identifier>
-              <ArrowFunctionExpression>
-                <BlockStatement>
-                  <ReturnStatement>
-                    <JSXElement>
-                      <JSXOpeningElement
-                        name={<JSXIdentifier name="span" />}
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>render</identifier>
+              <arrowFunctionExpression>
+                <blockStatement>
+                  <returnStatement>
+                    <jsxElement>
+                      <jsxOpeningElement
+                        name={<jsxIdentifier name="span" />}
                         attributes={[
-                          <JSXAttribute
-                            name={<JSXIdentifier name="id" />}
-                            value={<Literal>example</Literal>}
+                          <jsxAttribute
+                            name={<jsxIdentifier name="id" />}
+                            value={<literal>example</literal>}
                           />,
-                          <JSXAttribute
-                            name={<JSXIdentifier name="style" />}
+                          <jsxAttribute
+                            name={<jsxIdentifier name="style" />}
                             value={
-                              <JSXExpressionContainer>
-                                <ObjectExpression>
-                                  <Property
+                              <jsxExpressionContainer>
+                                <objectExpression>
+                                  <property
                                     kind="init"
                                     method={false}
                                     shorthand={false}
                                     computed={false}
                                   >
-                                    <Identifier>color</Identifier>
-                                    <Literal>red</Literal>
-                                  </Property>
-                                </ObjectExpression>
-                              </JSXExpressionContainer>
+                                    <identifier>color</identifier>
+                                    <literal>red</literal>
+                                  </property>
+                                </objectExpression>
+                              </jsxExpressionContainer>
                             }
                           />,
-                          <JSXAttribute
-                            name={<JSXIdentifier name="hidden" />}
+                          <jsxAttribute
+                            name={<jsxIdentifier name="hidden" />}
                             value={null}
                           />
                         ]}
                         selfClosing={false}
                       />
-                        <JSXText>hoge</JSXText>
-                      <JSXClosingElement name={<JSXIdentifier name="span" />} />
-                    </JSXElement>
-                  </ReturnStatement>
-                </BlockStatement>
-              </ArrowFunctionExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Program>
+                        <jsxText>hoge</jsxText>
+                      <jsxClosingElement name={<jsxIdentifier name="span" />} />
+                    </jsxElement>
+                  </returnStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
       )
     `))
 
@@ -1116,16 +1116,16 @@ describe('toBuilder', () => {
 })
 
 describe('option', () => {
-  it('should omit Program if shouldOmitProgram = true', () => {
+  it('should omit program if shouldOmitprogram = true', () => {
     const code = 'hoge()'
 
     assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
       const render = () => (
-        <ExpressionStatement>
-          <CallExpression>
-            <Identifier>hoge</Identifier>
-          </CallExpression>
-        </ExpressionStatement>
+        <expressionStatement>
+          <callExpression>
+            <identifier>hoge</identifier>
+          </callExpression>
+        </expressionStatement>
       )
     `))
 

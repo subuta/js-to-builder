@@ -3,6 +3,7 @@
 
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
+
 import h from 'lib/h'
 
 const assert = require('assert')
@@ -18,53 +19,11 @@ import {
   JSX
 } from 'lib/components/shorthand'
 
-import {
-  Program,
-
-  ReturnStatement,
-  ExpressionStatement,
-
-  CallExpression,
-  ArrayExpression,
-  ObjectExpression,
-  ArrowFunctionExpression,
-  MemberExpression,
-
-  BlockStatement,
-
-  Property,
-
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportNamespaceSpecifier,
-  ImportSpecifier,
-
-  ExportDefaultDeclaration,
-  ExportNamedDeclaration,
-
-  AssignmentPattern,
-  ObjectPattern,
-
-  VariableDeclaration,
-  VariableDeclarator,
-
-  Identifier,
-  Literal,
-
-  JSXElement,
-  JSXOpeningElement,
-  JSXIdentifier,
-  JSXText,
-  JSXClosingElement,
-  JSXAttribute,
-  JSXExpressionContainer
-} from 'lib/components'
-
 describe('Components', () => {
   it('Const should render', () => {
     const render = () => (
       <Const name="hoge">
-        <Literal>hoge</Literal>
+        <literal>hoge</literal>
       </Const>
     )
 
@@ -84,7 +43,7 @@ describe('Components', () => {
   it('Let should render', () => {
     const render = () => (
       <Let name="hoge">
-        <Literal>hoge</Literal>
+        <literal>hoge</literal>
       </Let>
     )
 
@@ -104,7 +63,7 @@ describe('Components', () => {
   it('Var should render', () => {
     const render = () => (
       <Var name="hoge">
-        <Literal>hoge</Literal>
+        <literal>hoge</literal>
       </Var>
     )
 
@@ -239,11 +198,11 @@ describe('Components', () => {
     const render = () => (
       <Const name="hoge">
         <ArrowFn>
-          <Identifier>str</Identifier>
-          <Identifier>hoge</Identifier>
+          <identifier>str</identifier>
+          <identifier>hoge</identifier>
           <FnStatement>
             <FnCall callee="console.log">
-              <Identifier>str</Identifier>
+              <identifier>str</identifier>
             </FnCall>
           </FnStatement>
         </ArrowFn>
@@ -259,11 +218,11 @@ describe('Components', () => {
     const render = () => (
       <Const name="hoge">
         <ArrowFn>
-          <Identifier>str</Identifier>
-          <Identifier>hoge</Identifier>
+          <identifier>str</identifier>
+          <identifier>hoge</identifier>
           <FnStatement>
             <FnCall callee="console.log">
-              <Identifier>str</Identifier>
+              <identifier>str</identifier>
             </FnCall>
             <Const name="hoge" value="true" />
           </FnStatement>
