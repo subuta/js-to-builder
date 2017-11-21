@@ -1,7 +1,7 @@
 import * as Babel from '@babel/standalone'
 import _ from 'lodash'
 
-import { h, print, format, shorthand } from 'js-to-builder'
+import { h, print, format, simple } from 'js-to-builder'
 
 // expose h to window for eval
 window.h = h
@@ -16,7 +16,7 @@ export const babelAndEval = (builderCode) => {
     ArrowFn,
     FnStatement,
     FnCall
-  } = shorthand
+  } = simple
 
   const code = _.get(Babel.transform(builderCode, {
     'presets': [

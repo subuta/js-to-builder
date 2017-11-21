@@ -17,7 +17,7 @@ import {
   FnStatement,
   FnCall,
   JSX
-} from 'lib/components/shorthand'
+} from 'lib/components/simple'
 
 describe('Components', () => {
   it('Const should render', () => {

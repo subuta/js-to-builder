@@ -5,40 +5,6 @@ import toBuilder from 'lib/transform'
 import format from 'lib/utils/formatter'
 import print from 'lib/utils/print'
 
-import {
-  Program,
-
-  ReturnStatement,
-  ExpressionStatement,
-
-  CallExpression,
-  ArrayExpression,
-  ObjectExpression,
-  ArrowFunctionExpression,
-  MemberExpression,
-
-  BlockStatement,
-
-  Property,
-
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportNamespaceSpecifier,
-  ImportSpecifier,
-
-  ExportDefaultDeclaration,
-  ExportNamedDeclaration,
-
-  AssignmentPattern,
-  ObjectPattern,
-
-  VariableDeclaration,
-  VariableDeclarator,
-
-  Identifier,
-  Literal,
-} from 'lib/components'
-
 import h from 'lib/h'
 
 const assert = require('assert')
