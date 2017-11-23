@@ -27,7 +27,7 @@ describe('toBuilder', () => {
   it('should convert CallExpression with memberExpression', () => {
     const code = 'console.log()'
 
-    assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
+    assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
           <FnCall callee="console.log" />
@@ -56,7 +56,7 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  it.only('should convert chained CallExpression', () => {
+  it('should convert chained CallExpression', () => {
     const code = 'hoge("arg1").fuga("arg2")'
 
     assert(toBuilder(code, { simple: true }).code === format(`
@@ -77,27 +77,24 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert CallExpression with arguments', () => {
-  //   const code = 'hoge(\'fuga\')'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>hoge</identifier>
-  //             <literal>fuga</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert CallExpression with arguments', () => {
+    const code = 'hoge(\'fuga\')'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="hoge">
+            <Value>fuga</Value>
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert ArrayExpression', () => {
   //   const code = '[]'
   //
