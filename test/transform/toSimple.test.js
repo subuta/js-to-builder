@@ -24,65 +24,59 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert CallExpression with memberExpression', () => {
-  //   const code = 'console.log()'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <FnCall callee="console.log" />
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should multiline code', () => {
-  //   const code = 'hoge(); fuga();'
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <FnCall callee="hoge" />
-  //         <FnCall callee="fuga" />
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert CallExpression with memberExpression', () => {
+    const code = 'console.log()'
 
-  // it('should convert chained CallExpression', () => {
-  //   const code = 'hoge("arg1").fuga("arg2")'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <memberExpression>
-  //               <callExpression>
-  //                 <identifier>hoge</identifier>
-  //                 <literal>arg1</literal>
-  //               </callExpression>
-  //               <identifier>fuga</identifier>
-  //             </memberExpression>
-  //             <literal>arg2</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+    assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="console.log" />
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should multiline code', () => {
+    const code = 'hoge(); fuga();'
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="hoge" />
+          <FnCall callee="fuga" />
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it.only('should convert chained CallExpression', () => {
+    const code = 'hoge("arg1").fuga("arg2")'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="fuga">
+            <FnCall callee="hoge">
+              <Value>arg1</Value>
+            </FnCall>
+            <Value>arg2</Value>
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert CallExpression with arguments', () => {
   //   const code = 'hoge(\'fuga\')'
   //
