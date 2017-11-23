@@ -27,6 +27,29 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert CallExpression with memberExpression', () => {
+    const code = 'console.log()'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <memberExpression>
+                <identifier>console</identifier>
+                <identifier>log</identifier>
+              </memberExpression>
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code).code === format(`
