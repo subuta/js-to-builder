@@ -194,6 +194,26 @@ describe('Components', () => {
     `))
   })
 
+  it('Value with empty array should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value>{[]}</Value>
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = []
+    `))
+
+    const renderWithValue = () => (
+      <Const name="hoge" value={[]} />
+    )
+
+    assert(format(print(renderWithValue())) === format(`
+      const hoge = []
+    `))
+  })
+
   it('Value with simple function should render', () => {
     const render = () => (
       <Const name="hoge">

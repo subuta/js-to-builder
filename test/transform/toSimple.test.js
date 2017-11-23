@@ -101,9 +101,7 @@ describe('toBuilder', () => {
   //   assert(toBuilder(code, { simple: true }).code === format(`
   //     const render = () => (
   //       <program>
-  //         <expressionStatement>
-  //           <arrayExpression />
-  //         </expressionStatement>
+  //         <Value>{[]}</Value>
   //       </program>
   //     )
   //   `))
@@ -112,20 +110,14 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
-  // it('should convert ArrayExpression with arguments', () => {
+
+  // it.only('should convert ArrayExpression with arguments', () => {
   //   const code = '[1, 2, 3]'
   //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
+  //   assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
   //     const render = () => (
   //       <program>
-  //         <expressionStatement>
-  //           <arrayExpression>
-  //             <literal>{1}</literal>
-  //             <literal>{2}</literal>
-  //             <literal>{3}</literal>
-  //           </arrayExpression>
-  //         </expressionStatement>
+  //         <Value>{[1, 2, 3]}</Value>
   //       </program>
   //     )
   //   `))
@@ -134,7 +126,7 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
+
   // it('should convert VariableDeclaration', () => {
   //   const code = 'const hoge = "hoge"'
   //
