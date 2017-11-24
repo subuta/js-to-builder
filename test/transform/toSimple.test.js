@@ -6,7 +6,6 @@ import { babelAndEval } from 'test/helper'
 
 const assert = require('assert')
 
-// TODO: 既存の構造は壊さずにtoSimpleを書いていく
 describe('toBuilder', () => {
   it('should convert CallExpression', () => {
     const code = 'hoge()'
@@ -95,37 +94,37 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert ArrayExpression', () => {
-  //   const code = '[]'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <Value>{[]}</Value>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert ArrayExpression', () => {
+    const code = '[]'
 
-  // it.only('should convert ArrayExpression with arguments', () => {
-  //   const code = '[1, 2, 3]'
-  //
-  //   assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
-  //     const render = () => (
-  //       <program>
-  //         <Value>{[1, 2, 3]}</Value>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <Value es>{[]}</Value>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it.only('should convert ArrayExpression with arguments', () => {
+    const code = '[1, 2, 3]'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <Value es>{[1, 2, 3]}</Value>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
 
   // it('should convert VariableDeclaration', () => {
   //   const code = 'const hoge = "hoge"'
