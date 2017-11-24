@@ -10,7 +10,7 @@ describe('toBuilder', () => {
   it('should convert CallExpression', () => {
     const code = 'hoge()'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="hoge" es/>
@@ -19,14 +19,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert CallExpression with memberExpression', () => {
     const code = 'console.log()'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="console.log" es/>
@@ -35,13 +35,13 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="hoge" es/>
@@ -51,14 +51,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert chained CallExpression', () => {
     const code = 'hoge("arg1").fuga("arg2")'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="fuga" es>
@@ -72,14 +72,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert nested CallExpression', () => {
     const code = 'fuga(hoge("arg1"), "arg2")'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="fuga" es>
@@ -102,7 +102,7 @@ describe('toBuilder', () => {
   it('should convert CallExpression with arguments', () => {
     const code = 'hoge(\'fuga\')'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall callee="hoge" es>
@@ -113,14 +113,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert ArrayExpression', () => {
     const code = '[]'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Value es>{[]}</Value>
@@ -129,14 +129,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert ArrayExpression with arguments', () => {
     const code = '[1, 2, 3]'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Value es>{[1, 2, 3]}</Value>
@@ -145,31 +145,70 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
-  // it('should convert VariableDeclaration', () => {
-  //   const code = 'const hoge = "hoge"'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>hoge</identifier>
-  //             <literal>hoge</literal>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert VariableDeclaration', () => {
+    const code = 'const hoge = "hoge"'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+		      <Const name="hoge">
+            <Value>hoge</Value>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert multiple VariableDeclaration', () => {
+    const code = 'const hoge = "hoge", fuga = "fuga"'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const>
+            <Declarator name="hoge">hoge</Declarator>
+            <Declarator name="fuga">fuga</Declarator>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert multiple complex VariableDeclaration', () => {
+    const code = 'const hoge = "hoge", fuga = () => {}'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const>
+            <Declarator name="hoge">hoge</Declarator>
+            <Declarator name="fuga">
+              <arrowFunctionExpression>
+                <blockStatement />
+              </arrowFunctionExpression>
+            </Declarator>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert VariableDeclaration with object', () => {
   //   const code = `const hoge = {
   //     HOGE: 'hoge'

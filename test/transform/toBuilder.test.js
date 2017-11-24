@@ -209,6 +209,60 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert multiple VariableDeclaration', () => {
+    const code = 'const hoge = "hoge", fuga = "fuga"'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <literal>hoge</literal>
+            </variableDeclarator>
+            
+            <variableDeclarator>
+              <identifier>fuga</identifier>
+              <literal>fuga</literal>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert multiple complex VariableDeclaration', () => {
+    const code = 'const hoge = "hoge", fuga = () => {}'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <literal>hoge</literal>
+            </variableDeclarator>
+      
+            <variableDeclarator>
+              <identifier>fuga</identifier>
+              <arrowFunctionExpression>
+                <blockStatement />
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert VariableDeclaration with object', () => {
     const code = `const hoge = {
       HOGE: 'hoge'
