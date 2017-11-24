@@ -101,6 +101,32 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert nested CallExpression', () => {
+    const code = 'fuga(hoge("arg1"), "arg2")'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier>fuga</identifier>
+              <callExpression>
+                <identifier>hoge</identifier>
+                <literal>arg1</literal>
+              </callExpression>
+      
+              <literal>arg2</literal>
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert CallExpression with arguments', () => {
     const code = 'hoge(\'fuga\')'
 

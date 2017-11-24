@@ -13,7 +13,7 @@ describe('toBuilder', () => {
     assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
-          <FnCall callee="hoge" />
+          <FnCall callee="hoge" es/>
         </program>
       )
     `))
@@ -29,7 +29,7 @@ describe('toBuilder', () => {
     assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
-          <FnCall callee="console.log" />
+          <FnCall callee="console.log" es/>
         </program>
       )
     `))
@@ -44,8 +44,8 @@ describe('toBuilder', () => {
     assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
-          <FnCall callee="hoge" />
-          <FnCall callee="fuga" />
+          <FnCall callee="hoge" es/>
+          <FnCall callee="fuga" es/>
         </program>
       )
     `))
@@ -61,7 +61,7 @@ describe('toBuilder', () => {
     assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
-          <FnCall callee="fuga">
+          <FnCall callee="fuga" es>
             <FnCall callee="hoge">
               <Value>arg1</Value>
             </FnCall>
@@ -76,13 +76,36 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert nested CallExpression', () => {
+    const code = 'fuga(hoge("arg1"), "arg2")'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="fuga" es>
+            <Value>
+              <FnCall callee="hoge">
+                <Value>arg1</Value>
+              </FnCall>
+            </Value>
+            <Value>arg2</Value>
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert CallExpression with arguments', () => {
     const code = 'hoge(\'fuga\')'
 
     assert(toBuilder(code, { simple: true }).code === format(`
       const render = () => (
         <program>
-          <FnCall callee="hoge">
+          <FnCall callee="hoge" es>
             <Value>fuga</Value>
           </FnCall>
         </program>
@@ -110,7 +133,7 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  it.only('should convert ArrayExpression with arguments', () => {
+  it('should convert ArrayExpression with arguments', () => {
     const code = '[1, 2, 3]'
 
     assert(toBuilder(code, { simple: true }).code === format(`

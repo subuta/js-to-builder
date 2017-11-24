@@ -241,7 +241,7 @@ describe('Components', () => {
           <identifier>str</identifier>
           <identifier>hoge</identifier>
           <FnStatement>
-            <FnCall callee="console.log">
+            <FnCall callee="console.log" es>
               <identifier>str</identifier>
             </FnCall>
             <Const name="hoge" value="true" />
