@@ -213,9 +213,9 @@ describe('toBuilder', () => {
           <Const>
             <Declarator name="hoge">hoge</Declarator>
             <Declarator name="fuga">
-              <arrowFunctionExpression>
+              <ArrowFn>
                 <blockStatement />
-              </arrowFunctionExpression>
+              </ArrowFn>
             </Declarator>
           </Const>
         </program>
@@ -232,7 +232,7 @@ describe('toBuilder', () => {
       HOGE: 'hoge'
     }`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const name="hoge">
@@ -243,33 +243,30 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
-  // it('should convert Empty arrow function expression', () => {
-  //   const code = 'const render = () => {}'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <blockStatement />
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert Empty arrow function expression', () => {
+    const code = 'const render = () => {}'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="render">
+            <ArrowFn>
+              <blockStatement />
+            </ArrowFn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert Empty function expression', () => {
   //   const code = 'const render = function() {}'
   //
