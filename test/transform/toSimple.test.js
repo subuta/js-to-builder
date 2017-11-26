@@ -83,11 +83,9 @@ describe('toBuilder', () => {
       const render = () => (
         <program>
           <FnCall callee="fuga" es>
-            <Value>
-              <FnCall callee="hoge">
-                <Value>arg1</Value>
-              </FnCall>
-            </Value>
+            <FnCall callee="hoge">
+              <Value>arg1</Value>
+            </FnCall>
             <Value>arg2</Value>
           </FnCall>
         </program>
@@ -192,8 +190,12 @@ describe('toBuilder', () => {
       const render = () => (
         <program>
           <Const>
-            <Declarator name="hoge">hoge</Declarator>
-            <Declarator name="fuga">fuga</Declarator>
+            <Declarator name="hoge">
+              <Value>hoge</Value>
+            </Declarator>
+            <Declarator name="fuga">
+              <Value>fuga</Value>
+            </Declarator>
           </Const>
         </program>
       )
@@ -211,7 +213,9 @@ describe('toBuilder', () => {
       const render = () => (
         <program>
           <Const>
-            <Declarator name="hoge">hoge</Declarator>
+            <Declarator name="hoge">
+              <Value>hoge</Value>
+            </Declarator>
             <Declarator name="fuga">
               <ArrowFn>
                 <blockStatement />
@@ -287,36 +291,29 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert single line arrow function expression', () => {
-  //   const code = 'const render = (str) => console.log(str)'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <identifier>str</identifier>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <identifier>str</identifier>
-  //               </callExpression>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert single line arrow function expression', () => {
+    const code = 'const render = str => console.log(str)'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <Const name="render">
+            <ArrowFn>
+              <identifier>str</identifier>
+              <FnCall callee="console.log">
+                <identifier>str</identifier>
+              </FnCall>
+            </ArrowFn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert block arrow function expression', () => {
   //   const code = 'const render = (str) => {console.log(str)}'
   //
