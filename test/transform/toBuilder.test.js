@@ -546,7 +546,7 @@ describe('toBuilder', () => {
   })
 
   it('should convert module named import as ...', () => {
-    const code = 'import { hoge as fuga } from \'hoge\''
+    const code = 'import { hoge as fuga, fuga as piyo } from \'hoge\''
 
     assert(toBuilder(code).code === format(`
       const render = () => (
@@ -555,6 +555,11 @@ describe('toBuilder', () => {
             <importSpecifier>
               <identifier>hoge</identifier>
               <identifier>fuga</identifier>
+            </importSpecifier>
+            
+            <importSpecifier>
+              <identifier>fuga</identifier>
+              <identifier>piyo</identifier>
             </importSpecifier>
             <literal>hoge</literal>
           </importDeclaration>

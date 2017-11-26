@@ -270,7 +270,7 @@ describe('Components', () => {
       import hoge from 'hoge'
     `))
   })
-  
+
   it('Import should render', () => {
     const render = () => (
       <Import name="hoge" source="hoge" />
@@ -278,6 +278,26 @@ describe('Components', () => {
 
     assert(format(print(render())) === format(`
       import * as hoge from 'hoge'
+    `))
+  })
+
+  it('Import with multiple importSpecifier should render', () => {
+    const render = () => (
+      <Import source="hoge">
+        <importSpecifier>
+          <identifier>hoge</identifier>
+          <identifier>hoge</identifier>
+        </importSpecifier>
+
+        <importSpecifier>
+          <identifier>fuga</identifier>
+          <identifier>piyo</identifier>
+        </importSpecifier>
+      </Import>
+    )
+
+    assert(format(print(render())) === format(`
+      import { hoge, fuga as piyo } from 'hoge'
     `))
   })
 
