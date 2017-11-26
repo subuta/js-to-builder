@@ -165,23 +165,23 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert VariableDeclaration with ArrayExpression', () => {
-  //   const code = 'const hoge = []'
-  //
-  //   assert(toBuilder(code, {simple: true}).code === format(`
-  //     const render = () => (
-  //       <program>
-		//       <Const name="hoge">
-  //           <Value>{[]}</Value>
-  //         </Const>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert VariableDeclaration with ArrayExpression', () => {
+    const code = 'const hoge = []'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+		      <Const name="hoge">
+            <Value>{[]}</Value>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
 
   it('should convert multiple VariableDeclaration', () => {
     const code = 'const hoge = "hoge", fuga = "fuga"'
