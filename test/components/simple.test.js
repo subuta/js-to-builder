@@ -18,7 +18,8 @@ import {
   FnCall,
   Fn,
   JSX,
-  Import
+  Import,
+  Export
 } from 'lib/components/simple'
 
 describe('Components', () => {
@@ -267,6 +268,32 @@ describe('Components', () => {
 
     assert(format(print(render())) === format(`
       import hoge from 'hoge'
+    `))
+  })
+
+  it('Export should render', () => {
+    const render = () => (
+      <Export default>
+        <identifier>hoge</identifier>
+      </Export>
+    )
+
+    assert(format(print(render())) === format(`
+      export default hoge
+    `))
+  })
+
+  it('Named export should render', () => {
+    const render = () => (
+      <Export>
+        <Const name="hoge">
+          <literal>hoge</literal>
+        </Const>
+      </Export>
+    )
+
+    assert(format(print(render())) === format(`
+      export const hoge = 'hoge'
     `))
   })
 

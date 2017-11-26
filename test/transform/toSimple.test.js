@@ -274,7 +274,7 @@ describe('toBuilder', () => {
   it('should convert Empty function expression', () => {
     const code = 'const render = function() {}'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const name="render">
@@ -287,14 +287,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert single line arrow function expression', () => {
     const code = 'const render = str => console.log(str)'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const name="render">
@@ -310,14 +310,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert block arrow function expression', () => {
     const code = 'const render = str => {console.log(str)}'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const name="render">
@@ -335,14 +335,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert Identifier', () => {
     const code = 'hoge'
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <identifier es>hoge</identifier>
@@ -351,14 +351,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert module import', () => {
     const code = 'import hoge from \'hoge\''
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Import local="hoge" source="hoge" />
@@ -367,51 +367,48 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
-  // it('should convert module default export', () => {
-  //   const code = `export default 'hoge'`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <exportDefaultDeclaration>
-  //           <literal>hoge</literal>
-  //         </exportDefaultDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module named export', () => {
-  //   const code = `export const hoge = 'hoge'`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <exportNamedDeclaration>
-  //           <variableDeclaration kind="const">
-  //             <variableDeclarator>
-  //               <identifier>hoge</identifier>
-  //               <literal>hoge</literal>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //         </exportNamedDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert module default export', () => {
+    const code = `export default 'hoge'`
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Export default>
+            <Value>hoge</Value>
+          </Export>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module named export', () => {
+    const code = `export const hoge = 'hoge'`
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Export>
+            <Const name="hoge">
+              <Value>hoge</Value>
+            </Const>
+          </Export>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert module import * as ...', () => {
   //   const code = 'import * as hoge from \'hoge\''
   //
