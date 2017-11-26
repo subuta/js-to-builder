@@ -16,6 +16,7 @@ export const babelAndEval = (builderCode) => {
     ArrowFn,
     FnStatement,
     FnCall,
+    Fn,
     Declarator
   } = simple
 
