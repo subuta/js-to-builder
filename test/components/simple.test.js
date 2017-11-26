@@ -16,7 +16,9 @@ import {
   ArrowFn,
   FnStatement,
   FnCall,
-  JSX
+  Fn,
+  JSX,
+  Import
 } from 'lib/components/simple'
 
 describe('Components', () => {
@@ -255,6 +257,16 @@ describe('Components', () => {
         console.log(str)
         const hoge = 'true'
       }
+    `))
+  })
+
+  it('Import should render', () => {
+    const render = () => (
+      <Import local="hoge" source="hoge" />
+    )
+
+    assert(format(print(render())) === format(`
+      import hoge from 'hoge'
     `))
   })
 
