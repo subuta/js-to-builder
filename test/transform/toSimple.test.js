@@ -361,7 +361,7 @@ describe('toBuilder', () => {
     assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <Import local="hoge" source="hoge" />
+          <Import name="hoge" source="hoge" default />
         </program>
       )
     `))
@@ -409,27 +409,22 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert module import * as ...', () => {
-  //   const code = 'import * as hoge from \'hoge\''
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <importDeclaration>
-  //           <importNamespaceSpecifier>
-  //             <identifier>hoge</identifier>
-  //           </importNamespaceSpecifier>
-  //           <literal>hoge</literal>
-  //         </importDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert module import * as ...', () => {
+    const code = 'import * as hoge from \'hoge\''
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <Import name="hoge" source="hoge" />
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert module named import', () => {
   //   const code = 'import { hoge } from \'hoge\''
   //

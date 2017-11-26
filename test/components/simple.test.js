@@ -261,13 +261,23 @@ describe('Components', () => {
     `))
   })
 
-  it('Import should render', () => {
+  it('Import default should render', () => {
     const render = () => (
-      <Import local="hoge" source="hoge" />
+      <Import name="hoge" source="hoge" default />
     )
 
     assert(format(print(render())) === format(`
       import hoge from 'hoge'
+    `))
+  })
+  
+  it('Import should render', () => {
+    const render = () => (
+      <Import name="hoge" source="hoge" />
+    )
+
+    assert(format(print(render())) === format(`
+      import * as hoge from 'hoge'
     `))
   })
 
