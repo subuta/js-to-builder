@@ -329,7 +329,7 @@ describe('toBuilder', () => {
   //                 <expressionStatement>
   //                   <callExpression>
   //                     <memberExpression>
-  //                       <identifier>console</identifier>
+  //                       <id entifier>console</identifier>
   //                       <identifier>log</identifier>
   //                     </memberExpression>
   //                     <identifier>str</identifier>
@@ -347,25 +347,23 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
-  // it('should convert Identifier', () => {
-  //   const code = 'hoge'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <identifier>hoge</identifier>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+
+  it('should convert Identifier', () => {
+    const code = 'hoge'
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <identifier es>hoge</identifier>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert module import', () => {
   //   const code = 'import hoge from \'hoge\''
   //
