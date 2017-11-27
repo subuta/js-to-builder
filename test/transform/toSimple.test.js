@@ -628,36 +628,36 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it.only('should convert iife', () => {
-  //   const code = `(function() {
-  //     debugger
-  //     return console.log('hoge')
-  //   })()`
-  //
-  //   assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
-  //     const render = () => (
-  //       <program>
-  //         <FnCall es>
-  //           <Fn>
-  //             <blockStatement>
-  //               <debuggerStatement />
-  //
-  //               <returnStatement>
-  //                 <FnCall callee="console.log">
-  //                   <Value>hoge</Value>
-  //                 </FnCall>
-  //               </returnStatement>
-  //             </blockStatement>
-  //           </Fn>
-  //         </FnCall>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert iife', () => {
+    const code = `(function() {
+      debugger
+      return console.log('hoge')
+    })()`
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <FnCall es>
+            <Fn>
+              <blockStatement>
+                <debuggerStatement />
+      
+                <returnStatement>
+                  <FnCall callee="console.log">
+                    <Value>hoge</Value>
+                  </FnCall>
+                </returnStatement>
+              </blockStatement>
+            </Fn>
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
 
   it('should convert if with alternate', () => {
     const code = `if (true) {
