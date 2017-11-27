@@ -664,283 +664,235 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
-  // it('should convert if with alternate', () => {
-  //   const code = `if (true) {
-  //     console.log('hoge');
-  //   } else {
-  //     console.log('fuga');
-  //   }`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>fuga</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with complex alternate', () => {
-  //   const code = `if (true) {
-  //     console.log('hoge');
-  //   } else if (false) {
-  //     console.log('fuga');
-  //   } else {
-  //     console.log('piyo');
-  //   }`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //
-  //           <ifStatement>
-  //             <literal>{false}</literal>
-  //             <blockStatement>
-  //               <expressionStatement>
-  //                 <callExpression>
-  //                   <memberExpression>
-  //                     <identifier>console</identifier>
-  //                     <identifier>log</identifier>
-  //                   </memberExpression>
-  //                   <literal>fuga</literal>
-  //                 </callExpression>
-  //               </expressionStatement>
-  //             </blockStatement>
-  //
-  //             <blockStatement>
-  //               <expressionStatement>
-  //                 <callExpression>
-  //                   <memberExpression>
-  //                     <identifier>console</identifier>
-  //                     <identifier>log</identifier>
-  //                   </memberExpression>
-  //                   <literal>piyo</literal>
-  //                 </callExpression>
-  //               </expressionStatement>
-  //             </blockStatement>
-  //           </ifStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with BinaryExpression', () => {
-  //   const code = `if (true === true) console.log('hoge');`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <binaryExpression operator="===">
-  //             <literal>{true}</literal>
-  //             <literal>{true}</literal>
-  //           </binaryExpression>
-  //           <expressionStatement>
-  //             <callExpression>
-  //               <memberExpression>
-  //                 <identifier>console</identifier>
-  //                 <identifier>log</identifier>
-  //               </memberExpression>
-  //               <literal>hoge</literal>
-  //             </callExpression>
-  //           </expressionStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert for loop', () => {
-  //   const code = `for (step = 0; step < 5; step++) {
-  //     if (true) {
-  //       break
-  //     } else {
-  //       continue
-  //     }
-  //   }`
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forStatement>
-  //           <assignmentExpression operator="=">
-  //             <identifier>step</identifier>
-  //             <literal>{0}</literal>
-  //           </assignmentExpression>
-  //
-  //           <binaryExpression operator="<">
-  //             <identifier>step</identifier>
-  //             <literal>{5}</literal>
-  //           </binaryExpression>
-  //
-  //           <updateExpression operator="++" prefix={false}>
-  //             <identifier>step</identifier>
-  //           </updateExpression>
-  //
-  //           <blockStatement>
-  //             <ifStatement>
-  //               <literal>{true}</literal>
-  //               <blockStatement>
-  //                 <breakStatement />
-  //               </blockStatement>
-  //
-  //               <blockStatement>
-  //                 <continueStatement />
-  //               </blockStatement>
-  //             </ifStatement>
-  //           </blockStatement>
-  //         </forStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert do while', () => {
-  //   const code = `
-  //   do {
-  //     console.log('hoge')
-  //   } while (true)
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <doWhileStatement>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //           <literal>{true}</literal>
-  //         </doWhileStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert while', () => {
-  //   const code = `
-  //   while (true) console.log('hoge');
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <whileStatement>
-  //           <literal>{true}</literal>
-  //           <expressionStatement>
-  //             <callExpression>
-  //               <memberExpression>
-  //                 <identifier>console</identifier>
-  //                 <identifier>log</identifier>
-  //               </memberExpression>
-  //               <literal>hoge</literal>
-  //             </callExpression>
-  //           </expressionStatement>
-  //         </whileStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert while with label', () => {
-  //   const code = `
-  //   markLoop: while (true) { break markLoop; }
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <labeledStatement>
-  //           <identifier>markLoop</identifier>
-  //           <whileStatement>
-  //             <literal>{true}</literal>
-  //             <blockStatement>
-  //               <breakStatement>
-  //                 <identifier>markLoop</identifier>
-  //               </breakStatement>
-  //             </blockStatement>
-  //           </whileStatement>
-  //         </labeledStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+
+  it('should convert if with alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else {
+      console.log('fuga');
+    }`
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement>
+            <Value>{true}</Value>
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <Value>hoge</Value>
+              </FnCall>
+            </blockStatement>
+      
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <Value>fuga</Value>
+              </FnCall>
+            </blockStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with complex alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else if (false) {
+      console.log('fuga');
+    } else {
+      console.log('piyo');
+    }`
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement>
+            <Value>{true}</Value>
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <Value>hoge</Value>
+              </FnCall>
+            </blockStatement>
+      
+            <ifStatement>
+              <Value>{false}</Value>
+              <blockStatement>
+                <FnCall callee="console.log" es>
+                  <Value>fuga</Value>
+                </FnCall>
+              </blockStatement>
+      
+              <blockStatement>
+                <FnCall callee="console.log" es>
+                  <Value>piyo</Value>
+                </FnCall>
+              </blockStatement>
+            </ifStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with BinaryExpression', () => {
+    const code = `if (true === true) console.log('hoge');`
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement>
+            <binaryExpression operator="===">
+              <Value>{true}</Value>
+              <Value>{true}</Value>
+            </binaryExpression>
+            <FnCall callee="console.log" es>
+              <Value>hoge</Value>
+            </FnCall>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert for loop', () => {
+    const code = `for (step = 0; step < 5; step++) {
+      if (true) {
+        break
+      } else {
+        continue
+      }
+    }`
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <forStatement>
+            <assignmentExpression operator="=">
+              <identifier>step</identifier>
+              <Value>{0}</Value>
+            </assignmentExpression>
+      
+            <binaryExpression operator="<">
+              <identifier>step</identifier>
+              <Value>{5}</Value>
+            </binaryExpression>
+      
+            <updateExpression operator="++" prefix={false}>
+              <identifier>step</identifier>
+            </updateExpression>
+      
+            <blockStatement>
+              <ifStatement>
+                <Value>{true}</Value>
+                <blockStatement>
+                  <breakStatement />
+                </blockStatement>
+      
+                <blockStatement>
+                  <continueStatement />
+                </blockStatement>
+              </ifStatement>
+            </blockStatement>
+          </forStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert do while', () => {
+    const code = `
+    do {
+      console.log('hoge')
+    } while (true)
+    `
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <doWhileStatement>
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <Value>hoge</Value>
+              </FnCall>
+            </blockStatement>
+            <Value>{true}</Value>
+          </doWhileStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert while', () => {
+    const code = `
+    while (true) console.log('hoge');
+    `
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <whileStatement>
+            <Value>{true}</Value>
+            <FnCall callee="console.log" es>
+              <Value>hoge</Value>
+            </FnCall>
+          </whileStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert while with label', () => {
+    const code = `
+    markLoop: while (true) { break markLoop; }
+    `
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <labeledStatement>
+            <identifier>markLoop</identifier>
+            <whileStatement>
+              <Value>{true}</Value>
+              <blockStatement>
+                <breakStatement>
+                  <identifier>markLoop</identifier>
+                </breakStatement>
+              </blockStatement>
+            </whileStatement>
+          </labeledStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert for in', () => {
   //   const code = `
   //   for (var i in obj) { console.log('hoge'); }
