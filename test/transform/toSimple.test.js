@@ -503,7 +503,7 @@ describe('toBuilder', () => {
       hoge = false
     } = piyo`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const>
@@ -526,14 +526,14 @@ describe('toBuilder', () => {
 
     // FIXME: rendered will be `const { hoge } = piyo` (assignment is ignored...)
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode !== format(code))
   })
 
   it('should convert object spread with literal', () => {
     const code = `const { 'hoge': hoge } = piyo`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const>
@@ -552,14 +552,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert object spread with computed', () => {
     const code = `const { ['hoge']: hoge } = piyo`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Const>
@@ -578,14 +578,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert if', () => {
     const code = `if (true) console.log('hoge');`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <ifStatement>
@@ -599,7 +599,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -608,7 +608,7 @@ describe('toBuilder', () => {
       console.log('hoge');
     }`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <ifStatement>
@@ -624,7 +624,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -672,7 +672,7 @@ describe('toBuilder', () => {
       console.log('fuga');
     }`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <ifStatement>
@@ -694,7 +694,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -707,7 +707,7 @@ describe('toBuilder', () => {
       console.log('piyo');
     }`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <ifStatement>
@@ -738,14 +738,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert if with BinaryExpression', () => {
     const code = `if (true === true) console.log('hoge');`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <ifStatement>
@@ -762,7 +762,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -775,7 +775,7 @@ describe('toBuilder', () => {
       }
     }`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <forStatement>
@@ -811,7 +811,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -822,7 +822,7 @@ describe('toBuilder', () => {
     } while (true)
     `
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <doWhileStatement>
@@ -838,7 +838,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -847,7 +847,7 @@ describe('toBuilder', () => {
     while (true) console.log('hoge');
     `
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <whileStatement>
@@ -861,7 +861,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -870,7 +870,7 @@ describe('toBuilder', () => {
     markLoop: while (true) { break markLoop; }
     `
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <labeledStatement>
@@ -889,7 +889,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -964,142 +964,97 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
-  // // JSX
-  // it('should convert simple jsx', () => {
-  //   const code = `
-  //     const render = () => {
-  //       return (
-  //         <span>hoge</span>
-  //       )
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <blockStatement>
-  //                 <returnStatement>
-  //                   <jsxElement>
-  //                     <jsxOpeningElement
-  //                       name={<jsxIdentifier name="span" />}
-  //                       attributes={[]}
-  //                       selfClosing={false}
-  //                     />
-  //                     <jsxText>hoge</jsxText>
-  //                     <jsxClosingElement name={<jsxIdentifier name="span" />} />
-  //                   </jsxElement>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert jsx with attributes', () => {
-  //   const code = `
-  //     const render = () => {
-  //       return (
-  //         <span
-  //           id="example"
-  //           style={{
-  //             color: 'red'
-  //           }}
-  //           hidden
-  //         >
-  //           hoge
-  //         </span>
-  //       )
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <blockStatement>
-  //                 <returnStatement>
-  //                   <jsxElement>
-  //                     <jsxOpeningElement
-  //                       name={<jsxIdentifier name="span" />}
-  //                       attributes={[
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="id" />}
-  //                           value={<literal>example</literal>}
-  //                         />,
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="style" />}
-  //                           value={
-  //                             <jsxExpressionContainer>
-  //                               <objectExpression>
-  //                                 <property
-  //                                   kind="init"
-  //                                   method={false}
-  //                                   shorthand={false}
-  //                                   computed={false}
-  //                                 >
-  //                                   <identifier>color</identifier>
-  //                                   <literal>red</literal>
-  //                                 </property>
-  //                               </objectExpression>
-  //                             </jsxExpressionContainer>
-  //                           }
-  //                         />,
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="hidden" />}
-  //                           value={null}
-  //                         />
-  //                       ]}
-  //                       selfClosing={false}
-  //                     />
-  //                       <jsxText>hoge</jsxText>
-  //                     <jsxClosingElement name={<jsxIdentifier name="span" />} />
-  //                   </jsxElement>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+
+  // JSX
+  it('should convert simple jsx', () => {
+    const code = `
+      const render = () => {
+        return (
+          <span>hoge</span>
+        )
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="render">
+            <ArrowFn>
+              <blockStatement>
+                <returnStatement>
+                  <JSX tagName="span">hoge</JSX>
+                </returnStatement>
+              </blockStatement>
+            </ArrowFn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert jsx with attributes', () => {
+    const code = `
+      const render = () => {
+        return (
+          <span
+            id="example"
+            style={{
+              color: 'red',
+              backgroundColor: 'red'
+            }}
+            hidden
+          >
+            hoge
+          </span>
+        )
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="render">
+            <ArrowFn>
+              <blockStatement>
+                <returnStatement>
+                  <JSX 
+                    tagName="span" 
+                    id="example" 
+                    style={{ color: 'red', backgroundColor: 'red' }} 
+                    hidden
+                  >
+                    hoge
+                  </JSX>
+                </returnStatement>
+              </blockStatement>
+            </ArrowFn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
 })
 
 describe('option', () => {
-  // it('should omit program if shouldOmitprogram = true', () => {
-  //   const code = 'hoge()'
-  //
-  //   assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
-  //     const render = () => (
-  //       <expressionStatement>
-  //         <callExpression>
-  //           <identifier>hoge</identifier>
-  //         </callExpression>
-  //       </expressionStatement>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should omit program if shouldOmitprogram = true', () => {
+    const code = 'hoge()'
+
+    assert(toBuilder(code, {shouldOmitProgram: true, simple: true}).code === format(`
+      const render = () => (
+        <FnCall callee="hoge" es />
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
 })

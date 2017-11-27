@@ -19,7 +19,8 @@ export const babelAndEval = (builderCode) => {
     Fn,
     Declarator,
     Import,
-    Export
+    Export,
+    JSX
   } = simple
 
   const code = _.get(Babel.transform(builderCode, {
