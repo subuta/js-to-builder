@@ -19,7 +19,8 @@ import {
   Fn,
   JSX,
   Import,
-  Export
+  Export,
+  Declarator
 } from 'lib/components/simple'
 
 describe('Components', () => {
@@ -258,6 +259,21 @@ describe('Components', () => {
         console.log(str)
         const hoge = 'true'
       }
+    `))
+  })
+
+  it('Declarator should render', () => {
+    const render = () => (
+      <variableDeclaration kind="const">
+        <Declarator>
+          <identifier>hoge</identifier>
+          <Value>fuga</Value>
+        </Declarator>
+      </variableDeclaration>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = 'fuga'
     `))
   })
 

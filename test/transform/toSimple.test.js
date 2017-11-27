@@ -412,7 +412,7 @@ describe('toBuilder', () => {
   it('should convert module import * as ...', () => {
     const code = 'import * as hoge from \'hoge\''
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Import name="hoge" source="hoge" />
@@ -421,14 +421,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert module named import', () => {
     const code = 'import { hoge } from \'hoge\''
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Import source="hoge">
@@ -442,14 +442,14 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert module named import as ...', () => {
     const code = 'import { hoge as fuga, fuga as piyo } from \'hoge\''
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <Import source="hoge">
@@ -468,36 +468,41 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
-  // it('should convert object spread', () => {
-  //   const code = 'const { hoge } = piyo'
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <objectPattern>
-  //               <property kind="init" method={false} shorthand={true} computed={false}>
-  //                 <identifier>hoge</identifier>
-  //                 <identifier>hoge</identifier>
-  //               </property>
-  //             </objectPattern>
-  //             <identifier>piyo</identifier>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+  it('should convert object spread', () => {
+    const code = 'const { hoge } = piyo'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const>
+            <Declarator>
+              <objectPattern>
+                <property
+                  kind="init"
+                  method={false}
+                  shorthand={true}
+                  computed={false}
+                >
+                  <identifier>hoge</identifier>
+                  <identifier>hoge</identifier>
+                </property>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </Declarator>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert object spread with assignment', () => {
   //   const code = `const {
   //     hoge = false
