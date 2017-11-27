@@ -19,7 +19,7 @@ describe('redux', () => {
         }
       }
     `
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code).code /*?*/ === format(`
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -34,7 +34,7 @@ describe('redux', () => {
                         <identifier>type</identifier>
                         <literal>HOGE</literal>
                       </property>
-        
+  
                       <property kind="init">
                         <identifier>payload</identifier>
                         <identifier>arg</identifier>
@@ -59,22 +59,12 @@ describe('redux', () => {
               <blockStatement>
                 <returnStatement>
                   <objectExpression>
-                    <property
-                      kind="init"
-                      method={false}
-                      shorthand={false}
-                      computed={false}
-                    >
+                    <property kind="init">
                       <identifier>type</identifier>
                       <literal>HOGE</literal>
                     </property>
 
-                    <property
-                      kind="init"
-                      method={false}
-                      shorthand={false}
-                      computed={false}
-                    >
+                    <property kind="init">
                       <identifier>payload</identifier>
                       <identifier>arg</identifier>
                     </property>

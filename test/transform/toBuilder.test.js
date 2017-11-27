@@ -777,6 +777,45 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert iife with arguments', () => {
+    const code = `(function(hoge, fuga) {
+      debugger
+      return console.log('hoge')
+    })()`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <functionExpression id={null}>
+                <identifier>hoge</identifier>
+                <identifier>fuga</identifier>
+                <blockStatement>
+                  <debuggerStatement />
+
+                  <returnStatement>
+                    <callExpression>
+                      <memberExpression>
+                        <identifier>console</identifier>
+                        <identifier>log</identifier>
+                      </memberExpression>
+                      <literal>hoge</literal>
+                    </callExpression>
+                  </returnStatement>
+                </blockStatement>
+              </functionExpression>
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert if with alternate', () => {
     const code = `if (true) {
       console.log('hoge');
