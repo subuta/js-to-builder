@@ -262,6 +262,30 @@ describe('Components', () => {
     `))
   })
 
+  it('Value with function id should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Fn id="hoge">
+          <identifier>str</identifier>
+          <identifier>hoge</identifier>
+          <FnStatement>
+            <FnCall callee="console.log" es>
+              <identifier>str</identifier>
+            </FnCall>
+            <Const name="hoge" value="true" />
+          </FnStatement>
+        </Fn>
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = function hoge (str, hoge) {
+        console.log(str)
+        const hoge = 'true'
+      }
+    `))
+  })
+
   it('Declarator should render', () => {
     const render = () => (
       <variableDeclaration kind="const">

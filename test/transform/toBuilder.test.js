@@ -740,7 +740,7 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  it.only('should convert iife', () => {
+  it('should convert iife', () => {
     const code = `(function() {
       debugger
       return console.log('hoge')

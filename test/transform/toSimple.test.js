@@ -634,7 +634,7 @@ describe('toBuilder', () => {
       return console.log('hoge')
     })()`
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <FnCall es>
@@ -655,7 +655,42 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert complex iife', () => {
+    const code = `(function hoge(hoge, fuga) {
+      debugger
+      return console.log('hoge')
+    })('hoge', 'fuga')`
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <FnCall es>
+            <Fn id="hoge">
+              <identifier>hoge</identifier>
+              <identifier>fuga</identifier>
+              <blockStatement>
+                <debuggerStatement />
+      
+                <returnStatement>
+                  <FnCall callee="console.log">
+                    <Value>hoge</Value>
+                  </FnCall>
+                </returnStatement>
+              </blockStatement>
+            </Fn>
+            <Value>hoge</Value>
+            <Value>fuga</Value>
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -1048,7 +1083,7 @@ describe('option', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 })
