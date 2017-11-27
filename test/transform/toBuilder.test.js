@@ -296,7 +296,7 @@ describe('toBuilder', () => {
             <variableDeclarator>
               <identifier>hoge</identifier>
               <objectExpression>
-                <property kind="init" method={false} shorthand={false} computed={false}>
+                <property kind="init">
                   <identifier>HOGE</identifier>
                   <literal>hoge</literal>
                 </property>
@@ -581,7 +581,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <objectPattern>
-                <property kind="init" method={false} shorthand={true} computed={false}>
+                <property kind="init" shorthand>
                   <identifier>hoge</identifier>
                   <identifier>hoge</identifier>
                 </property>
@@ -609,7 +609,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <objectPattern>
-                <property kind="init" method={false} shorthand={true} computed={false}>
+                <property kind="init" shorthand>
                   <identifier>hoge</identifier>
                   <assignmentPattern>
                     <identifier>hoge</identifier>
@@ -639,7 +639,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <objectPattern>
-                <property kind="init" method={false} shorthand={false} computed={false}>
+                <property kind="init">
                   <literal>hoge</literal>
                   <identifier>hoge</identifier>
                 </property>
@@ -665,7 +665,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <objectPattern>
-                <property kind="init" method={false} shorthand={false} computed={true}>
+                <property kind="init" computed>
                   <literal>hoge</literal>
                   <identifier>hoge</identifier>
                 </property>
@@ -1206,12 +1206,7 @@ describe('toBuilder', () => {
                             value={
                               <jsxExpressionContainer>
                                 <objectExpression>
-                                  <property
-                                    kind="init"
-                                    method={false}
-                                    shorthand={false}
-                                    computed={false}
-                                  >
+                                  <property kind="init">
                                     <identifier>color</identifier>
                                     <literal>red</literal>
                                   </property>

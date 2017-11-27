@@ -30,22 +30,12 @@ describe('redux', () => {
                 <blockStatement>
                   <returnStatement>
                     <objectExpression>
-                      <property
-                        kind="init"
-                        method={false}
-                        shorthand={false}
-                        computed={false}
-                      >
+                      <property kind="init">
                         <identifier>type</identifier>
                         <literal>HOGE</literal>
                       </property>
         
-                      <property
-                        kind="init"
-                        method={false}
-                        shorthand={false}
-                        computed={false}
-                      >
+                      <property kind="init">
                         <identifier>payload</identifier>
                         <identifier>arg</identifier>
                       </property>
@@ -128,22 +118,12 @@ describe('redux', () => {
                           <callExpression>
                             <identifier>dispatch</identifier>
                             <objectExpression>
-                              <property
-                                kind="init"
-                                method={false}
-                                shorthand={false}
-                                computed={false}
-                              >
+                              <property kind="init">
                                 <identifier>type</identifier>
                                 <literal>HOGE</literal>
                               </property>
         
-                              <property
-                                kind="init"
-                                method={false}
-                                shorthand={false}
-                                computed={false}
-                              >
+                              <property kind="init">
                                 <identifier>payload</identifier>
                                 <identifier>arg</identifier>
                               </property>

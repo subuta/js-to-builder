@@ -481,12 +481,7 @@ describe('toBuilder', () => {
           <Const>
             <Declarator>
               <objectPattern>
-                <property
-                  kind="init"
-                  method={false}
-                  shorthand={true}
-                  computed={false}
-                >
+                <property kind="init" shorthand>
                   <identifier>hoge</identifier>
                   <identifier>hoge</identifier>
                 </property>
