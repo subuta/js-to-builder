@@ -19,7 +19,7 @@ describe('redux', () => {
         }
       }
     `
-    assert(toBuilder(code).code /*?*/ === format(`
+    assert(toBuilder(code).code === format(`
       const render = () => (
         <program>
           <variableDeclaration kind="const">

@@ -344,7 +344,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier>render</identifier>
-              <functionExpression id={null}>
+              <functionExpression>
                 <blockStatement />
               </functionExpression>
             </variableDeclarator>
@@ -740,7 +740,7 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  it('should convert iife', () => {
+  it.only('should convert iife', () => {
     const code = `(function() {
       debugger
       return console.log('hoge')
@@ -751,7 +751,7 @@ describe('toBuilder', () => {
         <program>
           <expressionStatement>
             <callExpression>
-              <functionExpression id={null}>
+              <functionExpression>
                 <blockStatement>
                   <debuggerStatement />
 

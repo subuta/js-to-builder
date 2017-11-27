@@ -278,7 +278,7 @@ describe('toBuilder', () => {
       const render = () => (
         <program>
           <Const name="render">
-            <Fn id={null}>
+            <Fn>
               <blockStatement />
             </Fn>
           </Const>
@@ -628,34 +628,28 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert iife', () => {
+  // it.only('should convert iife', () => {
   //   const code = `(function() {
   //     debugger
   //     return console.log('hoge')
   //   })()`
   //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
+  //   assert(toBuilder(code, { simple: true }).code /*?*/ === format(`
   //     const render = () => (
   //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <functionExpression id={null}>
-  //               <blockStatement>
-  //                 <debuggerStatement />
+  //         <FnCall es>
+  //           <Fn>
+  //             <blockStatement>
+  //               <debuggerStatement />
   //
-  //                 <returnStatement>
-  //                   <callExpression>
-  //                     <memberExpression>
-  //                       <identifier>console</identifier>
-  //                       <identifier>log</identifier>
-  //                     </memberExpression>
-  //                     <literal>hoge</literal>
-  //                   </callExpression>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </functionExpression>
-  //           </callExpression>
-  //         </expressionStatement>
+  //               <returnStatement>
+  //                 <FnCall callee="console.log">
+  //                   <Value>hoge</Value>
+  //                 </FnCall>
+  //               </returnStatement>
+  //             </blockStatement>
+  //           </Fn>
+  //         </FnCall>
   //       </program>
   //     )
   //   `))
