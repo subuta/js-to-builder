@@ -29,7 +29,9 @@ const enhance = compose(
 
       // because toBuilder will throw syntax error while editing :)
       try {
-        jsx = format(toBuilder(code, {to: 'jsx'}).code)
+        // TODO: add simple: true / false toggle.
+        jsx = format(toBuilder(code).code)
+        // jsx = format(toBuilder(code, {simple: true}).code)
       } catch (e) {
         error = e.toString()
       }
