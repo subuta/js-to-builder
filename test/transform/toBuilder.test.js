@@ -777,23 +777,23 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  it('should convert iife with arguments', () => {
-    const code = `(function(hoge, fuga) {
+  it('should convert complex iife', () => {
+    const code = `(function hoge(hoge, fuga) {
       debugger
       return console.log('hoge')
-    })()`
+    })('hoge', 'fuga')`
 
     assert(toBuilder(code).code === format(`
       const render = () => (
         <program>
           <expressionStatement>
             <callExpression>
-              <functionExpression id={null}>
+              <functionExpression id={<identifier>hoge</identifier>}>
                 <identifier>hoge</identifier>
                 <identifier>fuga</identifier>
                 <blockStatement>
                   <debuggerStatement />
-
+      
                   <returnStatement>
                     <callExpression>
                       <memberExpression>
@@ -805,6 +805,8 @@ describe('toBuilder', () => {
                   </returnStatement>
                 </blockStatement>
               </functionExpression>
+              <literal>hoge</literal>
+              <literal>fuga</literal>
             </callExpression>
           </expressionStatement>
         </program>
