@@ -922,77 +922,57 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert for in', () => {
-  //   const code = `
-  //   for (var i in obj) { console.log('hoge'); }
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forInStatement>
-  //           <variableDeclaration kind="var">
-  //             <variableDeclarator>
-  //               <identifier>i</identifier>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //           <identifier>obj</identifier>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </forInStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert for of', () => {
-  //   const code = `
-  //     for (let i of arr) { console.log(i); }
-  //   `
-  //
-  //   assert(toBuilder(code, { simple: true }).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forOfStatement>
-  //           <variableDeclaration kind="let">
-  //             <variableDeclarator>
-  //               <identifier>i</identifier>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //           <identifier>arr</identifier>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <identifier>i</identifier>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </forOfStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert for in', () => {
+    const code = `
+    for (var i in obj) { console.log('hoge'); }
+    `
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <forInStatement>
+            <Var name="i" />
+            <identifier>obj</identifier>
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <Value>hoge</Value>
+              </FnCall>
+            </blockStatement>
+          </forInStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert for of', () => {
+    const code = `
+      for (let i of arr) { console.log(i); }
+    `
+
+    assert(toBuilder(code, { simple: true }).code === format(`
+      const render = () => (
+        <program>
+          <forOfStatement>
+            <Let name="i" />
+            <identifier>arr</identifier>
+            <blockStatement>
+              <FnCall callee="console.log" es>
+                <identifier>i</identifier>
+              </FnCall>
+            </blockStatement>
+          </forOfStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    assert(renderedCode === format(code))
+  })
 
   // JSX
   it('should convert simple jsx', () => {
