@@ -97,7 +97,7 @@ describe('toBuilder', () => {
 
   it('should convert Class', () => {
     const code = `
-      class Hoge {
+      class Hoge extends Component{
         constructor() {
           this.hoge = ''
         }
@@ -111,6 +111,7 @@ describe('toBuilder', () => {
       const render = () => (
         <program>
           <ClassDef id="Hoge">
+            <identifier>Component</identifier>
             <Method kind="constructor">
               <identifier>constructor</identifier>
               <Fn>
