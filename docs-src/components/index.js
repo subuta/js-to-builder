@@ -17,11 +17,12 @@ import { babelAndEval } from 'docs-src/utils/babel'
 
 const enhance = compose(
   withState('code', 'setCode', ''),
+  withState('isSimple', 'setIsSimple', false),
   withState('codeTemplate', 'setCodeTemplate', `const hoge = 'fuga'`),
   withState('builderError', 'setBuilderError', null),
   withPropsOnChange(
-    ['code', 'setCode', 'setCodeTemplate'],
-    ({code, setCode, setCodeTemplate}) => {
+    ['code', 'setCode', 'isSimple', 'setCodeTemplate'],
+    ({code, setCode, isSimple, setCodeTemplate}) => {
       let jsx = null
       let error = null
 
@@ -30,7 +31,7 @@ const enhance = compose(
       // because toBuilder will throw syntax error while editing :)
       try {
         // TODO: add simple: true / false toggle.
-        jsx = format(toBuilder(code).code)
+        jsx = format(toBuilder(code, {simple: isSimple}).code)
         // jsx = format(toBuilder(code, {simple: true}).code)
       } catch (e) {
         error = e.toString()
@@ -45,6 +46,9 @@ const enhance = compose(
     }
   ),
   withHandlers({
+    handleToggleSimpleChange: ({setIsSimple}) => (e) => {
+      setIsSimple(e.target.checked)
+    },
     handleBuilderChange: ({setCodeTemplate, setBuilderError}) => (value) => {
       if (_.isEmpty(value)) return
       const jsxCode = `/** @jsx h */ ${value}`
@@ -68,7 +72,9 @@ export default enhance((props) => {
     codeError,
     builderError,
     codeTemplate,
-    handleBuilderChange
+    handleToggleSimpleChange,
+    handleBuilderChange,
+    isSimple
   } = props
 
   return (
@@ -76,7 +82,21 @@ export default enhance((props) => {
       <div className={classes.Content}>
         <h3>js-to-builder</h3>
 
-        <a href="https://github.com/subuta/js-to-builder" target="_blank">https://github.com/subuta/js-to-builder</a>
+        <a href='https://github.com/subuta/js-to-builder' target='_blank'>https://github.com/subuta/js-to-builder</a>
+
+        <div className={classes.ToggleSimple}>
+          <b>EXPERIMENTAL:</b>
+
+          <div className={classes.ToggleSimpleInput}>
+            <label htmlFor='is-simple'>simple?</label>
+            <input
+              id='is-simple'
+              type='checkbox'
+              defaultChecked={isSimple}
+              onChange={handleToggleSimpleChange}
+            />
+          </div>
+        </div>
 
         <div className={classes.Editors}>
           <Editor
@@ -96,7 +116,7 @@ export default enhance((props) => {
       </div>
 
       <div className={classes.Footer}>
-        <a href="https://github.com/subuta" target="_blank">by @subuta</a>
+        <a href='https://github.com/subuta' target='_blank'>by @subuta</a>
       </div>
     </div>
   )

@@ -16,6 +16,20 @@ const Content = {
   }
 }
 
+const ToggleSimple = {
+  margin: '16px 0 0'
+}
+
+const ToggleSimpleInput = {
+  margin: '4px 0 0',
+  cursor: 'pointer',
+
+  '& > label': {
+    margin: '0 4px 0 0',
+    userSelect: 'none'
+  }
+}
+
 const Editors = {
   margin: '16px 0 0',
   display: 'flex',
@@ -42,6 +56,8 @@ const Footer = {
 
 export default registerStyles({
   Content,
+  ToggleSimple,
+  ToggleSimpleInput,
   Editors,
   Footer
 })
