@@ -95,6 +95,54 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert Class', () => {
+    const code = `
+      class Hoge {
+        constructor() {
+          this.hoge = ''
+        }
+        
+        static piyo() {}
+        fuga() {}
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <ClassDef id="Hoge">
+            <Method kind="constructor">
+              <identifier>constructor</identifier>
+              <Fn>
+                <blockStatement>
+                  <assignmentExpression operator="=">
+                    this.hoge<Value />
+                  </assignmentExpression>
+                </blockStatement>
+              </Fn>
+            </Method>
+            <Method kind="method" static>
+              <identifier>piyo</identifier>
+              <Fn>
+                <blockStatement />
+              </Fn>
+            </Method>
+            <Method kind="method">
+              <identifier>fuga</identifier>
+              <Fn>
+                <blockStatement />
+              </Fn>
+            </Method>
+          </ClassDef>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code, {simple: true}).code === format(`

@@ -20,7 +20,9 @@ export const babelAndEval = (builderCode) => {
     Declarator,
     Import,
     Export,
-    JSX
+    JSX,
+    ClassDef,
+    Method
   } = simple
 
   const code = _.get(Babel.transform(builderCode, {
