@@ -118,6 +118,62 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert Class', () => {
+    const code = `
+      class Hoge {
+        constructor() {
+          this.hoge = ''
+        }
+        
+        static piyo() {}
+        fuga() {}
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <classDeclaration id="Hoge">
+            <classBody>
+              <methodDefinition kind="constructor">
+                <identifier>constructor</identifier>
+                <functionExpression>
+                  <blockStatement>
+                    <expressionStatement>
+                      <assignmentExpression operator="=">
+                        <memberExpression>
+                          <thisExpression />
+                          <identifier>hoge</identifier>
+                        </memberExpression>
+                        <literal />
+                      </assignmentExpression>
+                    </expressionStatement>
+                  </blockStatement>
+                </functionExpression>
+              </methodDefinition>
+              <methodDefinition kind="method" static>
+                <identifier>piyo</identifier>
+                <functionExpression>
+                  <blockStatement />
+                </functionExpression>
+              </methodDefinition>
+              <methodDefinition kind="method">
+                <identifier>fuga</identifier>
+                <functionExpression>
+                  <blockStatement />
+                </functionExpression>
+              </methodDefinition>
+            </classBody>
+          </classDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code).code === format(`
