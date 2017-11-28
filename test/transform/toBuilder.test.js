@@ -50,6 +50,41 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert async/await', () => {
+    const code = `
+      const hoge = async () => {
+        await fuga()
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <arrowFunctionExpression async>
+                <blockStatement>
+                  <expressionStatement>
+                    <awaitExpression>
+                      <callExpression>
+                        <identifier>fuga</identifier>
+                      </callExpression>
+                    </awaitExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code).code === format(`

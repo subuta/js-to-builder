@@ -39,6 +39,34 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert async/await', () => {
+    const code = `
+      const hoge = async () => {
+        await fuga()
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="hoge">
+            <ArrowFn async>
+              <blockStatement>
+                <awaitExpression>
+                  <FnCall callee="fuga" />
+                </awaitExpression>
+              </blockStatement>
+            </ArrowFn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code, {simple: true}).code === format(`
@@ -927,7 +955,7 @@ describe('toBuilder', () => {
     for (var i in obj) { console.log('hoge'); }
     `
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <forInStatement>
@@ -944,7 +972,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -953,7 +981,7 @@ describe('toBuilder', () => {
       for (let i of arr) { console.log(i); }
     `
 
-    assert(toBuilder(code, { simple: true }).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <forOfStatement>
@@ -970,7 +998,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, { simple: true }).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
