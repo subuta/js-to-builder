@@ -39,6 +39,34 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert generator', () => {
+    const code = `
+      const hoge = function*() {
+        yield true;
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="hoge">
+            <Fn generator>
+              <blockStatement>
+                <yieldExpression>
+                  <Value>{true}</Value>
+                </yieldExpression>
+              </blockStatement>
+            </Fn>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert async/await', () => {
     const code = `
       const hoge = async () => {

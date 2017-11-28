@@ -50,6 +50,39 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert generator', () => {
+    const code = `
+      const hoge = function*() {
+        yield true;
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier>hoge</identifier>
+              <functionExpression generator>
+                <blockStatement>
+                  <expressionStatement>
+                    <yieldExpression>
+                      <literal>{true}</literal>
+                    </yieldExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </functionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert async/await', () => {
     const code = `
       const hoge = async () => {
