@@ -66,6 +66,7 @@
     "acorn-jsx": "^4.1.0",
     "ast-types": "^0.9.12",
     "falafel": "^2.1.0",
+    "icepick": "^2.2.1",
     "lodash": "^4.17.4",
     "prettier": "git://github.com/prettier/prettier.git#1.7.4",
     "recast": "^0.12.6"
