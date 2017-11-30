@@ -1,12 +1,35 @@
 /* global describe, it */
 
 import toBuilder from 'lib/transform'
+
 import format from 'lib/utils/formatter'
 import { babelAndEval } from 'test/helper'
+
+import * as types from 'ast-types'
+
+const {namedTypes: n, builders: b} = types
 
 const assert = require('assert')
 
 describe('toBuilder', () => {
+  it('should convert Identifier', () => {
+    const code = 'hoge'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <identifier name="hoge" />
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert CallExpression', () => {
   //   const code = 'hoge()'
   //
@@ -27,28 +50,28 @@ describe('toBuilder', () => {
   //   assert(renderedCode === format(code))
   // })
 
-  it.only('should convert CallExpression with memberExpression', () => {
-    const code = 'console.log()'
-
-    assert(toBuilder(code).code === format(`
-      const render = () => (
-        <program>
-          <expressionStatement>
-            <callExpression>
-              <memberExpression>
-                <identifier name="console" />
-                <identifier name="log" />
-              </memberExpression>
-            </callExpression>
-          </expressionStatement>
-        </program>
-      )
-    `))
-
-    // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-    assert(renderedCode === format(code))
-  })
+  // it.only('should convert CallExpression with memberExpression', () => {
+  //   const code = 'console.log()'
+  //
+  //   assert(toBuilder(code).code === format(`
+  //     const render = () => (
+  //       <program>
+  //         <expressionStatement>
+  //           <callExpression>
+  //             <memberExpression>
+  //               <identifier name="console" />
+  //               <identifier name="log" />
+  //             </memberExpression>
+  //           </callExpression>
+  //         </expressionStatement>
+  //       </program>
+  //     )
+  //   `))
+  //
+  //   // eval jsx and check rendered code equals to original code.
+  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+  //   assert(renderedCode === format(code))
+  // })
 
   // it('should convert generator', () => {
   //   const code = `
