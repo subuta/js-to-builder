@@ -30,82 +30,83 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert CallExpression', () => {
-  //   const code = 'hoge()'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>hoge</identifier>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it.only('should convert CallExpression', () => {
+    const code = 'hoge()'
 
-  // it.only('should convert CallExpression with memberExpression', () => {
-  //   const code = 'console.log()'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <memberExpression>
-  //               <identifier name="console" />
-  //               <identifier name="log" />
-  //             </memberExpression>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier name="hoge" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
 
-  // it('should convert generator', () => {
-  //   const code = `
-  //     const hoge = function*() {
-  //       yield true;
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>hoge</identifier>
-  //             <functionExpression generator>
-  //               <blockStatement>
-  //                 <expressionStatement>
-  //                   <yieldExpression>
-  //                     <literal>{true}</literal>
-  //                   </yieldExpression>
-  //                 </expressionStatement>
-  //               </blockStatement>
-  //             </functionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert CallExpression with memberExpression', () => {
+    const code = 'console.log()'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <memberExpression computed={false}>
+                <identifier name="console" />
+                <identifier name="log" />
+              </memberExpression>
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert generator', () => {
+    const code = `
+      const hoge = function*() {
+        yield true;
+      }
+    `
+
+    assert(toBuilder(code).code /*?*/ === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration>
+            const
+            <variableDeclarator>
+              <identifier name="hoge" />
+              <functionExpression id={null} generator="true" expression={false}>
+                <blockStatement>
+                  <expressionStatement>
+                    <yieldExpression delegate={false}>
+                      <literal value="true" />
+                    </yieldExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </functionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert async/await', () => {
   //   const code = `
   //     const hoge = async () => {

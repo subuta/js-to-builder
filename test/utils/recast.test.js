@@ -5,6 +5,7 @@ import _ from 'lodash'
 import {
   getBuilderName,
   getTypeName,
+  getAllFields,
   getSuperTypeList,
   getBuildParams
 } from 'lib/utils/recast'
@@ -17,6 +18,12 @@ const assert = require('assert')
 describe('getSuperTypeList', () => {
   it('should return supertypeList', () => {
     assert.deepEqual(getSuperTypeList('identifier'), ['Identifier', 'Expression', 'Pattern', 'Node', 'Printable'])
+  })
+})
+
+describe('getAllFields', () => {
+  it('should return allFields of Type', () => {
+    assert.deepEqual(getAllFields('Identifier').name.toString(), `"name": string`)
   })
 })
 
