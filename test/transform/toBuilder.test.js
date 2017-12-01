@@ -73,38 +73,38 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert generator', () => {
-  //   const code = `
-  //     const hoge = function*() {
-  //       yield true;
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code /*?*/ === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration>
-  //           <variableDeclarator>
-  //             <identifier name="hoge" />
-  //             <functionExpression id={null} generator="true" expression={false}>
-  //               <blockStatement>
-  //                 <expressionStatement>
-  //                   <yieldExpression delegate={false}>
-  //                     <literal value="true" />
-  //                   </yieldExpression>
-  //                 </expressionStatement>
-  //               </blockStatement>
-  //             </functionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert generator', () => {
+    const code = `
+      const hoge = function*() {
+        yield true;
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="hoge" />
+              <functionExpression id={null} generator expression={false}>
+                <blockStatement>
+                  <expressionStatement>
+                    <yieldExpression delegate={false}>
+                      <literal value />
+                    </yieldExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </functionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
 
   // it('should convert async/await', () => {
   //   const code = `
