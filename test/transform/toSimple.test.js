@@ -6,23 +6,23 @@ import { babelAndEval } from 'test/helper'
 
 const assert = require('assert')
 
-// describe('toBuilder', () => {
-//   it('should convert CallExpression', () => {
-//     const code = 'hoge()'
-//
-//     assert(toBuilder(code, {simple: true}).code === format(`
-//       const render = () => (
-//         <program>
-//           <FnCall callee="hoge" es/>
-//         </program>
-//       )
-//     `))
-//
-//     // eval jsx and check rendered code equals to original code.
-//     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
-//     assert(renderedCode === format(code))
-//   })
-//
+describe('toBuilder with simple:true', () => {
+  it('should convert CallExpression', () => {
+    const code = 'hoge()'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <FnCall callee="hoge" es/>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
 //   it('should convert CallExpression with memberExpression', () => {
 //     const code = 'console.log()'
 //
@@ -1155,8 +1155,8 @@ const assert = require('assert')
 //     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
 //     assert(renderedCode === format(code))
 //   })
-// })
-//
+})
+
 // describe('option', () => {
 //   it('should omit program if shouldOmitprogram = true', () => {
 //     const code = 'hoge()'
