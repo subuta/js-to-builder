@@ -58,7 +58,7 @@ describe('toBuilder', () => {
         <program>
           <expressionStatement>
             <callExpression>
-              <memberExpression computed={false}>
+              <memberExpression>
                 <identifier name="console" />
                 <identifier name="log" />
               </memberExpression>
@@ -86,10 +86,10 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="hoge" />
-              <functionExpression id={null} generator expression={false}>
+              <functionExpression id={null} generator>
                 <blockStatement>
                   <expressionStatement>
-                    <yieldExpression delegate={false}>
+                    <yieldExpression>
                       <literal value />
                     </yieldExpression>
                   </expressionStatement>
@@ -119,10 +119,10 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="hoge" />
-              <arrowFunctionExpression expression={false} async>
+              <arrowFunctionExpression async>
                 <blockStatement>
                   <expressionStatement>
-                    <awaitExpression all={false}>
+                    <awaitExpression>
                       <callExpression>
                         <identifier name="fuga" />
                       </callExpression>
@@ -141,178 +141,179 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert Class', () => {
-  //   const code = `
-  //     class Hoge extends Component{
-  //       constructor() {
-  //         this.hoge = ''
-  //       }
-  //
-  //       static piyo() {}
-  //       fuga() {}
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code /*?*/ === format(`
-  //     const render = () => (
-  //       <program>
-  //         <classDeclaration>
-  //           <identifier name="Hoge" />
-  //           <classBody>
-  //             <methodDefinition kind="constructor" static={false}>
-  //               <identifier name="constructor" />
-  //               <functionExpression id={null} generator={false} expression={false}>
-  //                 <blockStatement>
-  //                   <expressionStatement>
-  //                     <assignmentExpression operator="=">
-  //                       <memberExpression computed={false}>
-  //                         <thisExpression />
-  //                         <identifier name="hoge" />
-  //                       </memberExpression>
-  //                       <literal value="" />
-  //                     </assignmentExpression>
-  //                   </expressionStatement>
-  //                 </blockStatement>
-  //               </functionExpression>
-  //             </methodDefinition>,<methodDefinition kind="method" static>
-  //               <identifier name="piyo" />
-  //               <functionExpression id={null} generator={false} expression={false}>
-  //                 <blockStatement />
-  //               </functionExpression>
-  //             </methodDefinition>,<methodDefinition kind="method" static={false}>
-  //               <identifier name="fuga" />
-  //               <functionExpression id={null} generator={false} expression={false}>
-  //                 <blockStatement />
-  //               </functionExpression>
-  //             </methodDefinition>
-  //           </classBody>
-  //           <identifier name="Component" />
-  //         </classDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert Class', () => {
+    const code = `
+      class Hoge extends Component{
+        constructor() {
+          this.hoge = ''
+        }
 
-  // it('should multiline code', () => {
-  //   const code = 'hoge(); fuga();'
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>hoge</identifier>
-  //           </callExpression>
-  //         </expressionStatement>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>fuga</identifier>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert chained CallExpression', () => {
-  //   const code = 'hoge("arg1").fuga("arg2")'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <memberExpression>
-  //               <callExpression>
-  //                 <identifier>hoge</identifier>
-  //                 <literal>arg1</literal>
-  //               </callExpression>
-  //               <identifier>fuga</identifier>
-  //             </memberExpression>
-  //             <literal>arg2</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert nested CallExpression', () => {
-  //   const code = 'fuga(hoge("arg1"), "arg2")'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>fuga</identifier>
-  //             <callExpression>
-  //               <identifier>hoge</identifier>
-  //               <literal>arg1</literal>
-  //             </callExpression>
-  //
-  //             <literal>arg2</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert CallExpression with arguments', () => {
-  //   const code = 'hoge(\'fuga\')'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <identifier>hoge</identifier>
-  //             <literal>fuga</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert ArrayExpression', () => {
-  //   const code = '[]'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <arrayExpression />
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
+        static piyo() {}
+        fuga() {}
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <classDeclaration>
+            <identifier name="Hoge" />
+            <classBody>
+              <methodDefinition kind="constructor">
+                <identifier name="constructor" />
+                <functionExpression id={null}>
+                  <blockStatement>
+                    <expressionStatement>
+                      <assignmentExpression operator="=">
+                        <memberExpression>
+                          <thisExpression />
+                          <identifier name="hoge" />
+                        </memberExpression>
+                        <literal value="" />
+                      </assignmentExpression>
+                    </expressionStatement>
+                  </blockStatement>
+                </functionExpression>
+              </methodDefinition>
+              <methodDefinition kind="method" static>
+                <identifier name="piyo" />
+                <functionExpression id={null}>
+                  <blockStatement />
+                </functionExpression>
+              </methodDefinition>
+              <methodDefinition kind="method">
+                <identifier name="fuga" />
+                <functionExpression id={null}>
+                  <blockStatement />
+                </functionExpression>
+              </methodDefinition>
+            </classBody>
+            <identifier name="Component" />
+          </classDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should multiline code', () => {
+    const code = 'hoge(); fuga();'
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier name="hoge" />
+            </callExpression>
+          </expressionStatement>
+          <expressionStatement>
+            <callExpression>
+              <identifier name="fuga" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert chained CallExpression', () => {
+    const code = 'hoge("arg1").fuga("arg2")'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <memberExpression>
+                <callExpression>
+                  <identifier name="hoge" />
+                  <literal value="arg1" />
+                </callExpression>
+                <identifier name="fuga" />
+              </memberExpression>
+              <literal value="arg2" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert nested CallExpression', () => {
+    const code = 'fuga(hoge("arg1"), "arg2")'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier name="fuga" />
+              <callExpression>
+                <identifier name="hoge" />
+                <literal value="arg1" />
+              </callExpression>
+              <literal value="arg2" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert CallExpression with arguments', () => {
+    const code = 'hoge(\'fuga\')'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <identifier name="hoge" />
+              <literal value="fuga" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert ArrayExpression', () => {
+    const code = '[]'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <arrayExpression />
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   // it('should convert ArrayExpression with arguments', () => {
   //   const code = '[1, 2, 3]'
   //
@@ -321,9 +322,9 @@ describe('toBuilder', () => {
   //       <program>
   //         <expressionStatement>
   //           <arrayExpression>
-  //             <literal>{1}</literal>
-  //             <literal>{2}</literal>
-  //             <literal>{3}</literal>
+  //             <literal>1</literal>
+  //             <literal>2</literal>
+  //             <literal>3</literal>
   //           </arrayExpression>
   //         </expressionStatement>
   //       </program>
@@ -334,7 +335,7 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
+
   // it('should convert VariableDeclaration', () => {
   //   const code = 'const hoge = "hoge"'
   //
