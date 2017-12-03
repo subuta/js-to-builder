@@ -10,7 +10,7 @@ import {
 
 import classes from './style.js'
 
-import { components, shorthand, toBuilder, print, format } from 'js-to-builder'
+import { shorthand, toBuilder, print, format } from 'js-to-builder'
 
 import Editor from 'docs-src/components/common/Editor'
 import { babelAndEval } from 'docs-src/utils/babel'
@@ -30,9 +30,7 @@ const enhance = compose(
 
       // because toBuilder will throw syntax error while editing :)
       try {
-        // TODO: add simple: true / false toggle.
-        jsx = format(toBuilder(code, {simple: isSimple}).code)
-        // jsx = format(toBuilder(code, {simple: true}).code)
+        jsx = toBuilder(code, {simple: isSimple}).code
       } catch (e) {
         error = e.toString()
       }

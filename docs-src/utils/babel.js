@@ -16,7 +16,13 @@ export const babelAndEval = (builderCode) => {
     ArrowFn,
     FnStatement,
     FnCall,
-    JSX
+    Fn,
+    Declarator,
+    Import,
+    Export,
+    JSX,
+    ClassDef,
+    Method
   } = simple
 
   const code = _.get(Babel.transform(builderCode, {
