@@ -106,40 +106,40 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert async/await', () => {
-  //   const code = `
-  //     const hoge = async () => {
-  //       await fuga()
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>hoge</identifier>
-  //             <arrowFunctionExpression async>
-  //               <blockStatement>
-  //                 <expressionStatement>
-  //                   <awaitExpression>
-  //                     <callExpression>
-  //                       <identifier>fuga</identifier>
-  //                     </callExpression>
-  //                   </awaitExpression>
-  //                 </expressionStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert async/await', () => {
+    const code = `
+      const hoge = async () => {
+        await fuga()
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="hoge" />
+              <arrowFunctionExpression expression={false} async>
+                <blockStatement>
+                  <expressionStatement>
+                    <awaitExpression all={false}>
+                      <callExpression>
+                        <identifier name="fuga" />
+                      </callExpression>
+                    </awaitExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
 
   // it('should convert Class', () => {
   //   const code = `
@@ -153,41 +153,40 @@ describe('toBuilder', () => {
   //     }
   //   `
   //
-  //   assert(toBuilder(code).code === format(`
+  //   assert(toBuilder(code).code /*?*/ === format(`
   //     const render = () => (
   //       <program>
-  //         <classDeclaration id="Hoge">
-  //           <identifier>Component</identifier>
+  //         <classDeclaration>
+  //           <identifier name="Hoge" />
   //           <classBody>
-  //             <methodDefinition kind="constructor">
-  //               <identifier>constructor</identifier>
-  //               <functionExpression>
+  //             <methodDefinition kind="constructor" static={false}>
+  //               <identifier name="constructor" />
+  //               <functionExpression id={null} generator={false} expression={false}>
   //                 <blockStatement>
   //                   <expressionStatement>
   //                     <assignmentExpression operator="=">
-  //                       <memberExpression>
+  //                       <memberExpression computed={false}>
   //                         <thisExpression />
-  //                         <identifier>hoge</identifier>
+  //                         <identifier name="hoge" />
   //                       </memberExpression>
-  //                       <literal />
+  //                       <literal value="" />
   //                     </assignmentExpression>
   //                   </expressionStatement>
   //                 </blockStatement>
   //               </functionExpression>
-  //             </methodDefinition>
-  //             <methodDefinition kind="method" static>
-  //               <identifier>piyo</identifier>
-  //               <functionExpression>
+  //             </methodDefinition>,<methodDefinition kind="method" static>
+  //               <identifier name="piyo" />
+  //               <functionExpression id={null} generator={false} expression={false}>
   //                 <blockStatement />
   //               </functionExpression>
-  //             </methodDefinition>
-  //             <methodDefinition kind="method">
-  //               <identifier>fuga</identifier>
-  //               <functionExpression>
+  //             </methodDefinition>,<methodDefinition kind="method" static={false}>
+  //               <identifier name="fuga" />
+  //               <functionExpression id={null} generator={false} expression={false}>
   //                 <blockStatement />
   //               </functionExpression>
   //             </methodDefinition>
   //           </classBody>
+  //           <identifier name="Component" />
   //         </classDeclaration>
   //       </program>
   //     )
@@ -197,7 +196,7 @@ describe('toBuilder', () => {
   //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
   //   assert(renderedCode === format(code))
   // })
-  //
+
   // it('should multiline code', () => {
   //   const code = 'hoge(); fuga();'
   //   assert(toBuilder(code).code === format(`
