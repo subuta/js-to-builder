@@ -1,13 +1,8 @@
 /* global describe, it */
 
 import toBuilder from 'lib/transform'
-
 import format from 'lib/utils/formatter'
 import { babelAndEval } from 'test/helper'
-
-import * as types from 'ast-types'
-
-const {namedTypes: n, builders: b} = types
 
 const assert = require('assert')
 
@@ -58,7 +53,7 @@ describe('toBuilder', () => {
         <program>
           <expressionStatement>
             <callExpression>
-              <memberExpression>
+              <memberExpression computed={false}>
                 <identifier name="console" />
                 <identifier name="log" />
               </memberExpression>
@@ -86,11 +81,11 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="hoge" />
-              <functionExpression id={null} generator>
+              <functionExpression id={null} generator={true} expression={false}>
                 <blockStatement>
                   <expressionStatement>
-                    <yieldExpression>
-                      <literal value />
+                    <yieldExpression delegate={false}>
+                      <literal value={true} />
                     </yieldExpression>
                   </expressionStatement>
                 </blockStatement>
@@ -119,10 +114,10 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="hoge" />
-              <arrowFunctionExpression async>
+              <arrowFunctionExpression expression={false} async={true}>
                 <blockStatement>
                   <expressionStatement>
-                    <awaitExpression>
+                    <awaitExpression all={false}>
                       <callExpression>
                         <identifier name="fuga" />
                       </callExpression>
@@ -159,13 +154,13 @@ describe('toBuilder', () => {
           <classDeclaration>
             <identifier name="Hoge" />
             <classBody>
-              <methodDefinition kind="constructor">
+              <methodDefinition kind="constructor" static={false}>
                 <identifier name="constructor" />
-                <functionExpression id={null}>
+                <functionExpression id={null} generator={false} expression={false}>
                   <blockStatement>
                     <expressionStatement>
                       <assignmentExpression operator="=">
-                        <memberExpression>
+                        <memberExpression computed={false}>
                           <thisExpression />
                           <identifier name="hoge" />
                         </memberExpression>
@@ -175,15 +170,15 @@ describe('toBuilder', () => {
                   </blockStatement>
                 </functionExpression>
               </methodDefinition>
-              <methodDefinition kind="method" static>
+              <methodDefinition kind="method" static={true}>
                 <identifier name="piyo" />
-                <functionExpression id={null}>
+                <functionExpression id={null} generator={false} expression={false}>
                   <blockStatement />
                 </functionExpression>
               </methodDefinition>
-              <methodDefinition kind="method">
+              <methodDefinition kind="method" static={false}>
                 <identifier name="fuga" />
-                <functionExpression id={null}>
+                <functionExpression id={null} generator={false} expression={false}>
                   <blockStatement />
                 </functionExpression>
               </methodDefinition>
@@ -231,7 +226,7 @@ describe('toBuilder', () => {
         <program>
           <expressionStatement>
             <callExpression>
-              <memberExpression>
+              <memberExpression computed={false}>
                 <callExpression>
                   <identifier name="hoge" />
                   <literal value="arg1" />
@@ -416,7 +411,7 @@ describe('toBuilder', () => {
             </variableDeclarator>
             <variableDeclarator>
               <identifier name="fuga" />
-              <arrowFunctionExpression>
+              <arrowFunctionExpression expression={false}>
                 <blockStatement />
               </arrowFunctionExpression>
             </variableDeclarator>
@@ -467,7 +462,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="render" />
-              <arrowFunctionExpression>
+              <arrowFunctionExpression expression={false}>
                 <blockStatement />
               </arrowFunctionExpression>
             </variableDeclarator>
@@ -490,7 +485,7 @@ describe('toBuilder', () => {
           <variableDeclaration kind="const">
             <variableDeclarator>
               <identifier name="render" />
-              <functionExpression id={null}>
+              <functionExpression id={null} generator={false} expression={false}>
                 <blockStatement />
               </functionExpression>
             </variableDeclarator>
@@ -504,944 +499,929 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
-  // it('should convert single line arrow function expression', () => {
-  //   const code = 'const render = (str) => console.log(str)'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier name="render" />
-  //             <arrowFunctionExpression expression>
-  //               <identifier name="str" />
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier name="console" />
-  //                   <identifier name="log" />
-  //                 </memberExpression>
-  //                 <identifier name="str" />
-  //               </callExpression>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+  it('should convert single line arrow function expression', () => {
+    const code = 'const render = (str) => console.log(str)'
 
-  // it('should convert block arrow function expression', () => {
-  //   const code = 'const render = (str) => {console.log(str)}'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <identifier>str</identifier>
-  //               <blockStatement>
-  //                 <expressionStatement>
-  //                   <callExpression>
-  //                     <memberExpression>
-  //                       <identifier>console</identifier>
-  //                       <identifier>log</identifier>
-  //                     </memberExpression>
-  //                     <identifier>str</identifier>
-  //                   </callExpression>
-  //                 </expressionStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert Identifier', () => {
-  //   const code = 'hoge'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <identifier>hoge</identifier>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module import', () => {
-  //   const code = 'import hoge from \'hoge\''
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <importDeclaration>
-  //           <importDefaultSpecifier>
-  //             <identifier>hoge</identifier>
-  //           </importDefaultSpecifier>
-  //           <literal>hoge</literal>
-  //         </importDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module default export', () => {
-  //   const code = `export default 'hoge'`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <exportDefaultDeclaration>
-  //           <literal>hoge</literal>
-  //         </exportDefaultDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module named export', () => {
-  //   const code = `export const hoge = 'hoge'`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <exportNamedDeclaration>
-  //           <variableDeclaration kind="const">
-  //             <variableDeclarator>
-  //               <identifier>hoge</identifier>
-  //               <literal>hoge</literal>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //         </exportNamedDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module import * as ...', () => {
-  //   const code = 'import * as hoge from \'hoge\''
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <importDeclaration>
-  //           <importNamespaceSpecifier>
-  //             <identifier>hoge</identifier>
-  //           </importNamespaceSpecifier>
-  //           <literal>hoge</literal>
-  //         </importDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module named import', () => {
-  //   const code = 'import { hoge } from \'hoge\''
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <importDeclaration>
-  //           <importSpecifier>
-  //             <identifier>hoge</identifier>
-  //             <identifier>hoge</identifier>
-  //           </importSpecifier>
-  //           <literal>hoge</literal>
-  //         </importDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert module named import as ...', () => {
-  //   const code = 'import { hoge as fuga, fuga as piyo } from \'hoge\''
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <importDeclaration>
-  //           <importSpecifier>
-  //             <identifier>hoge</identifier>
-  //             <identifier>fuga</identifier>
-  //           </importSpecifier>
-  //
-  //           <importSpecifier>
-  //             <identifier>fuga</identifier>
-  //             <identifier>piyo</identifier>
-  //           </importSpecifier>
-  //           <literal>hoge</literal>
-  //         </importDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert object spread', () => {
-  //   const code = 'const { hoge } = piyo'
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <objectPattern>
-  //               <property kind="init" shorthand>
-  //                 <identifier>hoge</identifier>
-  //                 <identifier>hoge</identifier>
-  //               </property>
-  //             </objectPattern>
-  //             <identifier>piyo</identifier>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert object spread with assignment', () => {
-  //   const code = `const {
-  //     hoge = false
-  //   } = piyo`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <objectPattern>
-  //               <property kind="init" shorthand>
-  //                 <identifier>hoge</identifier>
-  //                 <assignmentPattern>
-  //                   <identifier>hoge</identifier>
-  //                   <literal>{false}</literal>
-  //                 </assignmentPattern>
-  //               </property>
-  //             </objectPattern>
-  //             <identifier>piyo</identifier>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // FIXME: rendered will be `const { hoge } = piyo` (assignment is ignored...)
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode !== format(code))
-  // })
-  //
-  // it('should convert object spread with literal', () => {
-  //   const code = `const { 'hoge': hoge } = piyo`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <objectPattern>
-  //               <property kind="init">
-  //                 <literal>hoge</literal>
-  //                 <identifier>hoge</identifier>
-  //               </property>
-  //             </objectPattern>
-  //             <identifier>piyo</identifier>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert object spread with computed', () => {
-  //   const code = `const { ['hoge']: hoge } = piyo`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <objectPattern>
-  //               <property kind="init" computed>
-  //                 <literal>hoge</literal>
-  //                 <identifier>hoge</identifier>
-  //               </property>
-  //             </objectPattern>
-  //             <identifier>piyo</identifier>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if', () => {
-  //   const code = `if (true) console.log('hoge');`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <expressionStatement>
-  //             <callExpression>
-  //               <memberExpression>
-  //                 <identifier>console</identifier>
-  //                 <identifier>log</identifier>
-  //               </memberExpression>
-  //               <literal>hoge</literal>
-  //             </callExpression>
-  //           </expressionStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with BlockStatement', () => {
-  //   const code = `if (true) {
-  //     console.log('hoge');
-  //   }`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert iife', () => {
-  //   const code = `(function() {
-  //     debugger
-  //     return console.log('hoge')
-  //   })()`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <functionExpression>
-  //               <blockStatement>
-  //                 <debuggerStatement />
-  //
-  //                 <returnStatement>
-  //                   <callExpression>
-  //                     <memberExpression>
-  //                       <identifier>console</identifier>
-  //                       <identifier>log</identifier>
-  //                     </memberExpression>
-  //                     <literal>hoge</literal>
-  //                   </callExpression>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </functionExpression>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert complex iife', () => {
-  //   const code = `(function hoge(hoge, fuga) {
-  //     debugger
-  //     return console.log('hoge')
-  //   })('hoge', 'fuga')`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <expressionStatement>
-  //           <callExpression>
-  //             <functionExpression id={<identifier>hoge</identifier>}>
-  //               <identifier>hoge</identifier>
-  //               <identifier>fuga</identifier>
-  //               <blockStatement>
-  //                 <debuggerStatement />
-  //
-  //                 <returnStatement>
-  //                   <callExpression>
-  //                     <memberExpression>
-  //                       <identifier>console</identifier>
-  //                       <identifier>log</identifier>
-  //                     </memberExpression>
-  //                     <literal>hoge</literal>
-  //                   </callExpression>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </functionExpression>
-  //             <literal>hoge</literal>
-  //             <literal>fuga</literal>
-  //           </callExpression>
-  //         </expressionStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with alternate', () => {
-  //   const code = `if (true) {
-  //     console.log('hoge');
-  //   } else {
-  //     console.log('fuga');
-  //   }`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>fuga</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with complex alternate', () => {
-  //   const code = `if (true) {
-  //     console.log('hoge');
-  //   } else if (false) {
-  //     console.log('fuga');
-  //   } else {
-  //     console.log('piyo');
-  //   }`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <literal>{true}</literal>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //
-  //           <ifStatement>
-  //             <literal>{false}</literal>
-  //             <blockStatement>
-  //               <expressionStatement>
-  //                 <callExpression>
-  //                   <memberExpression>
-  //                     <identifier>console</identifier>
-  //                     <identifier>log</identifier>
-  //                   </memberExpression>
-  //                   <literal>fuga</literal>
-  //                 </callExpression>
-  //               </expressionStatement>
-  //             </blockStatement>
-  //
-  //             <blockStatement>
-  //               <expressionStatement>
-  //                 <callExpression>
-  //                   <memberExpression>
-  //                     <identifier>console</identifier>
-  //                     <identifier>log</identifier>
-  //                   </memberExpression>
-  //                   <literal>piyo</literal>
-  //                 </callExpression>
-  //               </expressionStatement>
-  //             </blockStatement>
-  //           </ifStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert if with BinaryExpression', () => {
-  //   const code = `if (true === true) console.log('hoge');`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <ifStatement>
-  //           <binaryExpression operator="===">
-  //             <literal>{true}</literal>
-  //             <literal>{true}</literal>
-  //           </binaryExpression>
-  //           <expressionStatement>
-  //             <callExpression>
-  //               <memberExpression>
-  //                 <identifier>console</identifier>
-  //                 <identifier>log</identifier>
-  //               </memberExpression>
-  //               <literal>hoge</literal>
-  //             </callExpression>
-  //           </expressionStatement>
-  //         </ifStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert for loop', () => {
-  //   const code = `for (step = 0; step < 5; step++) {
-  //     if (true) {
-  //       break
-  //     } else {
-  //       continue
-  //     }
-  //   }`
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forStatement>
-  //           <assignmentExpression operator="=">
-  //             <identifier>step</identifier>
-  //             <literal>{0}</literal>
-  //           </assignmentExpression>
-  //
-  //           <binaryExpression operator="<">
-  //             <identifier>step</identifier>
-  //             <literal>{5}</literal>
-  //           </binaryExpression>
-  //
-  //           <updateExpression operator="++" prefix={false}>
-  //             <identifier>step</identifier>
-  //           </updateExpression>
-  //
-  //           <blockStatement>
-  //             <ifStatement>
-  //               <literal>{true}</literal>
-  //               <blockStatement>
-  //                 <breakStatement />
-  //               </blockStatement>
-  //
-  //               <blockStatement>
-  //                 <continueStatement />
-  //               </blockStatement>
-  //             </ifStatement>
-  //           </blockStatement>
-  //         </forStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert do while', () => {
-  //   const code = `
-  //   do {
-  //     console.log('hoge')
-  //   } while (true)
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <doWhileStatement>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //           <literal>{true}</literal>
-  //         </doWhileStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert while', () => {
-  //   const code = `
-  //   while (true) console.log('hoge');
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <whileStatement>
-  //           <literal>{true}</literal>
-  //           <expressionStatement>
-  //             <callExpression>
-  //               <memberExpression>
-  //                 <identifier>console</identifier>
-  //                 <identifier>log</identifier>
-  //               </memberExpression>
-  //               <literal>hoge</literal>
-  //             </callExpression>
-  //           </expressionStatement>
-  //         </whileStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert while with label', () => {
-  //   const code = `
-  //   markLoop: while (true) { break markLoop; }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <labeledStatement>
-  //           <identifier>markLoop</identifier>
-  //           <whileStatement>
-  //             <literal>{true}</literal>
-  //             <blockStatement>
-  //               <breakStatement>
-  //                 <identifier>markLoop</identifier>
-  //               </breakStatement>
-  //             </blockStatement>
-  //           </whileStatement>
-  //         </labeledStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert for in', () => {
-  //   const code = `
-  //   for (var i in obj) { console.log('hoge'); }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forInStatement>
-  //           <variableDeclaration kind="var">
-  //             <variableDeclarator>
-  //               <identifier>i</identifier>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //           <identifier>obj</identifier>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <literal>hoge</literal>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </forInStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert for of', () => {
-  //   const code = `
-  //     for (let i of arr) { console.log(i); }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <forOfStatement>
-  //           <variableDeclaration kind="let">
-  //             <variableDeclarator>
-  //               <identifier>i</identifier>
-  //             </variableDeclarator>
-  //           </variableDeclaration>
-  //           <identifier>arr</identifier>
-  //           <blockStatement>
-  //             <expressionStatement>
-  //               <callExpression>
-  //                 <memberExpression>
-  //                   <identifier>console</identifier>
-  //                   <identifier>log</identifier>
-  //                 </memberExpression>
-  //                 <identifier>i</identifier>
-  //               </callExpression>
-  //             </expressionStatement>
-  //           </blockStatement>
-  //         </forOfStatement>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // // JSX
-  // it('should convert simple jsx', () => {
-  //   const code = `
-  //     const render = () => {
-  //       return (
-  //         <span>hoge</span>
-  //       )
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <blockStatement>
-  //                 <returnStatement>
-  //                   <jsxElement>
-  //                     <jsxOpeningElement
-  //                       name={<jsxIdentifier name="span" />}
-  //                       attributes={[]}
-  //                       selfClosing={false}
-  //                     />
-  //                     <jsxText>hoge</jsxText>
-  //                     <jsxClosingElement name={<jsxIdentifier name="span" />} />
-  //                   </jsxElement>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
-  //
-  // it('should convert jsx with attributes', () => {
-  //   const code = `
-  //     const render = () => {
-  //       return (
-  //         <span
-  //           id="example"
-  //           style={{
-  //             color: 'red'
-  //           }}
-  //           hidden
-  //         >
-  //           hoge
-  //         </span>
-  //       )
-  //     }
-  //   `
-  //
-  //   assert(toBuilder(code).code === format(`
-  //     const render = () => (
-  //       <program>
-  //         <variableDeclaration kind="const">
-  //           <variableDeclarator>
-  //             <identifier>render</identifier>
-  //             <arrowFunctionExpression>
-  //               <blockStatement>
-  //                 <returnStatement>
-  //                   <jsxElement>
-  //                     <jsxOpeningElement
-  //                       name={<jsxIdentifier name="span" />}
-  //                       attributes={[
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="id" />}
-  //                           value={<literal>example</literal>}
-  //                         />,
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="style" />}
-  //                           value={
-  //                             <jsxExpressionContainer>
-  //                               <objectExpression>
-  //                                 <property kind="init">
-  //                                   <identifier>color</identifier>
-  //                                   <literal>red</literal>
-  //                                 </property>
-  //                               </objectExpression>
-  //                             </jsxExpressionContainer>
-  //                           }
-  //                         />,
-  //                         <jsxAttribute
-  //                           name={<jsxIdentifier name="hidden" />}
-  //                           value={null}
-  //                         />
-  //                       ]}
-  //                       selfClosing={false}
-  //                     />
-  //                       <jsxText>hoge</jsxText>
-  //                     <jsxClosingElement name={<jsxIdentifier name="span" />} />
-  //                   </jsxElement>
-  //                 </returnStatement>
-  //               </blockStatement>
-  //             </arrowFunctionExpression>
-  //           </variableDeclarator>
-  //         </variableDeclaration>
-  //       </program>
-  //     )
-  //   `))
-  //
-  //   // eval jsx and check rendered code equals to original code.
-  //   const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-  //   assert(renderedCode === format(code))
-  // })
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="render" />
+              <arrowFunctionExpression expression={true}>
+                <identifier name="str" />
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <identifier name="str" />
+                </callExpression>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert block arrow function expression', () => {
+    const code = 'const render = (str) => {console.log(str)}'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="render" />
+              <arrowFunctionExpression expression={false}>
+                <identifier name="str" />
+                <blockStatement>
+                  <expressionStatement>
+                    <callExpression>
+                      <memberExpression computed={false}>
+                        <identifier name="console" />
+                        <identifier name="log" />
+                      </memberExpression>
+                      <identifier name="str" />
+                    </callExpression>
+                  </expressionStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert Identifier', () => {
+    const code = 'hoge'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <identifier name="hoge" />
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module import', () => {
+    const code = 'import hoge from \'hoge\''
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <importDeclaration importKind="value">
+            <importDefaultSpecifier>
+              <identifier name="hoge" />
+            </importDefaultSpecifier>
+            <literal value="hoge" />
+          </importDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module default export', () => {
+    const code = `export default 'hoge'`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <exportDefaultDeclaration>
+            <literal value="hoge" />
+          </exportDefaultDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module named export', () => {
+    const code = `export const hoge = 'hoge'`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <exportNamedDeclaration source={null}>
+            <variableDeclaration kind="const">
+              <variableDeclarator>
+                <identifier name="hoge" />
+                <literal value="hoge" />
+              </variableDeclarator>
+            </variableDeclaration>
+          </exportNamedDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module import * as ...', () => {
+    const code = 'import * as hoge from \'hoge\''
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <importDeclaration importKind="value">
+            <importNamespaceSpecifier>
+              <identifier name="hoge" />
+            </importNamespaceSpecifier>
+            <literal value="hoge" />
+          </importDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module named import', () => {
+    const code = 'import { hoge } from \'hoge\''
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <importDeclaration importKind="value">
+            <importSpecifier>
+              <identifier name="hoge" />
+              <identifier name="hoge" />
+            </importSpecifier>
+            <literal value="hoge" />
+          </importDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert module named import as ...', () => {
+    const code = 'import { hoge as fuga, fuga as piyo } from \'hoge\''
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <importDeclaration importKind="value">
+            <importSpecifier>
+              <identifier name="hoge" />
+              <identifier name="fuga" />
+            </importSpecifier>
+            <importSpecifier>
+              <identifier name="fuga" />
+              <identifier name="piyo" />
+            </importSpecifier>
+            <literal value="hoge" />
+          </importDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert object spread', () => {
+    const code = 'const { hoge } = piyo'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" shorthand={true}>
+                  <identifier name="hoge" />
+                  <identifier name="hoge" />
+                </property>
+              </objectPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert object spread with assignment', () => {
+    const code = `const {
+      hoge = false
+    } = piyo`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" shorthand={true}>
+                  <identifier name="hoge" />
+                  <assignmentPattern>
+                    <identifier name="hoge" />
+                    <literal value={false} />
+                  </assignmentPattern>
+                </property>
+              </objectPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // FIXME: rendered will be `const { hoge } = piyo` (assignment is ignored...)
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode !== format(code))
+  })
+
+  it('should convert object spread with literal', () => {
+    const code = `const { 'hoge': hoge } = piyo`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init">
+                  <literal value="hoge" />
+                  <identifier name="hoge" />
+                </property>
+              </objectPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert object spread with computed', () => {
+    const code = `const { ['hoge']: hoge } = piyo`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" computed={true}>
+                  <literal value="hoge" />
+                  <identifier name="hoge" />
+                </property>
+              </objectPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if', () => {
+    const code = `if (true) console.log('hoge');`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement alternate={null}>
+            <literal value={true} />
+            <expressionStatement>
+              <callExpression>
+                <memberExpression computed={false}>
+                  <identifier name="console" />
+                  <identifier name="log" />
+                </memberExpression>
+                <literal value="hoge" />
+              </callExpression>
+            </expressionStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with BlockStatement', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement alternate={null}>
+            <literal value={true} />
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="hoge" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert iife', () => {
+    const code = `(function() {
+      debugger
+      return console.log('hoge')
+    })()`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <functionExpression id={null} generator={false} expression={false}>
+                <blockStatement>
+                  <debuggerStatement />
+                  <returnStatement>
+                    <callExpression>
+                      <memberExpression computed={false}>
+                        <identifier name="console" />
+                        <identifier name="log" />
+                      </memberExpression>
+                      <literal value="hoge" />
+                    </callExpression>
+                  </returnStatement>
+                </blockStatement>
+              </functionExpression>
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert complex iife', () => {
+    const code = `(function hoge(hoge, fuga) {
+      debugger
+      return console.log('hoge')
+    })('hoge', 'fuga')`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <expressionStatement>
+            <callExpression>
+              <functionExpression generator={false} expression={false}>
+                <identifier name="hoge" />
+                <identifier name="hoge" />
+                <identifier name="fuga" />
+                <blockStatement>
+                  <debuggerStatement />
+                  <returnStatement>
+                    <callExpression>
+                      <memberExpression computed={false}>
+                        <identifier name="console" />
+                        <identifier name="log" />
+                      </memberExpression>
+                      <literal value="hoge" />
+                    </callExpression>
+                  </returnStatement>
+                </blockStatement>
+              </functionExpression>
+              <literal value="hoge" />
+              <literal value="fuga" />
+            </callExpression>
+          </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else {
+      console.log('fuga');
+    }`
+
+    assert(toBuilder(code).code /*?*/ === format(`
+      const render = () => (
+        <program>
+          <ifStatement>
+            <literal value={true} />
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="hoge" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="fuga" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with complex alternate', () => {
+    const code = `if (true) {
+      console.log('hoge');
+    } else if (false) {
+      console.log('fuga');
+    } else {
+      console.log('piyo');
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement>
+            <literal value={true} />
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="hoge" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+            <ifStatement>
+              <literal value={false} />
+              <blockStatement>
+                <expressionStatement>
+                  <callExpression>
+                    <memberExpression computed={false}>
+                      <identifier name="console" />
+                      <identifier name="log" />
+                    </memberExpression>
+                    <literal value="fuga" />
+                  </callExpression>
+                </expressionStatement>
+              </blockStatement>
+              <blockStatement>
+                <expressionStatement>
+                  <callExpression>
+                    <memberExpression computed={false}>
+                      <identifier name="console" />
+                      <identifier name="log" />
+                    </memberExpression>
+                    <literal value="piyo" />
+                  </callExpression>
+                </expressionStatement>
+              </blockStatement>
+            </ifStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert if with BinaryExpression', () => {
+    const code = `if (true === true) console.log('hoge');`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <ifStatement alternate={null}>
+            <binaryExpression operator="===">
+              <literal value={true} />
+              <literal value={true} />
+            </binaryExpression>
+            <expressionStatement>
+              <callExpression>
+                <memberExpression computed={false}>
+                  <identifier name="console" />
+                  <identifier name="log" />
+                </memberExpression>
+                <literal value="hoge" />
+              </callExpression>
+            </expressionStatement>
+          </ifStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert for loop', () => {
+    const code = `for (step = 0; step < 5; step++) {
+      if (true) {
+        break
+      } else {
+        continue
+      }
+    }`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <forStatement>
+            <assignmentExpression operator="=">
+              <identifier name="step" />
+              <literal>{0}</literal>
+            </assignmentExpression>
+            <binaryExpression operator="<">
+              <identifier name="step" />
+              <literal>{5}</literal>
+            </binaryExpression>
+            <updateExpression operator="++" prefix={false}>
+              <identifier name="step" />
+            </updateExpression>
+            <blockStatement>
+              <ifStatement>
+                <literal value={true} />
+                <blockStatement>
+                  <breakStatement label={null} />
+                </blockStatement>
+                <blockStatement>
+                  <continueStatement label={null} />
+                </blockStatement>
+              </ifStatement>
+            </blockStatement>
+          </forStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert do while', () => {
+    const code = `
+    do {
+      console.log('hoge')
+    } while (true)
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <doWhileStatement>
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="hoge" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+            <literal value={true} />
+          </doWhileStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert while', () => {
+    const code = `
+    while (true) console.log('hoge');
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <whileStatement>
+            <literal value={true} />
+            <expressionStatement>
+              <callExpression>
+                <memberExpression computed={false}>
+                  <identifier name="console" />
+                  <identifier name="log" />
+                </memberExpression>
+                <literal value="hoge" />
+              </callExpression>
+            </expressionStatement>
+          </whileStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert while with label', () => {
+    const code = `
+    markLoop: while (true) { break markLoop; }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <labeledStatement>
+            <identifier name="markLoop" />
+            <whileStatement>
+              <literal value={true} />
+              <blockStatement>
+                <breakStatement>
+                  <identifier name="markLoop" />
+                </breakStatement>
+              </blockStatement>
+            </whileStatement>
+          </labeledStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert for in', () => {
+    const code = `
+    for (var i in obj) { console.log('hoge'); }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <forInStatement each={false}>
+            <variableDeclaration kind="var">
+              <variableDeclarator init={null}>
+                <identifier name="i" />
+              </variableDeclarator>
+            </variableDeclaration>
+            <identifier name="obj" />
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <literal value="hoge" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </forInStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert for of', () => {
+    const code = `
+      for (let i of arr) { console.log(i); }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <forOfStatement>
+            <variableDeclaration kind="let">
+              <variableDeclarator init={null}>
+                <identifier name="i" />
+              </variableDeclarator>
+            </variableDeclaration>
+            <identifier name="arr" />
+            <blockStatement>
+              <expressionStatement>
+                <callExpression>
+                  <memberExpression computed={false}>
+                    <identifier name="console" />
+                    <identifier name="log" />
+                  </memberExpression>
+                  <identifier name="i" />
+                </callExpression>
+              </expressionStatement>
+            </blockStatement>
+          </forOfStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  // JSX
+  it('should convert simple jsx', () => {
+    const code = `
+      const render = () => {
+        return (
+          <span>hoge</span>
+        )
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="render" />
+              <arrowFunctionExpression expression={false}>
+                <blockStatement>
+                  <returnStatement>
+                    <jsxElement>
+                      <jsxOpeningElement selfClosing={false}>
+                        <jsxIdentifier name="span" />
+                      </jsxOpeningElement>
+                      <jsxClosingElement>
+                        <jsxIdentifier name="span" />
+                      </jsxClosingElement>
+                      <jsxText value="hoge" />
+                    </jsxElement>
+                  </returnStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert jsx with attributes', () => {
+    const code = `
+      const render = () => {
+        return (
+          <span
+            id="example"
+            style={{
+              color: 'red'
+            }}
+            hidden
+          >hoge</span>
+        )
+      }
+    `
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="render" />
+              <arrowFunctionExpression expression={false}>
+                <blockStatement>
+                  <returnStatement>
+                    <jsxElement>
+                      <jsxOpeningElement selfClosing={false}>
+                        <jsxIdentifier name="span" />
+                        <jsxAttribute>
+                          <jsxIdentifier name="id" />
+                          <literal value="example" />
+                        </jsxAttribute>
+                        <jsxAttribute>
+                          <jsxIdentifier name="style" />
+                          <jsxExpressionContainer>
+                            <objectExpression>
+                              <property kind="init">
+                                <identifier name="color" />
+                                <literal value="red" />
+                              </property>
+                            </objectExpression>
+                          </jsxExpressionContainer>
+                        </jsxAttribute>
+                        <jsxAttribute value={null}>
+                          <jsxIdentifier name="hidden" />
+                        </jsxAttribute>
+                      </jsxOpeningElement>
+                      <jsxClosingElement>
+                        <jsxIdentifier name="span" />
+                      </jsxClosingElement>
+                      <jsxText value="hoge" />
+                    </jsxElement>
+                  </returnStatement>
+                </blockStatement>
+              </arrowFunctionExpression>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
 })
 
-// describe('option', () => {
-//   it('should omit program if shouldOmitprogram = true', () => {
-//     const code = 'hoge()'
-//
-//     assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
-//       const render = () => (
-//         <expressionStatement>
-//           <callExpression>
-//             <identifier>hoge</identifier>
-//           </callExpression>
-//         </expressionStatement>
-//       )
-//     `))
-//
-//     // eval jsx and check rendered code equals to original code.
-//     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
-//     assert(renderedCode === format(code))
-//   })
-// })
+describe('option', () => {
+  it('should omit program if shouldOmitprogram = true', () => {
+    const code = 'hoge()'
+
+    assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
+      const render = () => (
+        <expressionStatement>
+          <callExpression>
+            <identifier name="hoge" />
+          </callExpression>
+        </expressionStatement>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+})
