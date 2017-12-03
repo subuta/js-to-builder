@@ -23,6 +23,24 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert blank string', () => {
+    const code = `const a = ''`
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="a">
+            <Value value={''} />
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert CallExpression with memberExpression', () => {
     const code = 'console.log()'
 
@@ -118,7 +136,7 @@ describe('toBuilder with simple:true', () => {
                 <blockStatement>
                   <assignmentExpression operator="=">
                     this.hoge
-                    <Value />
+                    <Value value={''} />
                   </assignmentExpression>
                 </blockStatement>
               </Fn>
@@ -250,6 +268,32 @@ describe('toBuilder with simple:true', () => {
 
     // eval jsx and check rendered code equals to original code.
     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert array rest spread', () => {
+    const code = 'const [ hoge, ...fuga ] = piyo'
+
+    assert(toBuilder(code, {simple: true}).code /*?*/ === format(`
+      const render = () => (
+        <program>
+          <Const>
+            <variableDeclarator>
+              <arrayPattern>
+                <identifier>hoge</identifier>
+                <restElement>
+                  <identifier>fuga</identifier>
+                </restElement>
+              </arrayPattern>
+              <identifier>piyo</identifier>
+            </variableDeclarator>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -600,6 +644,35 @@ describe('toBuilder with simple:true', () => {
 
     // eval jsx and check rendered code equals to original code.
     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert object rest spread', () => {
+    const code = 'const { hoge, ...rest } = piyo'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const>
+            <Declarator>
+              <objectPattern>
+                <property kind="init" shorthand={true}>
+                  <identifier>hoge</identifier>
+                  <identifier>hoge</identifier>
+                </property>
+                <restProperty>
+                  <identifier>rest</identifier>
+                </restProperty>
+              </objectPattern>
+              <identifier>piyo</identifier>
+            </Declarator>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
     assert(renderedCode === format(code))
   })
 
@@ -1146,6 +1219,26 @@ describe('toBuilder with simple:true', () => {
     // eval jsx and check rendered code equals to original code.
     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
+  })
+
+  // Flow
+  it('should convert Flow to valid JS', () => {
+    const code = `var a: string = 'hoge';`
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Var name="a">
+            <Value>hoge</Value>
+          </Var>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    // should convert to valid JavaScript(without Flow annotation.)
+    assert(renderedCode === format(`var a = 'hoge'`))
   })
 })
 

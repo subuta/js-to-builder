@@ -45,6 +45,27 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert blank string', () => {
+    const code = `const a = ''`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="a" />
+              <literal value="" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert CallExpression with memberExpression', () => {
     const code = 'console.log()'
 
@@ -322,6 +343,32 @@ describe('toBuilder', () => {
               <literal>{3}</literal>
             </arrayExpression>
           </expressionStatement>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert array rest spread', () => {
+    const code = 'const [ hoge, ...fuga ] = piyo'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <arrayPattern>
+                <identifier name="hoge" />
+                <restElement>
+                  <identifier name="fuga" />
+                </restElement>
+              </arrayPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
         </program>
       )
     `))
@@ -725,6 +772,35 @@ describe('toBuilder', () => {
                   <identifier name="hoge" />
                   <identifier name="hoge" />
                 </property>
+              </objectPattern>
+              <identifier name="piyo" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert object rest spread', () => {
+    const code = 'const { hoge, ...rest } = piyo'
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <objectPattern>
+                <property kind="init" shorthand={true}>
+                  <identifier name="hoge" />
+                  <identifier name="hoge" />
+                </property>
+                <restProperty>
+                  <identifier name="rest" />
+                </restProperty>
               </objectPattern>
               <identifier name="piyo" />
             </variableDeclarator>
@@ -1403,6 +1479,33 @@ describe('toBuilder', () => {
     // eval jsx and check rendered code equals to original code.
     const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
     assert(renderedCode === format(code))
+  })
+
+  // Flow
+  it('should convert Flow to valid JS', () => {
+    const code = `var a: string = 'hoge';`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="var">
+            <variableDeclarator>
+              <identifier name="a">
+                <typeAnnotation>
+                  <stringTypeAnnotation />
+                </typeAnnotation>
+              </identifier>
+              <literal value="hoge" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    // should convert to valid JavaScript(without Flow annotation.)
+    assert(renderedCode === format(`var a = 'hoge'`))
   })
 })
 
