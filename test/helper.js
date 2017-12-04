@@ -35,7 +35,7 @@ export const babelAndEval = (builderCode) => {
 
   const builder = eval(`
     (() => {
-      ${format(code)}
+      ${code}
       return render()
     })()
   `)

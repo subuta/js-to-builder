@@ -647,6 +647,28 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert object assignment', () => {
+    const code = `
+      const hoge = { 
+        hoge: 'HOGE' 
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      const render = () => (
+        <program>
+          <Const name="hoge">
+            <Value>{{ hoge: 'HOGE' }}</Value>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert object rest spread', () => {
     const code = 'const { hoge, ...rest } = piyo'
 
