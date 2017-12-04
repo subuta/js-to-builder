@@ -36,14 +36,14 @@ console.log(variableDeclaration.code)
 
 // ->
 // const render = () => (
-//   <Program>
-//     <VariableDeclaration kind="const">
-//       <VariableDeclarator>
-//         <Identifier>hoge</Identifier>
-//         <Literal>fuga</Literal>
-//       </VariableDeclarator>
-//     </VariableDeclaration>
-//   </Program>
+//   <program>
+//     <variableDeclaration kind="const">
+//       <variableDeclarator>
+//         <identifier name="hoge" />
+//         <literal value="fuga" />
+//       </variableDeclarator>
+//     </variableDeclaration>
+//   </program>
 // )
 ```
 
@@ -56,68 +56,19 @@ Copy and paste printed `builder-jsx` and use `js-to-builder` for construct your 
 import { h, components, format } from 'js-to-builder'
 import { print } from 'recast'
 
-// 2. import necessary　builder-jsx components from js-to-builder components.
-const {
-  Program,
-
-  ForStatement,
-  ForInStatement,
-  ForOfStatement,
-  DebuggerStatement,
-  ReturnStatement,
-  ExpressionStatement,
-
-  CallExpression,
-  ArrayExpression,
-  ObjectExpression,
-  ArrowFunctionExpression,
-  MemberExpression,
-  BinaryExpression,
-  AssignmentExpression,
-  UpdateExpression,
-  FunctionExpression,
-
-  BlockStatement,
-  IfStatement,
-  LabeledStatement,
-  BreakStatement,
-  DoWhileStatement,
-  WhileStatement,
-  ContinueStatement,
-
-  Property,
-
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportNamespaceSpecifier,
-  ImportSpecifier,
-
-  ExportDefaultDeclaration,
-  ExportNamedDeclaration,
-
-  AssignmentPattern,
-  ObjectPattern,
-
-  VariableDeclaration,
-  VariableDeclarator,
-
-  Identifier,
-  Literal,
-} = components
-
-// 3. paste(or write your own) builder-jsx code
+// 2. paste(or write your own) builder-jsx code
 const render = () => (
-  <Program>
-    <VariableDeclaration kind="const">
-      <VariableDeclarator>
-        <Identifier>hoge</Identifier>
-        <Literal>fuga</Literal>
-      </VariableDeclarator>
-    </VariableDeclaration>
-  </Program>
+  <program>
+    <variableDeclaration kind="const">
+      <variableDeclarator>
+        <identifier name="hoge" />
+        <literal value="fuga" />
+      </variableDeclarator>
+    </variableDeclaration>
+  </program>
 )
 
-// 4. use react's `print` to convert builder code to JavaScript code.
+// 3. use react's `print` to convert builder code to JavaScript code.
 const code = format(print(render()))
 
 // will print JavaScript Code

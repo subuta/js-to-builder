@@ -11,8 +11,7 @@ module.exports = (options, req) => ({
   ],
 
   transformModules: [
-    'babylon',
-    'chalk',
+    'icepick',
     'prettier'
   ],
 

@@ -67,7 +67,7 @@
     "falafel": "^2.1.0",
     "icepick": "^2.2.1",
     "lodash": "^4.17.4",
-    "prettier": "1.6.1",
+    "prettier": "git://github.com/prettier/prettier.git#1.6.1",
     "recast": "^0.12.9"
   }
 }
