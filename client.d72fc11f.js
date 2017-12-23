@@ -538,11 +538,6 @@ var App = function App() {
   return _react2.default.createElement(
     'div',
     null,
-    _react2.default.createElement(
-      'h1',
-      null,
-      'test build'
-    ),
     _react2.default.createElement(_components2.default, null)
   );
 };
@@ -2339,4 +2334,4 @@ exports.default = Style;
 /***/ })
 
 },[321]);
-//# sourceMappingURL=client.8ac4c47e.js.map
+//# sourceMappingURL=client.d72fc11f.js.map
