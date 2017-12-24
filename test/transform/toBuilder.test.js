@@ -1580,6 +1580,27 @@ describe('comments', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert line comment with variableDeclaration', () => {
+    const code = `// comment\nconst hoge = 'fuga'`
+
+    assert(toBuilder(code).code === format(`
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const" leadingComments={['// comment']}>
+            <variableDeclarator>
+              <identifier name="hoge" />
+              <literal value="fuga" />
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert trailing line comment', () => {
     const code = 'hoge // comment'
 

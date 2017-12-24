@@ -64,6 +64,7 @@ export default enhance((props) => {
         plugins={plugins}
         value={value}
         onChange={handleChange}
+        spellCheck={false}
       />
 
       {error && (
