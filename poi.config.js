@@ -12,7 +12,12 @@ module.exports = (options, req) => ({
 
   transformModules: [
     'icepick',
-    'prettier'
+    'prettier',
+    'string-width',
+    'ansi-regex',
+    'ansi-styles',
+    'is-fullwidth-code-point',
+    'chalk'
   ],
 
   devServer: {
