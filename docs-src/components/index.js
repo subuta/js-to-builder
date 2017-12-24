@@ -49,7 +49,7 @@ const enhance = compose(
     },
     handleBuilderChange: ({setCodeTemplate, setBuilderError}) => (value) => {
       if (_.isEmpty(value)) return
-      const jsxCode = `/** @jsx h */ ${value}`
+      const jsxCode = `/* prettier-ignore */ /** @jsx h */ ${value}`
       try {
         const code = format(babelAndEval(jsxCode))
         setBuilderError(null)
