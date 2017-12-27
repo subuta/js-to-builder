@@ -1315,16 +1315,15 @@ describe('comments', () => {
     assert(renderedCode === format(code))
   })
 
-  // FIXME: trailingに書いたのがleadingとして表示されてる。
   it('should convert trailing line comment', () => {
     const code = 'hoge // comment'
 
     assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <expressionStatement trailingComments={['// comment']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier trailingComments={['// comment']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
@@ -1337,72 +1336,72 @@ describe('comments', () => {
   it('should convert multiple line comment', () => {
     const code = '// comment1\n// comment2\nhoge'
 
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <expressionStatement leadingComments={['// comment1', '// comment2']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier leadingComments={['// comment1', '// comment2']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert block comment', () => {
     const code = '/* hoge */\nhoge'
 
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <expressionStatement leadingComments={['/* hoge */']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier leadingComments={['/* hoge */']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert trailing block comment', () => {
     const code = 'hoge /* hoge */'
 
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <expressionStatement trailingComments={['/* hoge */']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier trailingComments={['/* hoge */']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     assert(renderedCode === format(code))
   })
 
   it('should convert multi-line block comment with \n', () => {
     const code = '/* hoge\nfuga */\nhoge'
 
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
-          <expressionStatement leadingComments={['/* hoge\\nfuga */']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier leadingComments={['/* hoge\\nfuga */']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     // should replace line feed by os.EOL
     assert(renderedCode === format('/* hoge\nfuga */\nhoge\n'))
   })
@@ -1413,9 +1412,9 @@ describe('comments', () => {
     assert(toBuilder(code).code === format(`
       const render = () => (
         <program>
-          <expressionStatement leadingComments={['/* hoge\\nfuga */']}>
-            <identifier name="hoge" />
-          </expressionStatement>
+          <identifier leadingComments={['/* hoge\\nfuga */']} es>
+            hoge
+          </identifier>
         </program>
       )
     `))
