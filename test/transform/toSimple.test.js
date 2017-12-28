@@ -66,6 +66,31 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert complex memberExpression', () => {
+    const code = 'ctx.state.models'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <memberExpression es>
+            <memberExpression>
+              <identifier>ctx</identifier>
+              <identifier>state</identifier>
+            </memberExpression>
+            <identifier>models</identifier>
+          </memberExpression>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert generator', () => {
     const code = `
       const hoge = function*() {
@@ -147,13 +172,16 @@ describe('toBuilder with simple:true', () => {
       const render = () => (
         <program>
           <ClassDef id="Hoge">
-            <identifier>Component</identifier>
             <Method kind="constructor">
               <identifier>constructor</identifier>
               <Fn>
                 <blockStatement>
-                  <assignmentExpression operator="=">
-                    this.hoge
+                  <assignmentExpression operator="=" es>
+                    <memberExpression>
+                      <thisExpression />
+                      <identifier>hoge</identifier>
+                    </memberExpression>
+                    
                     <Value value={''} />
                   </assignmentExpression>
                 </blockStatement>
@@ -171,6 +199,7 @@ describe('toBuilder with simple:true', () => {
                 <blockStatement />
               </Fn>
             </Method>
+            <identifier>Component</identifier>
           </ClassDef>
         </program>
       )
