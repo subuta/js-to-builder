@@ -812,6 +812,43 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert nested identifier as MemberExpression', () => {
+    const code = `
+      const hoge = { 
+        hoge: hoge.piyo.fuga 
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <Const name="hoge">
+            <Value>
+              {{ 
+                hoge: (
+                    <memberExpression>
+                      <memberExpression>
+                        <identifier>hoge</identifier>
+                        <identifier>piyo</identifier>
+                      </memberExpression>
+                      <identifier>fuga</identifier>
+                    </memberExpression>
+                ) 
+              }}
+            </Value>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert object rest spread', () => {
     const code = 'const { hoge, ...rest } = piyo'
 

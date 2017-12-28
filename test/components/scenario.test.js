@@ -49,6 +49,32 @@ describe('scenario', () => {
     `))
   })
 
+  it('Use props.children if no-children passed', () => {
+    const render = () => (
+      <program>
+        <Const name="hoge" children={[<literal>fuga</literal>]} />
+      </program>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = 'fuga'
+    `))
+  })
+
+  it('Prefer children than props.children if both specified', () => {
+    const render = () => (
+      <program>
+        <Const name="hoge" children={[<literal>fuga</literal>]}>
+          <literal>hoge</literal>
+        </Const>
+      </program>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = 'hoge'
+    `))
+  })
+
   it('program should allow mixed usage of nested array of component and single component as children', () => {
     const render = () => (
       <program>
