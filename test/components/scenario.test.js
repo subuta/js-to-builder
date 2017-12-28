@@ -68,25 +68,25 @@ describe('scenario', () => {
     `))
   })
 
-  it('allow use of `fragment`', () => {
-    const twoImports = (
+  it('allow use of `fragment` and nested array', () => {
+    const TwoImports = () => (
       <fragment>
-        <Import name="hoge" source="hoge.js" default />
-        <Import name="fuga" source="fuga.js" default />
+        {[
+          <Import name="hoge" source="hoge.js" default />,
+          <Import name="fuga" source="fuga.js" default />
+        ]}
       </fragment>
     )
 
     const render = () => (
       <program>
-        {twoImports}
-        <Import name="piyo" source="piyo.js" default />
+        {[<TwoImports />]}
       </program>
     )
 
     assert(format(print(render())) === format(`
       import hoge from 'hoge.js'
       import fuga from 'fuga.js'
-      import piyo from 'piyo.js'
     `))
   })
 })
