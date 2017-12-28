@@ -23,7 +23,7 @@ import {
   Declarator
 } from 'lib/components/simple'
 
-describe('compose', () => {
+describe('scenario', () => {
   it('Const should allow nested components', () => {
     const DefineHoge = () => {
       return (
@@ -57,6 +57,28 @@ describe('compose', () => {
           <Import name="fuga" source="fuga.js" default />
         ]}
 
+        <Import name="piyo" source="piyo.js" default />
+      </program>
+    )
+
+    assert(format(print(render())) === format(`
+      import hoge from 'hoge.js'
+      import fuga from 'fuga.js'
+      import piyo from 'piyo.js'
+    `))
+  })
+
+  it('allow use of `fragment`', () => {
+    const twoImports = (
+      <fragment>
+        <Import name="hoge" source="hoge.js" default />
+        <Import name="fuga" source="fuga.js" default />
+      </fragment>
+    )
+
+    const render = () => (
+      <program>
+        {twoImports}
         <Import name="piyo" source="piyo.js" default />
       </program>
     )
