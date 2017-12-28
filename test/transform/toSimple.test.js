@@ -1409,7 +1409,7 @@ describe('comments', () => {
   it('should convert multi-line block comment with \r\n', () => {
     const code = '/* hoge\r\nfuga */\r\nhoge\r\n'
 
-    assert(toBuilder(code).code === format(`
+    assert(toBuilder(code, {simple: true}).code === format(`
       const render = () => (
         <program>
           <identifier leadingComments={['/* hoge\\nfuga */']} es>
@@ -1420,7 +1420,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code, {simple: true}).code}`))
     // should replace line feed by os.EOL
     assert(renderedCode === format('/* hoge\nfuga */\nhoge\n'))
   })

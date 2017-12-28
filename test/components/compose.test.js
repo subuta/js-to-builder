@@ -48,4 +48,23 @@ describe('compose', () => {
       const hoge = 'fuga'
     `))
   })
+
+  it('program should allow mixed usage of nested array of component and single component as children', () => {
+    const render = () => (
+      <program>
+        {[
+          <Import name="hoge" source="hoge.js" default />,
+          <Import name="fuga" source="fuga.js" default />
+        ]}
+
+        <Import name="piyo" source="piyo.js" default />
+      </program>
+    )
+
+    assert(format(print(render())) === format(`
+      import hoge from 'hoge.js'
+      import fuga from 'fuga.js'
+      import piyo from 'piyo.js'
+    `))
+  })
 })
