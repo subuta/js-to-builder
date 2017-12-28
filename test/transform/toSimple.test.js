@@ -269,6 +269,27 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert nested CallExpression with arguments', () => {
+    const code = 'piyo.hoge(fuga())'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <FnCall callee="piyo.hoge" es>
+             <FnCall callee="fuga" />
+          </FnCall>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert ArrayExpression', () => {
     const code = '[]'
 
