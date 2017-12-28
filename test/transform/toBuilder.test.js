@@ -13,6 +13,9 @@ describe('toBuilder', () => {
     const code = 'hoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement>
@@ -23,7 +26,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -31,6 +34,9 @@ describe('toBuilder', () => {
     const code = 'hoge()'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -43,7 +49,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -51,6 +57,9 @@ describe('toBuilder', () => {
     const code = `const a = ''`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -64,7 +73,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -72,6 +81,9 @@ describe('toBuilder', () => {
     const code = 'console.log()'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement>
@@ -87,7 +99,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -99,6 +111,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -120,7 +135,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -132,6 +147,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -155,7 +173,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -172,6 +190,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <classDeclaration>
@@ -213,13 +234,16 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
   it('should multiline code', () => {
     const code = 'hoge(); fuga();'
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -237,7 +261,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -245,6 +269,9 @@ describe('toBuilder', () => {
     const code = 'hoge("arg1").fuga("arg2")'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -264,7 +291,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -272,6 +299,9 @@ describe('toBuilder', () => {
     const code = 'fuga(hoge("arg1"), "arg2")'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -289,7 +319,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -297,6 +327,9 @@ describe('toBuilder', () => {
     const code = 'hoge(\'fuga\')'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -310,7 +343,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -318,6 +351,9 @@ describe('toBuilder', () => {
     const code = '[]'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -328,7 +364,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -336,6 +372,9 @@ describe('toBuilder', () => {
     const code = '[1, 2, 3]'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <expressionStatement>
@@ -350,7 +389,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -358,6 +397,9 @@ describe('toBuilder', () => {
     const code = 'const [ hoge, ...fuga ] = piyo'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -376,7 +418,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -384,6 +426,9 @@ describe('toBuilder', () => {
     const code = 'const hoge = "hoge"'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -397,7 +442,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -405,6 +450,9 @@ describe('toBuilder', () => {
     const code = 'const hoge = []'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -418,7 +466,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -426,6 +474,9 @@ describe('toBuilder', () => {
     const code = 'const hoge = "hoge", fuga = "fuga"'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -443,7 +494,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -451,6 +502,9 @@ describe('toBuilder', () => {
     const code = 'const hoge = "hoge", fuga = () => {}'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -470,7 +524,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -480,6 +534,9 @@ describe('toBuilder', () => {
     }`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -498,7 +555,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -506,6 +563,9 @@ describe('toBuilder', () => {
     const code = 'const render = () => {}'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -521,7 +581,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -529,6 +589,9 @@ describe('toBuilder', () => {
     const code = 'const render = function() {}'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -544,7 +607,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -552,6 +615,9 @@ describe('toBuilder', () => {
     const code = 'const render = (str) => console.log(str)'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -574,7 +640,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -582,6 +648,9 @@ describe('toBuilder', () => {
     const code = 'const render = (str) => {console.log(str)}'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -608,7 +677,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -616,6 +685,9 @@ describe('toBuilder', () => {
     const code = 'hoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement>
@@ -626,7 +698,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -634,6 +706,9 @@ describe('toBuilder', () => {
     const code = 'import hoge from \'hoge\''
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <importDeclaration importKind="value">
@@ -647,7 +722,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -655,6 +730,9 @@ describe('toBuilder', () => {
     const code = `export default 'hoge'`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <exportDefaultDeclaration>
@@ -665,7 +743,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -673,6 +751,9 @@ describe('toBuilder', () => {
     const code = `export const hoge = 'hoge'`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <exportNamedDeclaration source={null}>
@@ -688,7 +769,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -696,6 +777,9 @@ describe('toBuilder', () => {
     const code = 'import * as hoge from \'hoge\''
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <importDeclaration importKind="value">
@@ -709,7 +793,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -717,6 +801,9 @@ describe('toBuilder', () => {
     const code = 'import { hoge } from \'hoge\''
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <importDeclaration importKind="value">
@@ -731,7 +818,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -739,6 +826,9 @@ describe('toBuilder', () => {
     const code = 'import { hoge as fuga, fuga as piyo } from \'hoge\''
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <importDeclaration importKind="value">
@@ -757,7 +847,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -765,6 +855,9 @@ describe('toBuilder', () => {
     const code = 'const { hoge } = piyo'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -783,18 +876,21 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
   it('should convert object assignment', () => {
     const code = `
-      const hoge = { 
-        hoge: 'HOGE' 
+      const hoge = {
+        hoge: 'HOGE'
       }
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -813,7 +909,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -821,6 +917,9 @@ describe('toBuilder', () => {
     const code = 'const { hoge, ...rest } = piyo'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -842,7 +941,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -852,6 +951,9 @@ describe('toBuilder', () => {
     } = piyo`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -874,7 +976,7 @@ describe('toBuilder', () => {
 
     // FIXME: rendered will be `const { hoge } = piyo` (assignment is ignored...)
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode !== format(code))
   })
 
@@ -882,6 +984,9 @@ describe('toBuilder', () => {
     const code = `const { 'hoge': hoge } = piyo`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -900,7 +1005,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -908,6 +1013,9 @@ describe('toBuilder', () => {
     const code = `const { ['hoge']: hoge } = piyo`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -926,7 +1034,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -934,6 +1042,9 @@ describe('toBuilder', () => {
     const code = `if (true) console.log('hoge');`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <ifStatement alternate={null}>
@@ -953,7 +1064,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -963,6 +1074,9 @@ describe('toBuilder', () => {
     }`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <ifStatement alternate={null}>
@@ -984,7 +1098,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -995,6 +1109,9 @@ describe('toBuilder', () => {
     })()`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement>
@@ -1020,7 +1137,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1031,6 +1148,9 @@ describe('toBuilder', () => {
     })('hoge', 'fuga')`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement>
@@ -1061,7 +1181,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1072,7 +1192,10 @@ describe('toBuilder', () => {
       console.log('fuga');
     }`
 
-    assert(toBuilder(code).code /*?*/ === format(`
+    assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <ifStatement>
@@ -1105,7 +1228,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1119,6 +1242,9 @@ describe('toBuilder', () => {
     }`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <ifStatement>
@@ -1165,7 +1291,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1173,6 +1299,9 @@ describe('toBuilder', () => {
     const code = `if (true === true) console.log('hoge');`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <ifStatement alternate={null}>
@@ -1195,7 +1324,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1209,6 +1338,9 @@ describe('toBuilder', () => {
     }`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <forStatement>
@@ -1240,7 +1372,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1252,6 +1384,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <doWhileStatement>
@@ -1273,7 +1408,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1283,6 +1418,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <whileStatement>
@@ -1302,7 +1440,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1312,6 +1450,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <labeledStatement>
@@ -1330,7 +1471,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1340,6 +1481,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <forInStatement each={false}>
@@ -1366,7 +1510,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1376,6 +1520,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
       const render = () => (
         <program>
           <forOfStatement>
@@ -1402,7 +1549,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1417,6 +1564,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -1444,7 +1594,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1464,6 +1614,9 @@ describe('toBuilder', () => {
     `
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const">
@@ -1509,7 +1662,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1518,6 +1671,9 @@ describe('toBuilder', () => {
     const code = `var a: string = 'hoge';`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="var">
@@ -1535,7 +1691,7 @@ describe('toBuilder', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     // should convert to valid JavaScript(without Flow annotation.)
     assert(renderedCode === format(`var a = 'hoge'`))
   })
@@ -1546,6 +1702,9 @@ describe('option', () => {
     const code = 'hoge()'
 
     assert(toBuilder(code, {shouldOmitProgram: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <expressionStatement>
           <callExpression>
@@ -1556,7 +1715,7 @@ describe('option', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 })
@@ -1566,6 +1725,9 @@ describe('comments', () => {
     const code = '// comment\nhoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement leadingComments={['// comment']}>
@@ -1576,7 +1738,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1584,6 +1746,9 @@ describe('comments', () => {
     const code = `// comment\nconst hoge = 'fuga'`
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <variableDeclaration kind="const" leadingComments={['// comment']}>
@@ -1597,7 +1762,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1605,6 +1770,9 @@ describe('comments', () => {
     const code = 'hoge // comment'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement trailingComments={['// comment']}>
@@ -1615,7 +1783,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1623,6 +1791,9 @@ describe('comments', () => {
     const code = '// comment1\n// comment2\nhoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement leadingComments={['// comment1', '// comment2']}>
@@ -1633,7 +1804,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1641,6 +1812,9 @@ describe('comments', () => {
     const code = '/* hoge */\nhoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement leadingComments={['/* hoge */']}>
@@ -1651,7 +1825,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1659,6 +1833,9 @@ describe('comments', () => {
     const code = 'hoge /* hoge */'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement trailingComments={['/* hoge */']}>
@@ -1669,7 +1846,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     assert(renderedCode === format(code))
   })
 
@@ -1677,6 +1854,9 @@ describe('comments', () => {
     const code = '/* hoge\nfuga */\nhoge'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement leadingComments={['/* hoge\\nfuga */']}>
@@ -1687,7 +1867,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     // should replace line feed by os.EOL
     assert(renderedCode === format('/* hoge\nfuga */\nhoge\n'))
   })
@@ -1696,6 +1876,9 @@ describe('comments', () => {
     const code = '/* hoge\r\nfuga */\r\nhoge\r\n'
 
     assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
       const render = () => (
         <program>
           <expressionStatement leadingComments={['/* hoge\\nfuga */']}>
@@ -1706,7 +1889,7 @@ describe('comments', () => {
     `))
 
     // eval jsx and check rendered code equals to original code.
-    const renderedCode = format(babelAndEval(`/** @jsx h */\n${toBuilder(code).code}`))
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
     // should replace line feed by os.EOL
     assert(renderedCode === format('/* hoge\nfuga */\nhoge\n'))
   })
