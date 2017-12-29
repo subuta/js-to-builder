@@ -128,6 +128,40 @@ describe('Components', () => {
     `))
   })
 
+  it('Value with member should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value member="hoge.piyo.fuga" />
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = hoge.piyo.fuga
+    `))
+  })
+
+  it('Value with member contains literal should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value member="hoge['piyo'].fuga" />
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = hoge['piyo'].fuga
+    `))
+
+    const renderAnother = () => (
+      <Const name="hoge">
+        <Value member="hoge.piyo['fuga']" />
+      </Const>
+    )
+
+    assert(format(print(renderAnother())) === format(`
+      const hoge = hoge.piyo['fuga']
+    `))
+  })
+
   it('Value with bool should render', () => {
     const render = () => (
       <Const name="hoge">

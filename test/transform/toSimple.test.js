@@ -75,13 +75,7 @@ describe('toBuilder with simple:true', () => {
       
       const render = () => (
         <program>
-          <memberExpression es>
-            <memberExpression>
-              <identifier>ctx</identifier>
-              <identifier>state</identifier>
-            </memberExpression>
-            <identifier>models</identifier>
-          </memberExpression>
+          <Value member="ctx.state.models" es />
         </program>
       )
     `))
@@ -177,11 +171,7 @@ describe('toBuilder with simple:true', () => {
               <Fn>
                 <blockStatement>
                   <assignmentExpression operator="=" es>
-                    <memberExpression>
-                      <thisExpression />
-                      <identifier>hoge</identifier>
-                    </memberExpression>
-                    
+                    <Value member="this.hoge" />
                     <Value value={''} />
                   </assignmentExpression>
                 </blockStatement>
@@ -827,17 +817,7 @@ describe('toBuilder with simple:true', () => {
         <program>
           <Const name="hoge">
             <Value>
-              {{ 
-                hoge: (
-                    <memberExpression>
-                      <memberExpression>
-                        <identifier>hoge</identifier>
-                        <identifier>piyo</identifier>
-                      </memberExpression>
-                      <identifier>fuga</identifier>
-                    </memberExpression>
-                ) 
-              }}
+              {{hoge: <Value member="hoge.piyo.fuga" />}}
             </Value>
           </Const>
         </program>
