@@ -777,6 +777,77 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert complex object', () => {
+    const code = `
+      hoge = {
+        where: {
+          id: sub
+        },
+      
+        defaults: params
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <assignmentExpression operator="=" es>
+            <identifier>hoge</identifier>
+      
+            <Value>
+              {{
+                where: <Value>{{id: <Value member="sub" />}}</Value>,
+                defaults: <Value member="params" />
+              }}
+            </Value>
+          </assignmentExpression>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    /*?*/
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert another object', () => {
+    const code = `
+      const params = {
+        ...user, 
+        id: sub
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <Const name="params">
+            <objectExpression>
+              <spreadProperty>
+                <identifier>user</identifier>
+              </spreadProperty>
+              <property kind="init">
+                <identifier>id</identifier>
+                <identifier>sub</identifier>
+              </property>
+            </objectExpression>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert object assignment', () => {
     const code = `
       const hoge = { 

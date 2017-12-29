@@ -42,6 +42,18 @@ describe('Components', () => {
     assert(format(print(renderWithValue())) === format(`
       const hoge = 'hoge'
     `))
+
+    const renderTwice = () => (
+      <program>
+        <Const name="hoge" value="hoge" es />
+        <Const name="hoge" value="hoge" es />
+      </program>
+    )
+
+    assert(format(print(renderTwice())) === format(`
+      const hoge = 'hoge'
+      const hoge = 'hoge'
+    `))
   })
 
   it('Let should render', () => {
