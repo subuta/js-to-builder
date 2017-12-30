@@ -75,7 +75,7 @@ describe('toBuilder with simple:true', () => {
       
       const render = () => (
         <program>
-          <Value member="ctx.state.models" es />
+          <Value identifier="ctx.state.models" es />
         </program>
       )
     `))
@@ -171,7 +171,7 @@ describe('toBuilder with simple:true', () => {
               <Fn>
                 <blockStatement>
                   <assignmentExpression operator="=" es>
-                    <Value member="this.hoge" />
+                    <Value identifier="this.hoge" />
                     <Value value={''} />
                   </assignmentExpression>
                 </blockStatement>
@@ -799,8 +799,8 @@ describe('toBuilder with simple:true', () => {
       
             <Value>
               {{
-                where: <Value>{{id: <Value member="sub" />}}</Value>,
-                defaults: <Value member="params" />
+                where: <Value>{{id: <Value identifier="sub" />}}</Value>,
+                defaults: <Value identifier="params" />
               }}
             </Value>
           </assignmentExpression>
@@ -888,7 +888,7 @@ describe('toBuilder with simple:true', () => {
         <program>
           <Const name="hoge">
             <Value>
-              {{hoge: <Value member="hoge.piyo.fuga" />}}
+              {{hoge: <Value identifier="hoge.piyo.fuga" />}}
             </Value>
           </Const>
         </program>

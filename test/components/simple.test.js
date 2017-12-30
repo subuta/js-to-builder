@@ -143,7 +143,7 @@ describe('Components', () => {
   it('Value with member should render', () => {
     const render = () => (
       <Const name="hoge">
-        <Value member="hoge.piyo.fuga" />
+        <Value identifier="hoge.piyo.fuga" />
       </Const>
     )
 
@@ -155,7 +155,7 @@ describe('Components', () => {
   it('Value with member contains literal should render', () => {
     const render = () => (
       <Const name="hoge">
-        <Value member="hoge['piyo'].fuga" />
+        <Value identifier="hoge['piyo'].fuga" />
       </Const>
     )
 
@@ -165,7 +165,7 @@ describe('Components', () => {
 
     const renderAnother = () => (
       <Const name="hoge">
-        <Value member="hoge.piyo['fuga']" />
+        <Value identifier="hoge.piyo['fuga']" />
       </Const>
     )
 
