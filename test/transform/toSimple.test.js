@@ -595,6 +595,28 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert logical expression', () => {
+    const code = 'true && fuga()'
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <logicalExpression operator="&&" es>
+            <Value>{true}</Value>
+            <FnCall callee="fuga" />
+          </logicalExpression>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert Identifier', () => {
     const code = 'hoge'
 
