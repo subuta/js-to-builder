@@ -226,6 +226,20 @@ describe('Components', () => {
     `))
   })
 
+  it('Value with same object should use shorthand', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value>{{fuga: <Value identifier="fuga" />}}</Value>
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = {
+        fuga
+      }
+    `))
+  })
+
   it('Value with array should render', () => {
     const render = () => (
       <Const name="hoge">
