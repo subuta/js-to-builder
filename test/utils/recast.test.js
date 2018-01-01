@@ -7,7 +7,8 @@ import {
   getTypeName,
   getAllFields,
   getSuperTypeList,
-  getBuildParams
+  getBuildParams,
+  createMatcher
 } from 'lib/utils/recast'
 
 import * as types from 'ast-types'
@@ -42,5 +43,13 @@ describe('getBuilderName', () => {
       assert(n[typeName] !== undefined)
       assert(getBuilderName(typeName) === builderName)
     })
+  })
+})
+
+describe('match', () => {
+  it('should check node matches type def', () => {
+    assert(createMatcher('[Literal]')(b.literal('name')) === true)
+    assert(createMatcher('[Literal]')(b.identifier('name')) === false)
+    assert(createMatcher('[Literal | Identifier]')(b.literal('name')) === true)
   })
 })

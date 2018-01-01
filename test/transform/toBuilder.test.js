@@ -559,6 +559,36 @@ describe('toBuilder', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert TemplateLiteral', () => {
+    const code = 'const hoge = `hoge ${fuga}`' // eslint-disable-line no-template-curly-in-string
+
+    assert(toBuilder(code).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+
+      const render = () => (
+        <program>
+          <variableDeclaration kind="const">
+            <variableDeclarator>
+              <identifier name="hoge" />
+              <templateLiteral>
+                <templateElement tail={false}>
+                  {{raw: 'hoge ', cooked: 'hoge '}}
+                </templateElement>
+                <templateElement tail={true}>{{raw: '', cooked: ''}}</templateElement>
+                <identifier name="fuga" />
+              </templateLiteral>
+            </variableDeclarator>
+          </variableDeclaration>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert Empty arrow function expression', () => {
     const code = 'const render = () => {}'
 
