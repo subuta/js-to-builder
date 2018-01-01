@@ -318,7 +318,7 @@ describe('toBuilder with simple:true', () => {
       
       const render = () => (
         <program>
-          <Value es>{[]}</Value>
+          <Value raw es>{[]}</Value>
         </program>
       )
     `))
@@ -337,7 +337,7 @@ describe('toBuilder with simple:true', () => {
       
       const render = () => (
         <program>
-          <Value es>{[1, 2, 3]}</Value>
+          <Value raw es>{[1, 2, 3]}</Value>
         </program>
       )
     `))
@@ -407,7 +407,7 @@ describe('toBuilder with simple:true', () => {
       const render = () => (
         <program>
 		      <Const name="hoge">
-            <Value>{[]}</Value>
+            <Value raw>{[]}</Value>
           </Const>
         </program>
       )
@@ -838,6 +838,39 @@ describe('toBuilder with simple:true', () => {
                 <identifier>sub</identifier>
               </property>
             </objectExpression>
+          </Const>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
+  it('should convert complex object', () => {
+    const code = `
+      const params = {
+        id: sub,
+        bool: true,
+        array: ['one']
+      }
+    `
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <Const name="params">
+            <Value>
+              {{
+                id: <Value identifier="sub" />,
+                bool: true,
+                array: <Value raw>{['one']}</Value>
+              }}
+            </Value>
           </Const>
         </program>
       )

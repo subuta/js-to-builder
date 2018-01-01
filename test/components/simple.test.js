@@ -201,25 +201,27 @@ describe('Components', () => {
   it('Value with object should render', () => {
     const render = () => (
       <Const name="hoge">
-        <Value>{{hoge: 'fuga', fuga: 'piyo'}}</Value>
+        <Value>{{hoge: 'fuga', fuga: 'piyo', bool: true}}</Value>
       </Const>
     )
 
     assert(format(print(render())) === format(`
       const hoge = {
         hoge: 'fuga',
-        fuga: 'piyo'
+        fuga: 'piyo',
+        bool: true
       }
     `))
 
     const renderWithValue = () => (
-      <Const name="hoge" value={{hoge: 'fuga', fuga: 'piyo'}} />
+      <Const name="hoge" value={{hoge: 'fuga', fuga: 'piyo', bool: true}} />
     )
 
     assert(format(print(renderWithValue())) === format(`
       const hoge = {
         hoge: 'fuga',
-        fuga: 'piyo'
+        fuga: 'piyo',
+        bool: true
       }
     `))
   })
@@ -241,6 +243,26 @@ describe('Components', () => {
 
     assert(format(print(renderWithValue())) === format(`
       const hoge = [1, 2, 3]
+    `))
+  })
+
+  it('Value with single item array should render', () => {
+    const render = () => (
+      <Const name="hoge">
+        <Value raw>{['1']}</Value>
+      </Const>
+    )
+
+    assert(format(print(render())) === format(`
+      const hoge = ['1']
+    `))
+
+    const renderWithValue = () => (
+      <Const name="hoge" value={['1']} raw />
+    )
+
+    assert(format(print(renderWithValue())) === format(`
+      const hoge = ['1']
     `))
   })
 
