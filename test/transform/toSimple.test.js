@@ -633,6 +633,33 @@ describe('toBuilder with simple:true', () => {
     assert(renderedCode === format(code))
   })
 
+  it('should convert complex module import', () => {
+    const code = 'import hoge, { piyo } from \'hoge\''
+
+    assert(toBuilder(code, {simple: true}).code === format(`
+      /** @jsx h */
+      // const h = require('js-to-builder').h // use h from js-to-builder.
+      
+      const render = () => (
+        <program>
+          <Import source="hoge">
+            <importDefaultSpecifier>
+              <identifier>hoge</identifier>
+            </importDefaultSpecifier>
+            <importSpecifier>
+              <identifier>piyo</identifier>
+              <identifier>piyo</identifier>
+            </importSpecifier>
+          </Import>
+        </program>
+      )
+    `))
+
+    // eval jsx and check rendered code equals to original code.
+    const renderedCode = format(babelAndEval(toBuilder(code, {simple: true}).code))
+    assert(renderedCode === format(code))
+  })
+
   it('should convert module default export', () => {
     const code = `export default 'hoge'`
 
